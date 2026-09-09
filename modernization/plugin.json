@@ -1,0 +1,22 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "modernization",
+  "version": "0.1.0",
+  "description": "Migracao de aplicacoes legadas para stacks modernas. Reverse engineer, Spec-first, Forward build.",
+  "author": {
+    "name": "Modernization",
+    "url": "https://github.com/Jorgim1/modernization"
+  },
+  "keywords": [
+    "migrar",
+    "modernizar",
+    "legado",
+    "legacy",
+    "migration",
+    "modernization",
+    "rewrite",
+    "stack",
+    "refactor"
+  ],
+  "license": "MIT"
+}

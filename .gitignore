@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+
+# TypeScript tsc build artifacts (individual compiled files).
+# bundle.cjs and bundle.mjs have different extensions so they are NOT excluded
+# by these patterns — they're kept committed for zero-install usage.
+**/dist/*.js
+**/dist/*.js.map
+**/dist/*.d.ts
+**/dist/*.d.ts.map
+**/dist/**/*.js
+**/dist/**/*.js.map
+**/dist/**/*.d.ts
+**/dist/**/*.d.ts.map
+
+# TypeScript incremental build cache
+*.tsbuildinfo
+
+# Claude Code session data
+.claude/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env
+.env
+.env.local
+
+# Editor
+.vscode/
+.idea/
