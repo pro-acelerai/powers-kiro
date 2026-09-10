@@ -11,8 +11,7 @@ export function isInScope(filePath: string, scope: string[]): boolean {
     const normalizedScope = abs(scopePath)
     return (
       normalizedFile === normalizedScope ||
-      normalizedFile.startsWith(normalizedScope + sep) ||
-      normalizedFile.startsWith(normalizedScope + '/')
+      normalizedFile.startsWith(normalizedScope + sep)
     )
   })
 }

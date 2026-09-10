@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto'
 import { resolve, sep } from 'node:path'
 import type { AppContext } from '../context.js'
 import type { ImplementationSession, NewFile, FileOperation } from '../domain/types.js'
+import { getCurrentAttempt } from './attempt-utils.js'
 
 interface SubmitNewFileArgs {
   sessionId: string
@@ -10,10 +11,6 @@ interface SubmitNewFileArgs {
   content: string
   justification: string
   specRefs?: string[]
-}
-
-function getCurrentAttempt(session: ImplementationSession) {
-  return session.attempts.find(a => a.status === 'IN_PROGRESS') ?? null
 }
 
 export async function handleSubmitNewFile(args: SubmitNewFileArgs, ctx: AppContext) {

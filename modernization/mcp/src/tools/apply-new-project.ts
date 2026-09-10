@@ -9,10 +9,7 @@ import {
 } from '../harness/sensors.js'
 import type { AppContext } from '../context.js'
 import type { DiscoverySession, ImplementationSession } from '../domain/types.js'
-
-function getCurrentAttempt(session: ImplementationSession) {
-  return session.attempts.find(a => a.status === 'IN_PROGRESS') ?? null
-}
+import { getCurrentAttempt } from './attempt-utils.js'
 
 export async function handleApplyNewProject(args: { sessionId: string }, ctx: AppContext) {
   const session = await ctx.store.load(args.sessionId)

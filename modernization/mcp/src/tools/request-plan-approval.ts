@@ -29,6 +29,9 @@ export async function handleRequestPlanApproval(
   }
 
   if (args.approved) {
+    const plan = arch.migrationPlan
+    if (!plan) throw new Error('Architecture session has no migration plan. Call submit_migration_plan before approving.')
+
     const transResult = transition(session, 'DONE')
     if (!transResult.ok) throw new Error(transResult.error)
 
@@ -41,9 +44,6 @@ export async function handleRequestPlanApproval(
 
     const updated = { ...transResult.session, humanDecision, resolution } as ArchitectureSession
     await ctx.store.save(updated, session)
-
-    const plan = arch.migrationPlan
-    if (!plan) throw new Error('Architecture session has no migration plan. Call submit_migration_plan before approving.')
 
     return {
       sessionId: session.id,

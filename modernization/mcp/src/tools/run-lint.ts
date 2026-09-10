@@ -3,10 +3,7 @@ import { runLint } from '../harness/lint-runner.js'
 import { transition, canAttemptCorrection } from '../domain/state-machine.js'
 import type { AppContext } from '../context.js'
 import type { ImplementationSession, Resolution } from '../domain/types.js'
-
-function getCurrentAttempt(session: ImplementationSession) {
-  return session.attempts.find(a => a.status === 'IN_PROGRESS') ?? null
-}
+import { getCurrentAttempt } from './attempt-utils.js'
 
 export async function handleRunLint(args: { sessionId: string }, ctx: AppContext) {
   const session = await ctx.store.load(args.sessionId)

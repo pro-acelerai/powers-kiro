@@ -126240,8 +126240,8 @@ async function handleCreateSession(args, ctx2) {
         discoverySessionId,
         architectureSessionId,
         phaseId,
-        phaseNumber,
-        phaseTitle,
+        phaseNumber: phase.number,
+        phaseTitle: phase.title,
         newProjectPath
       });
       return {
@@ -126643,7 +126643,7 @@ function isInScope(filePath, scope) {
   const normalizedFile = abs(filePath);
   return scope.some((scopePath) => {
     const normalizedScope = abs(scopePath);
-    return normalizedFile === normalizedScope || normalizedFile.startsWith(normalizedScope + import_node_path5.sep) || normalizedFile.startsWith(normalizedScope + "/");
+    return normalizedFile === normalizedScope || normalizedFile.startsWith(normalizedScope + import_node_path5.sep);
   });
 }
 function assertInScope(filePath, scope) {
@@ -127376,6 +127376,8 @@ async function handleRequestPlanApproval(args, ctx2) {
     notes: args.notes ?? ""
   };
   if (args.approved) {
+    const plan = arch.migrationPlan;
+    if (!plan) throw new Error("Architecture session has no migration plan. Call submit_migration_plan before approving.");
     const transResult2 = transition(session, "DONE");
     if (!transResult2.ok) throw new Error(transResult2.error);
     const resolution = {
@@ -127386,8 +127388,6 @@ async function handleRequestPlanApproval(args, ctx2) {
     };
     const updated2 = { ...transResult2.session, humanDecision, resolution };
     await ctx2.store.save(updated2, session);
-    const plan = arch.migrationPlan;
-    if (!plan) throw new Error("Architecture session has no migration plan. Call submit_migration_plan before approving.");
     return {
       sessionId: session.id,
       status: "DONE",
@@ -127531,9 +127531,13 @@ var readPhaseContextToolDefinition = {
 // src/tools/submit-new-file.ts
 var import_node_crypto9 = require("node:crypto");
 var import_node_path8 = require("node:path");
+
+// src/tools/attempt-utils.ts
 function getCurrentAttempt(session) {
   return session.attempts.find((a) => a.status === "IN_PROGRESS") ?? null;
 }
+
+// src/tools/submit-new-file.ts
 async function handleSubmitNewFile(args, ctx2) {
   const session = await ctx2.store.load(args.sessionId);
   if (session.type !== "implementation") {
@@ -127704,9 +127708,6 @@ function formatIsolationError(result) {
 }
 
 // src/tools/apply-new-project.ts
-function getCurrentAttempt2(session) {
-  return session.attempts.find((a) => a.status === "IN_PROGRESS") ?? null;
-}
 async function handleApplyNewProject(args, ctx2) {
   const session = await ctx2.store.load(args.sessionId);
   if (session.type !== "implementation") {
@@ -127717,7 +127718,7 @@ async function handleApplyNewProject(args, ctx2) {
     throw new Error(`apply_new_project requires status BUILDING or CORRECTING, got ${session.status}`);
   }
   const impl = session;
-  const attempt = getCurrentAttempt2(impl);
+  const attempt = getCurrentAttempt(impl);
   if (!attempt) {
     throw new Error("No IN_PROGRESS attempt found. Submit files first via submit_new_file.");
   }
@@ -127892,9 +127893,6 @@ async function runLint(files, attemptId, projectPath) {
 }
 
 // src/tools/run-lint.ts
-function getCurrentAttempt3(session) {
-  return session.attempts.find((a) => a.status === "IN_PROGRESS") ?? null;
-}
 async function handleRunLint(args, ctx2) {
   const session = await ctx2.store.load(args.sessionId);
   if (session.type !== "implementation") {
@@ -127904,7 +127902,7 @@ async function handleRunLint(args, ctx2) {
     throw new Error(`run_lint requires status APPLYING, got ${session.status}`);
   }
   const impl = session;
-  const attempt = getCurrentAttempt3(impl);
+  const attempt = getCurrentAttempt(impl);
   if (!attempt) {
     throw new Error("No IN_PROGRESS attempt found. Apply the project first via apply_new_project.");
   }

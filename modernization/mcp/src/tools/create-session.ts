@@ -1,10 +1,4 @@
 import { resolve, sep } from 'node:path'
-
-function assertWithinWorkspace(resolved: string, workspace: string, label: string): void {
-  if (resolved !== workspace && !resolved.startsWith(workspace + sep)) {
-    throw new Error(`${label} must be within the workspace directory: "${workspace}"`)
-  }
-}
 import type { AppContext } from '../context.js'
 
 interface CreateDiscoveryArgs {
@@ -132,8 +126,8 @@ export async function handleCreateSession(args: CreateSessionArgs, ctx: AppConte
         discoverySessionId,
         architectureSessionId,
         phaseId,
-        phaseNumber,
-        phaseTitle,
+        phaseNumber: phase.number,
+        phaseTitle: phase.title,
         newProjectPath,
       })
 
