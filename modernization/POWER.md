@@ -27,7 +27,7 @@ Use este Power quando o usuario:
 - Quiser mudar o framework, linguagem ou arquitetura de um sistema existente
 - Precisar de uma analise tecnica de um sistema legado antes de decidir como migrar
 
-Nao use para implementar features novas sem migracao de sistema legado (use pro-coding para isso).
+Nao use para implementar features novas sem migracao de sistema legado (use coding para isso).
 
 ## As 4 Fases
 

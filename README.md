@@ -8,7 +8,7 @@ Coleção de **Kiro Powers** — extensões MCP para o [Kiro IDE](https://kiro.d
 
 | Power | Descrição |
 |---|---|
-| [`pro-coding-power`](./pro-coding-power/) | Fluxo estruturado de implementação de histórias — planejamento, escrita de código, testes, lint e entrega com trilha de auditoria |
+| [`coding`](./coding/) | Fluxo estruturado de implementação de histórias — planejamento, escrita de código, testes, lint e entrega com trilha de auditoria |
 | [`modernization`](./modernization/) | Esteira de modernização de sistemas legados — Discovery, Architecture, Implementation e Delivery guiados por Especificação |
 
 ---
