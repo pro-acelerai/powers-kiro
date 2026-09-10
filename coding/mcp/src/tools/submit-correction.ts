@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto'
+import { isAbsolute, resolve } from 'node:path'
 import { assertInScope } from '../harness/scope.js'
 import { canAttemptCorrection } from '../domain/state-machine.js'
 import type { AppContext } from '../context.js'
@@ -23,12 +24,15 @@ export async function handleSubmitCorrection(
     )
   }
 
-  assertInScope(args.file, session.scope)
+  // Resolve relative paths against the workspace and store the absolute path.
+  const resolvedFile = isAbsolute(args.file) ? args.file : resolve(ctx.workspacePath, args.file)
+
+  assertInScope(resolvedFile, session.scope, ctx.workspacePath)
 
   const change: ProposedChange = {
     id: randomUUID(),
     attemptId: '',
-    file: args.file,
+    file: resolvedFile,
     operation: args.operation,
     content: args.operation === 'delete' ? '' : (args.content ?? ''),
     justification: args.justification,

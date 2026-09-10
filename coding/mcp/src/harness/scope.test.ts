@@ -57,3 +57,19 @@ describe('assertInScope()', () => {
     assert.ok(message.includes('outside'), `Expected path in error, got: ${message}`)
   })
 })
+
+describe('isInScope() with basePath (relative paths)', () => {
+  it('resolves a relative file against basePath, not cwd', () => {
+    // "src/app.ts" relative to BASE is in scope, regardless of process.cwd().
+    assert.equal(isInScope('src/app.ts', scope, BASE), true)
+  })
+
+  it('rejects a relative traversal that escapes basePath', () => {
+    assert.equal(isInScope('../other/file.ts', scope, BASE), false)
+  })
+
+  it('still handles absolute paths when basePath is provided', () => {
+    assert.equal(isInScope(resolve(BASE, 'src', 'x.ts'), scope, BASE), true)
+    assert.equal(isInScope(resolve('C:/elsewhere/x.ts'), scope, BASE), false)
+  })
+})

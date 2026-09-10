@@ -2983,7 +2983,7 @@ var require_compile = __commonJS({
       const schOrFunc = root.refs[ref];
       if (schOrFunc)
         return schOrFunc;
-      let _sch = resolve4.call(this, root, ref);
+      let _sch = resolve6.call(this, root, ref);
       if (_sch === void 0) {
         const schema = (_a3 = root.localRefs) === null || _a3 === void 0 ? void 0 : _a3[ref];
         const { schemaId } = this.opts;
@@ -3010,7 +3010,7 @@ var require_compile = __commonJS({
     function sameSchemaEnv(s1, s2) {
       return s1.schema === s2.schema && s1.root === s2.root && s1.baseId === s2.baseId;
     }
-    function resolve4(root, ref) {
+    function resolve6(root, ref) {
       let sch;
       while (typeof (sch = this.refs[ref]) == "string")
         ref = sch;
@@ -3840,7 +3840,7 @@ var require_fast_uri = __commonJS({
       }
       return uri;
     }
-    function resolve4(baseURI, relativeURI, options) {
+    function resolve6(baseURI, relativeURI, options) {
       const schemelessOptions = options ? Object.assign({ scheme: "null" }, options) : { scheme: "null" };
       const {
         parsed: baseParsed,
@@ -4208,7 +4208,7 @@ var require_fast_uri = __commonJS({
     var fastUri = {
       SCHEMES,
       normalize: normalize2,
-      resolve: resolve4,
+      resolve: resolve6,
       resolveComponent,
       equal,
       serialize,
@@ -79930,7 +79930,7 @@ var require_uri_all = __commonJS({
         target.fragment = relative.fragment;
         return target;
       }
-      function resolve4(baseURI, relativeURI, options) {
+      function resolve6(baseURI, relativeURI, options) {
         var schemelessOptions = assign({ scheme: "null" }, options);
         return serialize(resolveComponents(parse3(baseURI, schemelessOptions), parse3(relativeURI, schemelessOptions), schemelessOptions, true), schemelessOptions);
       }
@@ -80195,7 +80195,7 @@ var require_uri_all = __commonJS({
       exports3.removeDotSegments = removeDotSegments;
       exports3.serialize = serialize;
       exports3.resolveComponents = resolveComponents;
-      exports3.resolve = resolve4;
+      exports3.resolve = resolve6;
       exports3.normalize = normalize2;
       exports3.equal = equal;
       exports3.escapeComponent = escapeComponent;
@@ -80513,18 +80513,18 @@ var require_resolve2 = __commonJS({
     var util = require_util2();
     var SchemaObject = require_schema_obj();
     var traverse = require_json_schema_traverse2();
-    module2.exports = resolve4;
-    resolve4.normalizeId = normalizeId;
-    resolve4.fullPath = getFullPath;
-    resolve4.url = resolveUrl;
-    resolve4.ids = resolveIds;
-    resolve4.inlineRef = inlineRef;
-    resolve4.schema = resolveSchema;
-    function resolve4(compile, root, ref) {
+    module2.exports = resolve6;
+    resolve6.normalizeId = normalizeId;
+    resolve6.fullPath = getFullPath;
+    resolve6.url = resolveUrl;
+    resolve6.ids = resolveIds;
+    resolve6.inlineRef = inlineRef;
+    resolve6.schema = resolveSchema;
+    function resolve6(compile, root, ref) {
       var refVal = this._refs[ref];
       if (typeof refVal == "string") {
         if (this._refs[refVal]) refVal = this._refs[refVal];
-        else return resolve4.call(this, compile, root, refVal);
+        else return resolve6.call(this, compile, root, refVal);
       }
       refVal = refVal || this._schemas[ref];
       if (refVal instanceof SchemaObject) {
@@ -80729,7 +80729,7 @@ var require_resolve2 = __commonJS({
 var require_error_classes = __commonJS({
   "node_modules/@eslint/eslintrc/node_modules/ajv/lib/compile/error_classes.js"(exports2, module2) {
     "use strict";
-    var resolve4 = require_resolve2();
+    var resolve6 = require_resolve2();
     module2.exports = {
       Validation: errorSubclass(ValidationError),
       MissingRef: errorSubclass(MissingRefError)
@@ -80744,8 +80744,8 @@ var require_error_classes = __commonJS({
     };
     function MissingRefError(baseId, ref, message) {
       this.message = message || MissingRefError.message(baseId, ref);
-      this.missingRef = resolve4.url(baseId, ref);
-      this.missingSchema = resolve4.normalizeId(resolve4.fullPath(this.missingRef));
+      this.missingRef = resolve6.url(baseId, ref);
+      this.missingSchema = resolve6.normalizeId(resolve6.fullPath(this.missingRef));
     }
     function errorSubclass(Subclass) {
       Subclass.prototype = Object.create(Error.prototype);
@@ -81273,7 +81273,7 @@ var require_validate2 = __commonJS({
 var require_compile2 = __commonJS({
   "node_modules/@eslint/eslintrc/node_modules/ajv/lib/compile/index.js"(exports2, module2) {
     "use strict";
-    var resolve4 = require_resolve2();
+    var resolve6 = require_resolve2();
     var util = require_util2();
     var errorClasses = require_error_classes();
     var stableStringify = require_fast_json_stable_stringify();
@@ -81335,7 +81335,7 @@ var require_compile2 = __commonJS({
           RULES,
           validate: validateGenerator,
           util,
-          resolve: resolve4,
+          resolve: resolve6,
           resolveRef,
           usePattern,
           useDefault,
@@ -81397,7 +81397,7 @@ var require_compile2 = __commonJS({
         return validate;
       }
       function resolveRef(baseId2, ref, isRoot) {
-        ref = resolve4.url(baseId2, ref);
+        ref = resolve6.url(baseId2, ref);
         var refIndex = refs[ref];
         var _refVal, refCode;
         if (refIndex !== void 0) {
@@ -81414,11 +81414,11 @@ var require_compile2 = __commonJS({
           }
         }
         refCode = addLocalRef(ref);
-        var v2 = resolve4.call(self2, localCompile, root, ref);
+        var v2 = resolve6.call(self2, localCompile, root, ref);
         if (v2 === void 0) {
           var localSchema = localRefs && localRefs[ref];
           if (localSchema) {
-            v2 = resolve4.inlineRef(localSchema, opts.inlineRefs) ? localSchema : compile.call(self2, localSchema, root, localRefs, baseId2);
+            v2 = resolve6.inlineRef(localSchema, opts.inlineRefs) ? localSchema : compile.call(self2, localSchema, root, localRefs, baseId2);
           }
         }
         if (v2 === void 0) {
@@ -85035,7 +85035,7 @@ var require_ajv2 = __commonJS({
   "node_modules/@eslint/eslintrc/node_modules/ajv/lib/ajv.js"(exports2, module2) {
     "use strict";
     var compileSchema = require_compile2();
-    var resolve4 = require_resolve2();
+    var resolve6 = require_resolve2();
     var Cache = require_cache();
     var SchemaObject = require_schema_obj();
     var stableStringify = require_fast_json_stable_stringify();
@@ -85117,7 +85117,7 @@ var require_ajv2 = __commonJS({
       var id = this._getId(schema);
       if (id !== void 0 && typeof id != "string")
         throw new Error("schema id must be string");
-      key = resolve4.normalizeId(key || id);
+      key = resolve6.normalizeId(key || id);
       checkUnique(this, key);
       this._schemas[key] = this._addSchema(schema, _skipValidation, _meta, true);
       return this;
@@ -85161,7 +85161,7 @@ var require_ajv2 = __commonJS({
       }
     }
     function _getSchemaFragment(self2, ref) {
-      var res = resolve4.schema.call(self2, { schema: {} }, ref);
+      var res = resolve6.schema.call(self2, { schema: {} }, ref);
       if (res) {
         var schema = res.schema, root = res.root, baseId = res.baseId;
         var v = compileSchema.call(self2, schema, root, void 0, baseId);
@@ -85177,7 +85177,7 @@ var require_ajv2 = __commonJS({
       }
     }
     function _getSchemaObj(self2, keyRef) {
-      keyRef = resolve4.normalizeId(keyRef);
+      keyRef = resolve6.normalizeId(keyRef);
       return self2._schemas[keyRef] || self2._refs[keyRef] || self2._fragments[keyRef];
     }
     function removeSchema(schemaKeyRef) {
@@ -85204,7 +85204,7 @@ var require_ajv2 = __commonJS({
           this._cache.del(cacheKey);
           var id = this._getId(schemaKeyRef);
           if (id) {
-            id = resolve4.normalizeId(id);
+            id = resolve6.normalizeId(id);
             delete this._schemas[id];
             delete this._refs[id];
           }
@@ -85228,13 +85228,13 @@ var require_ajv2 = __commonJS({
       var cached2 = this._cache.get(cacheKey);
       if (cached2) return cached2;
       shouldAddSchema = shouldAddSchema || this._opts.addUsedSchema !== false;
-      var id = resolve4.normalizeId(this._getId(schema));
+      var id = resolve6.normalizeId(this._getId(schema));
       if (id && shouldAddSchema) checkUnique(this, id);
       var willValidate = this._opts.validateSchema !== false && !skipValidation;
       var recursiveMeta;
-      if (willValidate && !(recursiveMeta = id && id == resolve4.normalizeId(schema.$schema)))
+      if (willValidate && !(recursiveMeta = id && id == resolve6.normalizeId(schema.$schema)))
         this.validateSchema(schema, true);
-      var localRefs = resolve4.ids.call(this, schema);
+      var localRefs = resolve6.ids.call(this, schema);
       var schemaObj = new SchemaObject({
         id,
         schema,
@@ -88858,7 +88858,7 @@ var require_posix = __commonJS({
       assertArg$1(pathObject);
       return _format("/", pathObject);
     }
-    function isAbsolute2(path2) {
+    function isAbsolute4(path2) {
       assertPath(path2);
       return path2.length > 0 && isPosixPathSeparator(path2.charCodeAt(0));
     }
@@ -88925,12 +88925,12 @@ var require_posix = __commonJS({
         path2 = fromFileUrl(path2);
       }
       assertArg(path2);
-      const isAbsolute3 = isPosixPathSeparator(path2.charCodeAt(0));
+      const isAbsolute5 = isPosixPathSeparator(path2.charCodeAt(0));
       const trailingSeparator = isPosixPathSeparator(path2.charCodeAt(path2.length - 1));
-      path2 = normalizeString(path2, !isAbsolute3, "/", isPosixPathSeparator);
-      if (path2.length === 0 && !isAbsolute3) path2 = ".";
+      path2 = normalizeString(path2, !isAbsolute5, "/", isPosixPathSeparator);
+      if (path2.length === 0 && !isAbsolute5) path2 = ".";
       if (path2.length > 0 && trailingSeparator) path2 += "/";
-      if (isAbsolute3) return `/${path2}`;
+      if (isAbsolute5) return `/${path2}`;
       return path2;
     }
     function join4(path2, ...paths) {
@@ -88956,9 +88956,9 @@ var require_posix = __commonJS({
         name: ""
       };
       if (path2.length === 0) return ret;
-      const isAbsolute3 = isPosixPathSeparator(path2.charCodeAt(0));
+      const isAbsolute5 = isPosixPathSeparator(path2.charCodeAt(0));
       let start;
-      if (isAbsolute3) {
+      if (isAbsolute5) {
         ret.root = "/";
         start = 1;
       } else {
@@ -88994,7 +88994,7 @@ var require_posix = __commonJS({
       preDotState === 0 || // The (right-most) trimmed path component is exactly '..'
       preDotState === 1 && startDot === end - 1 && startDot === startPart + 1) {
         if (end !== -1) {
-          if (startPart === 0 && isAbsolute3) {
+          if (startPart === 0 && isAbsolute5) {
             ret.base = ret.name = path2.slice(1, end);
           } else {
             ret.base = ret.name = path2.slice(startPart, end);
@@ -89002,7 +89002,7 @@ var require_posix = __commonJS({
         }
         ret.base = ret.base || "/";
       } else {
-        if (startPart === 0 && isAbsolute3) {
+        if (startPart === 0 && isAbsolute5) {
           ret.name = path2.slice(1, startDot);
           ret.base = path2.slice(1, end);
         } else {
@@ -89013,10 +89013,10 @@ var require_posix = __commonJS({
       }
       if (startPart > 0) {
         ret.dir = stripTrailingSeparators(path2.slice(0, startPart - 1), isPosixPathSeparator);
-      } else if (isAbsolute3) ret.dir = "/";
+      } else if (isAbsolute5) ret.dir = "/";
       return ret;
     }
-    function resolve4(...pathSegments) {
+    function resolve6(...pathSegments) {
       let resolvedPath = "";
       let resolvedAbsolute = false;
       for (let i = pathSegments.length - 1; i >= -1 && !resolvedAbsolute; i--) {
@@ -89050,8 +89050,8 @@ var require_posix = __commonJS({
     }
     function relative(from, to) {
       assertArgs(from, to);
-      from = resolve4(from);
-      to = resolve4(to);
+      from = resolve6(from);
+      to = resolve6(to);
       if (from === to) return "";
       let fromStart = 1;
       const fromEnd = from.length;
@@ -89118,7 +89118,7 @@ var require_posix = __commonJS({
       });
     }
     function toFileUrl(path2) {
-      if (!isAbsolute2(path2)) {
+      if (!isAbsolute4(path2)) {
         throw new TypeError(`Path must be absolute: received "${path2}"`);
       }
       const url = new URL("file:///");
@@ -89436,7 +89436,7 @@ var require_posix = __commonJS({
     exports2.format = format;
     exports2.fromFileUrl = fromFileUrl;
     exports2.globToRegExp = globToRegExp;
-    exports2.isAbsolute = isAbsolute2;
+    exports2.isAbsolute = isAbsolute4;
     exports2.isGlob = isGlob;
     exports2.join = join4;
     exports2.joinGlobs = joinGlobs;
@@ -89444,7 +89444,7 @@ var require_posix = __commonJS({
     exports2.normalizeGlob = normalizeGlob;
     exports2.parse = parse3;
     exports2.relative = relative;
-    exports2.resolve = resolve4;
+    exports2.resolve = resolve6;
     exports2.toFileUrl = toFileUrl;
     exports2.toNamespacedPath = toNamespacedPath;
   }
@@ -89688,7 +89688,7 @@ var require_windows = __commonJS({
       assertArg$1(pathObject);
       return _format("\\", pathObject);
     }
-    function isAbsolute2(path2) {
+    function isAbsolute4(path2) {
       assertPath(path2);
       const len = path2.length;
       if (len === 0) return false;
@@ -89768,11 +89768,11 @@ var require_windows = __commonJS({
       const len = path2.length;
       let rootEnd = 0;
       let device;
-      let isAbsolute3 = false;
+      let isAbsolute5 = false;
       const code = path2.charCodeAt(0);
       if (len > 1) {
         if (isPathSeparator(code)) {
-          isAbsolute3 = true;
+          isAbsolute5 = true;
           if (isPathSeparator(path2.charCodeAt(1))) {
             let j = 2;
             let last = j;
@@ -89807,7 +89807,7 @@ var require_windows = __commonJS({
             rootEnd = 2;
             if (len > 2) {
               if (isPathSeparator(path2.charCodeAt(2))) {
-                isAbsolute3 = true;
+                isAbsolute5 = true;
                 rootEnd = 3;
               }
             }
@@ -89818,21 +89818,21 @@ var require_windows = __commonJS({
       }
       let tail;
       if (rootEnd < len) {
-        tail = normalizeString(path2.slice(rootEnd), !isAbsolute3, "\\", isPathSeparator);
+        tail = normalizeString(path2.slice(rootEnd), !isAbsolute5, "\\", isPathSeparator);
       } else {
         tail = "";
       }
-      if (tail.length === 0 && !isAbsolute3) tail = ".";
+      if (tail.length === 0 && !isAbsolute5) tail = ".";
       if (tail.length > 0 && isPathSeparator(path2.charCodeAt(len - 1))) {
         tail += "\\";
       }
       if (device === void 0) {
-        if (isAbsolute3) {
+        if (isAbsolute5) {
           if (tail.length > 0) return `\\${tail}`;
           else return "\\";
         }
         return tail;
-      } else if (isAbsolute3) {
+      } else if (isAbsolute5) {
         if (tail.length > 0) return `${device}\\${tail}`;
         else return `${device}\\`;
       }
@@ -89983,7 +89983,7 @@ var require_windows = __commonJS({
       } else ret.dir = ret.root;
       return ret;
     }
-    function resolve4(...pathSegments) {
+    function resolve6(...pathSegments) {
       let resolvedDevice = "";
       let resolvedTail = "";
       let resolvedAbsolute = false;
@@ -90011,11 +90011,11 @@ var require_windows = __commonJS({
         if (len === 0) continue;
         let rootEnd = 0;
         let device = "";
-        let isAbsolute3 = false;
+        let isAbsolute5 = false;
         const code = path2.charCodeAt(0);
         if (len > 1) {
           if (isPathSeparator(code)) {
-            isAbsolute3 = true;
+            isAbsolute5 = true;
             if (isPathSeparator(path2.charCodeAt(1))) {
               let j = 2;
               let last = j;
@@ -90051,7 +90051,7 @@ var require_windows = __commonJS({
               rootEnd = 2;
               if (len > 2) {
                 if (isPathSeparator(path2.charCodeAt(2))) {
-                  isAbsolute3 = true;
+                  isAbsolute5 = true;
                   rootEnd = 3;
                 }
               }
@@ -90059,7 +90059,7 @@ var require_windows = __commonJS({
           }
         } else if (isPathSeparator(code)) {
           rootEnd = 1;
-          isAbsolute3 = true;
+          isAbsolute5 = true;
         }
         if (device.length > 0 && resolvedDevice.length > 0 && device.toLowerCase() !== resolvedDevice.toLowerCase()) {
           continue;
@@ -90069,7 +90069,7 @@ var require_windows = __commonJS({
         }
         if (!resolvedAbsolute) {
           resolvedTail = `${path2.slice(rootEnd)}\\${resolvedTail}`;
-          resolvedAbsolute = isAbsolute3;
+          resolvedAbsolute = isAbsolute5;
         }
         if (resolvedAbsolute && resolvedDevice.length > 0) break;
       }
@@ -90083,8 +90083,8 @@ var require_windows = __commonJS({
     }
     function relative(from, to) {
       assertArgs(from, to);
-      const fromOrig = resolve4(from);
-      const toOrig = resolve4(to);
+      const fromOrig = resolve6(from);
+      const toOrig = resolve6(to);
       if (fromOrig === toOrig) return "";
       from = fromOrig.toLowerCase();
       to = toOrig.toLowerCase();
@@ -90166,7 +90166,7 @@ var require_windows = __commonJS({
       });
     }
     function toFileUrl(path2) {
-      if (!isAbsolute2(path2)) {
+      if (!isAbsolute4(path2)) {
         throw new TypeError(`Path must be absolute: received "${path2}"`);
       }
       const [, hostname, pathname] = path2.match(/^(?:[/\\]{2}([^/\\]+)(?=[/\\](?:[^/\\]|$)))?(.*)/);
@@ -90183,7 +90183,7 @@ var require_windows = __commonJS({
     function toNamespacedPath(path2) {
       if (typeof path2 !== "string") return path2;
       if (path2.length === 0) return "";
-      const resolvedPath = resolve4(path2);
+      const resolvedPath = resolve6(path2);
       if (resolvedPath.length >= 3) {
         if (resolvedPath.charCodeAt(0) === CHAR_BACKWARD_SLASH) {
           if (resolvedPath.charCodeAt(1) === CHAR_BACKWARD_SLASH) {
@@ -90509,7 +90509,7 @@ var require_windows = __commonJS({
     exports2.format = format;
     exports2.fromFileUrl = fromFileUrl;
     exports2.globToRegExp = globToRegExp;
-    exports2.isAbsolute = isAbsolute2;
+    exports2.isAbsolute = isAbsolute4;
     exports2.isGlob = isGlob;
     exports2.join = join4;
     exports2.joinGlobs = joinGlobs;
@@ -90517,7 +90517,7 @@ var require_windows = __commonJS({
     exports2.normalizeGlob = normalizeGlob;
     exports2.parse = parse3;
     exports2.relative = relative;
-    exports2.resolve = resolve4;
+    exports2.resolve = resolve6;
     exports2.toFileUrl = toFileUrl;
     exports2.toNamespacedPath = toNamespacedPath;
   }
@@ -92083,18 +92083,18 @@ var require_resolve3 = __commonJS({
     var util = require_util3();
     var SchemaObject = require_schema_obj2();
     var traverse = require_json_schema_traverse3();
-    module2.exports = resolve4;
-    resolve4.normalizeId = normalizeId;
-    resolve4.fullPath = getFullPath;
-    resolve4.url = resolveUrl;
-    resolve4.ids = resolveIds;
-    resolve4.inlineRef = inlineRef;
-    resolve4.schema = resolveSchema;
-    function resolve4(compile, root, ref) {
+    module2.exports = resolve6;
+    resolve6.normalizeId = normalizeId;
+    resolve6.fullPath = getFullPath;
+    resolve6.url = resolveUrl;
+    resolve6.ids = resolveIds;
+    resolve6.inlineRef = inlineRef;
+    resolve6.schema = resolveSchema;
+    function resolve6(compile, root, ref) {
       var refVal = this._refs[ref];
       if (typeof refVal == "string") {
         if (this._refs[refVal]) refVal = this._refs[refVal];
-        else return resolve4.call(this, compile, root, refVal);
+        else return resolve6.call(this, compile, root, refVal);
       }
       refVal = refVal || this._schemas[ref];
       if (refVal instanceof SchemaObject) {
@@ -92299,7 +92299,7 @@ var require_resolve3 = __commonJS({
 var require_error_classes2 = __commonJS({
   "node_modules/eslint/node_modules/ajv/lib/compile/error_classes.js"(exports2, module2) {
     "use strict";
-    var resolve4 = require_resolve3();
+    var resolve6 = require_resolve3();
     module2.exports = {
       Validation: errorSubclass(ValidationError),
       MissingRef: errorSubclass(MissingRefError)
@@ -92314,8 +92314,8 @@ var require_error_classes2 = __commonJS({
     };
     function MissingRefError(baseId, ref, message) {
       this.message = message || MissingRefError.message(baseId, ref);
-      this.missingRef = resolve4.url(baseId, ref);
-      this.missingSchema = resolve4.normalizeId(resolve4.fullPath(this.missingRef));
+      this.missingRef = resolve6.url(baseId, ref);
+      this.missingSchema = resolve6.normalizeId(resolve6.fullPath(this.missingRef));
     }
     function errorSubclass(Subclass) {
       Subclass.prototype = Object.create(Error.prototype);
@@ -92787,7 +92787,7 @@ var require_validate3 = __commonJS({
 var require_compile3 = __commonJS({
   "node_modules/eslint/node_modules/ajv/lib/compile/index.js"(exports2, module2) {
     "use strict";
-    var resolve4 = require_resolve3();
+    var resolve6 = require_resolve3();
     var util = require_util3();
     var errorClasses = require_error_classes2();
     var stableStringify = require_fast_json_stable_stringify();
@@ -92849,7 +92849,7 @@ var require_compile3 = __commonJS({
           RULES,
           validate: validateGenerator,
           util,
-          resolve: resolve4,
+          resolve: resolve6,
           resolveRef,
           usePattern,
           useDefault,
@@ -92911,7 +92911,7 @@ var require_compile3 = __commonJS({
         return validate;
       }
       function resolveRef(baseId2, ref, isRoot) {
-        ref = resolve4.url(baseId2, ref);
+        ref = resolve6.url(baseId2, ref);
         var refIndex = refs[ref];
         var _refVal, refCode;
         if (refIndex !== void 0) {
@@ -92928,11 +92928,11 @@ var require_compile3 = __commonJS({
           }
         }
         refCode = addLocalRef(ref);
-        var v2 = resolve4.call(self2, localCompile, root, ref);
+        var v2 = resolve6.call(self2, localCompile, root, ref);
         if (v2 === void 0) {
           var localSchema = localRefs && localRefs[ref];
           if (localSchema) {
-            v2 = resolve4.inlineRef(localSchema, opts.inlineRefs) ? localSchema : compile.call(self2, localSchema, root, localRefs, baseId2);
+            v2 = resolve6.inlineRef(localSchema, opts.inlineRefs) ? localSchema : compile.call(self2, localSchema, root, localRefs, baseId2);
           }
         }
         if (v2 === void 0) {
@@ -96549,7 +96549,7 @@ var require_ajv3 = __commonJS({
   "node_modules/eslint/node_modules/ajv/lib/ajv.js"(exports2, module2) {
     "use strict";
     var compileSchema = require_compile3();
-    var resolve4 = require_resolve3();
+    var resolve6 = require_resolve3();
     var Cache = require_cache2();
     var SchemaObject = require_schema_obj2();
     var stableStringify = require_fast_json_stable_stringify();
@@ -96631,7 +96631,7 @@ var require_ajv3 = __commonJS({
       var id = this._getId(schema);
       if (id !== void 0 && typeof id != "string")
         throw new Error("schema id must be string");
-      key = resolve4.normalizeId(key || id);
+      key = resolve6.normalizeId(key || id);
       checkUnique(this, key);
       this._schemas[key] = this._addSchema(schema, _skipValidation, _meta, true);
       return this;
@@ -96675,7 +96675,7 @@ var require_ajv3 = __commonJS({
       }
     }
     function _getSchemaFragment(self2, ref) {
-      var res = resolve4.schema.call(self2, { schema: {} }, ref);
+      var res = resolve6.schema.call(self2, { schema: {} }, ref);
       if (res) {
         var schema = res.schema, root = res.root, baseId = res.baseId;
         var v = compileSchema.call(self2, schema, root, void 0, baseId);
@@ -96691,7 +96691,7 @@ var require_ajv3 = __commonJS({
       }
     }
     function _getSchemaObj(self2, keyRef) {
-      keyRef = resolve4.normalizeId(keyRef);
+      keyRef = resolve6.normalizeId(keyRef);
       return self2._schemas[keyRef] || self2._refs[keyRef] || self2._fragments[keyRef];
     }
     function removeSchema(schemaKeyRef) {
@@ -96718,7 +96718,7 @@ var require_ajv3 = __commonJS({
           this._cache.del(cacheKey);
           var id = this._getId(schemaKeyRef);
           if (id) {
-            id = resolve4.normalizeId(id);
+            id = resolve6.normalizeId(id);
             delete this._schemas[id];
             delete this._refs[id];
           }
@@ -96742,13 +96742,13 @@ var require_ajv3 = __commonJS({
       var cached2 = this._cache.get(cacheKey);
       if (cached2) return cached2;
       shouldAddSchema = shouldAddSchema || this._opts.addUsedSchema !== false;
-      var id = resolve4.normalizeId(this._getId(schema));
+      var id = resolve6.normalizeId(this._getId(schema));
       if (id && shouldAddSchema) checkUnique(this, id);
       var willValidate = this._opts.validateSchema !== false && !skipValidation;
       var recursiveMeta;
-      if (willValidate && !(recursiveMeta = id && id == resolve4.normalizeId(schema.$schema)))
+      if (willValidate && !(recursiveMeta = id && id == resolve6.normalizeId(schema.$schema)))
         this.validateSchema(schema, true);
-      var localRefs = resolve4.ids.call(this, schema);
+      var localRefs = resolve6.ids.call(this, schema);
       var schemaObj = new SchemaObject({
         id,
         schema,
@@ -103272,18 +103272,18 @@ var require_p_limit = __commonJS({
           queue.dequeue()();
         }
       };
-      const run = async (fn, resolve4, ...args) => {
+      const run = async (fn, resolve6, ...args) => {
         activeCount++;
         const result = (async () => fn(...args))();
-        resolve4(result);
+        resolve6(result);
         try {
           await result;
         } catch {
         }
         next();
       };
-      const enqueue = (fn, resolve4, ...args) => {
-        queue.enqueue(run.bind(null, fn, resolve4, ...args));
+      const enqueue = (fn, resolve6, ...args) => {
+        queue.enqueue(run.bind(null, fn, resolve6, ...args));
         (async () => {
           await Promise.resolve();
           if (activeCount < concurrency && queue.size > 0) {
@@ -103291,8 +103291,8 @@ var require_p_limit = __commonJS({
           }
         })();
       };
-      const generator = (fn, ...args) => new Promise((resolve4) => {
-        enqueue(fn, resolve4, ...args);
+      const generator = (fn, ...args) => new Promise((resolve6) => {
+        enqueue(fn, resolve6, ...args);
       });
       Object.defineProperties(generator, {
         activeCount: {
@@ -104630,15 +104630,15 @@ function createPromise() {
   if (Promise.withResolvers) {
     return Promise.withResolvers();
   }
-  let resolve4, reject;
+  let resolve6, reject;
   const promise = new Promise((res, rej) => {
-    resolve4 = res;
+    resolve6 = res;
     reject = rej;
   });
-  if (resolve4 === void 0 || reject === void 0) {
+  if (resolve6 === void 0 || reject === void 0) {
     throw new Error("Promise executor did not initialize resolve or reject.");
   }
-  return { promise, resolve: resolve4, reject };
+  return { promise, resolve: resolve6, reject };
 }
 var MAX_TASK_TIMEOUT, MAX_TASK_DELAY, MAX_CONCURRENCY, RetryTask, Retrier;
 var init_retrier = __esm({
@@ -104695,12 +104695,12 @@ var init_retrier = __esm({
        * @param {Function} reject The reject function for the promise.
        * @param {AbortSignal|undefined} signal The AbortSignal to monitor for cancellation.
        */
-      constructor(fn, error2, resolve4, reject, signal) {
+      constructor(fn, error2, resolve6, reject, signal) {
         this.fn = fn;
         this.error = error2;
         this.timestamp = Date.now();
         this.lastAttempt = Date.now();
-        this.resolve = resolve4;
+        this.resolve = resolve6;
         this.reject = reject;
         this.signal = signal;
       }
@@ -104803,7 +104803,7 @@ var init_retrier = __esm({
        * @returns {Promise<any>} A promise that resolves when the function is
        * called successfully.
        */
-      #call(fn, { signal, promise, resolve: resolve4, reject }) {
+      #call(fn, { signal, promise, resolve: resolve6, reject }) {
         let result;
         try {
           result = fn();
@@ -104823,13 +104823,13 @@ var init_retrier = __esm({
         });
         Promise.resolve(result).then((value) => {
           debug("Function called successfully without retry.");
-          resolve4(value);
+          resolve6(value);
         }).catch((error2) => {
           if (!this.#check(error2)) {
             reject(error2);
             return;
           }
-          const task = new RetryTask(fn, error2, resolve4, reject, signal);
+          const task = new RetryTask(fn, error2, resolve6, reject, signal);
           debug(`Function failed, queuing for retry with task ${task.id}.`);
           this.#retrying.push(task);
           signal?.addEventListener("abort", () => {
@@ -104851,8 +104851,8 @@ var init_retrier = __esm({
        */
       retry(fn, { signal } = {}) {
         signal?.throwIfAborted();
-        const { promise, resolve: resolve4, reject } = createPromise();
-        this.#pending.push(() => this.#call(fn, { signal, promise, resolve: resolve4, reject }));
+        const { promise, resolve: resolve6, reject } = createPromise();
+        this.#pending.push(() => this.#call(fn, { signal, promise, resolve: resolve6, reject }));
         this.#processPending();
         return promise;
       }
@@ -104938,11 +104938,11 @@ var init_retrier = __esm({
 });
 
 // node_modules/@humanfs/node/src/node-hfs.js
-var import_node_path6, import_promises4, import_node_url, RETRY_ERROR_CODES, NodeHfsDirectoryEntry, NodeHfsImpl, NodeHfs, hfs;
+var import_node_path7, import_promises4, import_node_url, RETRY_ERROR_CODES, NodeHfsDirectoryEntry, NodeHfsImpl, NodeHfs, hfs;
 var init_node_hfs = __esm({
   "node_modules/@humanfs/node/src/node-hfs.js"() {
     init_src();
-    import_node_path6 = __toESM(require("node:path"), 1);
+    import_node_path7 = __toESM(require("node:path"), 1);
     init_retrier();
     import_promises4 = __toESM(require("node:fs/promises"), 1);
     import_node_url = require("node:url");
@@ -105029,7 +105029,7 @@ var init_node_hfs = __esm({
         const value = Buffer.from(contents);
         return this.#retrier.retry(() => this.#fsp.writeFile(filePath, value)).catch((error2) => {
           if (error2.code === "ENOENT") {
-            const dirPath = import_node_path6.default.dirname(
+            const dirPath = import_node_path7.default.dirname(
               filePath instanceof URL ? (0, import_node_url.fileURLToPath)(filePath) : filePath
             );
             return this.#fsp.mkdir(dirPath, { recursive: true }).then(() => this.#fsp.writeFile(filePath, value));
@@ -105051,7 +105051,7 @@ var init_node_hfs = __esm({
         const value = Buffer.from(contents);
         return this.#retrier.retry(() => this.#fsp.appendFile(filePath, value)).catch((error2) => {
           if (error2.code === "ENOENT") {
-            const dirPath = import_node_path6.default.dirname(
+            const dirPath = import_node_path7.default.dirname(
               filePath instanceof URL ? (0, import_node_url.fileURLToPath)(filePath) : filePath
             );
             return this.#fsp.mkdir(dirPath, { recursive: true }).then(() => this.#fsp.appendFile(filePath, value));
@@ -105217,8 +105217,8 @@ var init_node_hfs = __esm({
         const destinationStr = destination instanceof URL ? (0, import_node_url.fileURLToPath)(destination) : destination;
         await this.createDirectory(destination);
         for await (const entry of this.list(source)) {
-          const fromEntryPath = import_node_path6.default.join(sourceStr, entry.name);
-          const toEntryPath = import_node_path6.default.join(destinationStr, entry.name);
+          const fromEntryPath = import_node_path7.default.join(sourceStr, entry.name);
+          const toEntryPath = import_node_path7.default.join(destinationStr, entry.name);
           if (entry.isSymlink) {
             const target = await this.#fsp.readlink(fromEntryPath);
             await this.#fsp.symlink(target, toEntryPath);
@@ -106118,15 +106118,15 @@ var require_retrier = __commonJS({
       if (Promise.withResolvers) {
         return Promise.withResolvers();
       }
-      let resolve4, reject;
+      let resolve6, reject;
       const promise = new Promise((res, rej) => {
-        resolve4 = res;
+        resolve6 = res;
         reject = rej;
       });
-      if (resolve4 === void 0 || reject === void 0) {
+      if (resolve6 === void 0 || reject === void 0) {
         throw new Error("Promise executor did not initialize resolve or reject.");
       }
-      return { promise, resolve: resolve4, reject };
+      return { promise, resolve: resolve6, reject };
     }
     var RetryTask2 = class {
       /**
@@ -106177,12 +106177,12 @@ var require_retrier = __commonJS({
        * @param {Function} reject The reject function for the promise.
        * @param {AbortSignal|undefined} signal The AbortSignal to monitor for cancellation.
        */
-      constructor(fn, error2, resolve4, reject, signal) {
+      constructor(fn, error2, resolve6, reject, signal) {
         this.fn = fn;
         this.error = error2;
         this.timestamp = Date.now();
         this.lastAttempt = Date.now();
-        this.resolve = resolve4;
+        this.resolve = resolve6;
         this.reject = reject;
         this.signal = signal;
       }
@@ -106285,7 +106285,7 @@ var require_retrier = __commonJS({
        * @returns {Promise<any>} A promise that resolves when the function is
        * called successfully.
        */
-      #call(fn, { signal, promise, resolve: resolve4, reject }) {
+      #call(fn, { signal, promise, resolve: resolve6, reject }) {
         let result;
         try {
           result = fn();
@@ -106305,13 +106305,13 @@ var require_retrier = __commonJS({
         });
         Promise.resolve(result).then((value) => {
           debug2("Function called successfully without retry.");
-          resolve4(value);
+          resolve6(value);
         }).catch((error2) => {
           if (!this.#check(error2)) {
             reject(error2);
             return;
           }
-          const task = new RetryTask2(fn, error2, resolve4, reject, signal);
+          const task = new RetryTask2(fn, error2, resolve6, reject, signal);
           debug2(`Function failed, queuing for retry with task ${task.id}.`);
           this.#retrying.push(task);
           signal?.addEventListener("abort", () => {
@@ -106333,8 +106333,8 @@ var require_retrier = __commonJS({
        */
       retry(fn, { signal } = {}) {
         signal?.throwIfAborted();
-        const { promise, resolve: resolve4, reject } = createPromise2();
-        this.#pending.push(() => this.#call(fn, { signal, promise, resolve: resolve4, reject }));
+        const { promise, resolve: resolve6, reject } = createPromise2();
+        this.#pending.push(() => this.#call(fn, { signal, promise, resolve: resolve6, reject }));
         this.#processPending();
         return promise;
       }
@@ -106426,10 +106426,10 @@ var require_relative_module_resolver = __commonJS({
     "use strict";
     var Module = require("node:module");
     var createRequire = Module.createRequire;
-    function resolve4(moduleName, relativeToPath) {
+    function resolve6(moduleName, relativeToPath) {
       return createRequire(relativeToPath).resolve(moduleName);
     }
-    exports2.resolve = resolve4;
+    exports2.resolve = resolve6;
   }
 });
 
@@ -106474,7 +106474,7 @@ var require_eslint = __commonJS({
       getNamespaceFromTerm,
       normalizePackageName
     } = require_naming();
-    var { resolve: resolve4 } = require_relative_module_resolver();
+    var { resolve: resolve6 } = require_relative_module_resolver();
     var hrtimeBigint = process.hrtime.bigint;
     var debug2 = createDebug("eslint:eslint");
     var privateMembers = /* @__PURE__ */ new WeakMap();
@@ -107180,7 +107180,7 @@ var require_eslint = __commonJS({
               normalizedFormatName,
               "eslint-formatter"
             );
-            formatterPath = resolve4(npmFormat, getPlaceholderPath(cwd));
+            formatterPath = resolve6(npmFormat, getPlaceholderPath(cwd));
           } catch {
             formatterPath = path2.resolve(
               __dirname,
@@ -109028,7 +109028,7 @@ ${this.formatErrors(validateSchema.errors)}`);
       getNamespaceFromTerm
     };
     var createRequire = Module__default["default"].createRequire;
-    function resolve4(moduleName, relativeToPath) {
+    function resolve6(moduleName, relativeToPath) {
       try {
         return createRequire(relativeToPath).resolve(moduleName);
       } catch (error2) {
@@ -109042,7 +109042,7 @@ Require stack:
     }
     var ModuleResolver = {
       __proto__: null,
-      resolve: resolve4
+      resolve: resolve6
     };
     var require$1 = Module.createRequire(require("url").pathToFileURL(__filename).toString());
     var debug$2 = debugOrig__default["default"]("eslintrc:config-array-factory");
@@ -109174,7 +109174,7 @@ Error: ${e.message}`;
       if (debug$2.enabled) {
         let nameAndVersion = null;
         try {
-          const packageJsonPath = resolve4(
+          const packageJsonPath = resolve6(
             `${request}/package.json`,
             relativeTo
           );
@@ -123772,7 +123772,7 @@ var Protocol = class {
           return;
         }
         const pollInterval = task2.pollInterval ?? this._options?.defaultTaskPollInterval ?? 1e3;
-        await new Promise((resolve4) => setTimeout(resolve4, pollInterval));
+        await new Promise((resolve6) => setTimeout(resolve6, pollInterval));
         options?.signal?.throwIfAborted();
       }
     } catch (error2) {
@@ -123789,7 +123789,7 @@ var Protocol = class {
    */
   request(request, resultSchema, options) {
     const { relatedRequestId, resumptionToken, onresumptiontoken, task, relatedTask } = options ?? {};
-    return new Promise((resolve4, reject) => {
+    return new Promise((resolve6, reject) => {
       const earlyReject = (error2) => {
         reject(error2);
       };
@@ -123867,7 +123867,7 @@ var Protocol = class {
           if (!parseResult.success) {
             reject(parseResult.error);
           } else {
-            resolve4(parseResult.data);
+            resolve6(parseResult.data);
           }
         } catch (error2) {
           reject(error2);
@@ -124128,12 +124128,12 @@ var Protocol = class {
       }
     } catch {
     }
-    return new Promise((resolve4, reject) => {
+    return new Promise((resolve6, reject) => {
       if (signal.aborted) {
         reject(new McpError(ErrorCode.InvalidRequest, "Request cancelled"));
         return;
       }
-      const timeoutId = setTimeout(resolve4, interval);
+      const timeoutId = setTimeout(resolve6, interval);
       signal.addEventListener("abort", () => {
         clearTimeout(timeoutId);
         reject(new McpError(ErrorCode.InvalidRequest, "Request cancelled"));
@@ -125009,12 +125009,12 @@ var StdioServerTransport = class {
     this.onclose?.();
   }
   send(message) {
-    return new Promise((resolve4) => {
+    return new Promise((resolve6) => {
       const json = serializeMessage(message);
       if (this._stdout.write(json)) {
-        resolve4();
+        resolve6();
       } else {
-        this._stdout.once("drain", resolve4);
+        this._stdout.once("drain", resolve6);
       }
     });
   }
@@ -125163,19 +125163,26 @@ var import_node_path4 = require("node:path");
 
 // src/harness/scope.ts
 var import_node_path3 = require("node:path");
-function abs(p) {
-  const resolved = (0, import_node_path3.isAbsolute)(p) ? (0, import_node_path3.normalize)(p) : (0, import_node_path3.normalize)((0, import_node_path3.resolve)(p));
+function abs(p, basePath) {
+  let resolved;
+  if ((0, import_node_path3.isAbsolute)(p)) {
+    resolved = (0, import_node_path3.normalize)(p);
+  } else if (basePath) {
+    resolved = (0, import_node_path3.normalize)((0, import_node_path3.resolve)(basePath, p));
+  } else {
+    resolved = (0, import_node_path3.normalize)((0, import_node_path3.resolve)(p));
+  }
   return process.platform === "win32" ? resolved.toLowerCase() : resolved;
 }
-function isInScope(filePath, scope) {
-  const normalizedFile = abs(filePath);
+function isInScope(filePath, scope, basePath) {
+  const normalizedFile = abs(filePath, basePath);
   return scope.some((scopePath) => {
-    const normalizedScope = abs(scopePath);
+    const normalizedScope = abs(scopePath, basePath);
     return normalizedFile === normalizedScope || normalizedFile.startsWith(normalizedScope + import_node_path3.sep) || normalizedFile.startsWith(normalizedScope + "/");
   });
 }
-function assertInScope(filePath, scope) {
-  if (!isInScope(filePath, scope)) {
+function assertInScope(filePath, scope, basePath) {
+  if (!isInScope(filePath, scope, basePath)) {
     throw new Error(
       `Scope violation: "${filePath}" is not within the authorized scope. Authorized paths: [${scope.join(", ")}]`
     );
@@ -125361,7 +125368,7 @@ async function handleApplyChanges(args, ctx2) {
     throw new Error("No proposed changes found in the current attempt.");
   }
   for (const change of attempt.proposedChanges) {
-    assertInScope(change.file, session.scope);
+    assertInScope(change.file, session.scope, ctx2.workspacePath);
   }
   const updatedChanges = [...attempt.proposedChanges];
   const existedBefore = new Array(updatedChanges.length).fill(false);
@@ -125485,6 +125492,7 @@ var submitPlanToolDefinition = {
 
 // src/tools/submit-proposed-change.ts
 var import_node_crypto3 = require("node:crypto");
+var import_node_path6 = require("node:path");
 async function handleSubmitProposedChange(args, ctx2) {
   const session = await ctx2.store.load(args.sessionId);
   if (session.status !== "PLANNING" && session.status !== "PROPOSED") {
@@ -125492,11 +125500,12 @@ async function handleSubmitProposedChange(args, ctx2) {
       `submit_proposed_change requires status PLANNING or PROPOSED, got ${session.status}. Call submit_plan first if you haven't planned yet.`
     );
   }
-  assertInScope(args.file, session.scope);
+  const resolvedFile = (0, import_node_path6.isAbsolute)(args.file) ? args.file : (0, import_node_path6.resolve)(ctx2.workspacePath, args.file);
+  assertInScope(resolvedFile, session.scope, ctx2.workspacePath);
   const change = {
     id: (0, import_node_crypto3.randomUUID)(),
     attemptId: "",
-    file: args.file,
+    file: resolvedFile,
     operation: args.operation,
     content: args.operation === "delete" ? "" : args.content ?? "",
     justification: args.justification,
@@ -125641,11 +125650,11 @@ var import_eslint = __toESM(require_api(), 1);
 var import_js = __toESM(require_src3(), 1);
 var import_globals = __toESM(require_globals5(), 1);
 var import_node_fs = require("node:fs");
-var import_node_path7 = require("node:path");
+var import_node_path8 = require("node:path");
 var import_node_crypto5 = require("node:crypto");
 var CONFIG_FILES = ["eslint.config.js", "eslint.config.mjs", "eslint.config.cjs"];
 function hasProjectConfig(workspacePath) {
-  return CONFIG_FILES.some((f) => (0, import_node_fs.existsSync)((0, import_node_path7.join)(workspacePath, f)));
+  return CONFIG_FILES.some((f) => (0, import_node_fs.existsSync)((0, import_node_path8.join)(workspacePath, f)));
 }
 async function runLint(files, attemptId, workspacePath) {
   if (files.length === 0) {
@@ -125809,6 +125818,7 @@ var runLintToolDefinition = {
 
 // src/tools/submit-correction.ts
 var import_node_crypto7 = require("node:crypto");
+var import_node_path9 = require("node:path");
 async function handleSubmitCorrection(args, ctx2) {
   const session = await ctx2.store.load(args.sessionId);
   if (session.status !== "CORRECTING") {
@@ -125816,11 +125826,12 @@ async function handleSubmitCorrection(args, ctx2) {
       `submit_correction requires status CORRECTING, got ${session.status}. Call run_lint first to get the failure evidence.`
     );
   }
-  assertInScope(args.file, session.scope);
+  const resolvedFile = (0, import_node_path9.isAbsolute)(args.file) ? args.file : (0, import_node_path9.resolve)(ctx2.workspacePath, args.file);
+  assertInScope(resolvedFile, session.scope, ctx2.workspacePath);
   const change = {
     id: (0, import_node_crypto7.randomUUID)(),
     attemptId: "",
-    file: args.file,
+    file: resolvedFile,
     operation: args.operation,
     content: args.operation === "delete" ? "" : args.content ?? "",
     justification: args.justification,

@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto'
+import { isAbsolute, resolve } from 'node:path'
 import { transition } from '../domain/state-machine.js'
 import { assertInScope } from '../harness/scope.js'
 import type { AppContext } from '../context.js'
@@ -23,13 +24,17 @@ export async function handleSubmitProposedChange(
     )
   }
 
-  // Harness validates scope before accepting the proposed change
-  assertInScope(args.file, session.scope)
+  // Resolve relative paths against the workspace (not the server's cwd) and store
+  // the absolute path so every later step (apply, lint) operates on the same file.
+  const resolvedFile = isAbsolute(args.file) ? args.file : resolve(ctx.workspacePath, args.file)
+
+  // Harness validates scope before accepting the proposed change.
+  assertInScope(resolvedFile, session.scope, ctx.workspacePath)
 
   const change: ProposedChange = {
     id: randomUUID(),
     attemptId: '',
-    file: args.file,
+    file: resolvedFile,
     operation: args.operation,
     content: args.operation === 'delete' ? '' : (args.content ?? ''),
     justification: args.justification,

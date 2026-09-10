@@ -34,9 +34,10 @@ export async function handleApplyChanges(args: { sessionId: string }, ctx: AppCo
     throw new Error('No proposed changes found in the current attempt.')
   }
 
-  // Control: revalidate scope for every change before touching any file
+  // Control: revalidate scope for every change before touching any file.
+  // Resolve relative paths against the workspace, not the server's cwd.
   for (const change of attempt.proposedChanges) {
-    assertInScope(change.file, session.scope)
+    assertInScope(change.file, session.scope, ctx.workspacePath)
   }
 
   // Phase 1: snapshot every target file before touching any of them.

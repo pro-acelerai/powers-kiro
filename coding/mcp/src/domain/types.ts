@@ -51,7 +51,10 @@ export interface ProposedChange {
 export interface Attempt {
   id: string
   sessionId: string
-  attemptNumber: number      // 1, 2, or 3
+  attemptNumber: number      // 1 = original implementation; 2..N = corrections.
+                             // With correctionBudget=3, attempts 1..3 are within
+                             // budget; a 4th attempt may exist transiently and is
+                             // what triggers BUDGET_EXCEEDED.
   createdAt: string
   completedAt: string | null
   status: AttemptStatus
