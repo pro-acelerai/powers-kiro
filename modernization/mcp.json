@@ -4,7 +4,10 @@
     "modernization": {
       "type": "stdio",
       "command": "node",
-      "args": ["./mcp/dist/bundle.cjs"]
+      "args": ["./mcp/dist/bundle.cjs"],
+      "env": {
+        "MODERNIZATION_WORKSPACE": "${workspaceFolder}"
+      }
     }
   }
 }
