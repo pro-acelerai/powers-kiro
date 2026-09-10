@@ -45,10 +45,13 @@ export async function handleSubmitMigrationPlan(args: SubmitPlanArgs, ctx: AppCo
     estimatedComplexity: p.estimatedComplexity ?? 'medium',
   }))
 
-  const newProjectPath = resolve(ctx.workspacePath, args.newProjectName.trim())
-  if (!newProjectPath.startsWith(ctx.workspacePath + sep)) {
+  // Resolve the new project under the artifacts path confirmed at the start of
+  // the iteration (inherited by this architecture session), not the raw workspace.
+  const artifactsBase = session.artifactsPath
+  const newProjectPath = resolve(artifactsBase, args.newProjectName.trim())
+  if (newProjectPath !== artifactsBase && !newProjectPath.startsWith(artifactsBase + sep)) {
     throw new Error(
-      `newProjectName "${args.newProjectName.trim()}" resolves outside the workspace. ` +
+      `newProjectName "${args.newProjectName.trim()}" resolves outside the artifacts directory: "${artifactsBase}". ` +
       `Use a simple directory name like "my-app-modern".`
     )
   }

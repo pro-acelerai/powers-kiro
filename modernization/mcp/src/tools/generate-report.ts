@@ -257,12 +257,12 @@ Both can run simultaneously. Validate the new system before decommissioning the 
   const updated = { ...toDone.session, report: markdown, resolution } as DeliverySession
   await ctx.store.save(updated, session)
 
-  await ctx.store.saveReport(args.sessionId, markdown)
+  const reportPath = await ctx.store.saveReport(args.sessionId, markdown, delivery.artifactsPath)
 
   return {
     sessionId: session.id,
     status: 'DONE',
-    reportSavedTo: `.kiro/trace/modernization/report-${args.sessionId}.md`,
+    reportSavedTo: reportPath,
     phasesCompleted: donePhases.length,
     phasesTotal: implSessions.length,
     totalFilesCreated: totalNewFiles,

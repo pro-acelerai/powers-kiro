@@ -23,12 +23,14 @@ export class SessionStore {
     legacyPath: string
     targetStack: string
     scope: string[]
+    artifactsPath: string
   }): Promise<DiscoverySession> {
     const session: DiscoverySession = {
       id: randomUUID(),
       createdAt: new Date().toISOString(),
       type: 'discovery',
       status: 'CREATED',
+      artifactsPath: params.artifactsPath,
       legacyPath: params.legacyPath,
       targetStack: params.targetStack,
       scope: params.scope,
@@ -44,12 +46,16 @@ export class SessionStore {
     return session
   }
 
-  async createArchitecture(params: { discoverySessionId: string }): Promise<ArchitectureSession> {
+  async createArchitecture(params: {
+    discoverySessionId: string
+    artifactsPath: string
+  }): Promise<ArchitectureSession> {
     const session: ArchitectureSession = {
       id: randomUUID(),
       createdAt: new Date().toISOString(),
       type: 'architecture',
       status: 'CREATED',
+      artifactsPath: params.artifactsPath,
       discoverySessionId: params.discoverySessionId,
       migrationPlan: null,
       humanDecision: null,
@@ -69,12 +75,14 @@ export class SessionStore {
     phaseNumber: number
     phaseTitle: string
     newProjectPath: string
+    artifactsPath: string
   }): Promise<ImplementationSession> {
     const session: ImplementationSession = {
       id: randomUUID(),
       createdAt: new Date().toISOString(),
       type: 'implementation',
       status: 'CREATED',
+      artifactsPath: params.artifactsPath,
       discoverySessionId: params.discoverySessionId,
       architectureSessionId: params.architectureSessionId,
       phaseId: params.phaseId,
@@ -94,12 +102,14 @@ export class SessionStore {
     discoverySessionId: string
     architectureSessionId: string
     implementationSessionIds: string[]
+    artifactsPath: string
   }): Promise<DeliverySession> {
     const session: DeliverySession = {
       id: randomUUID(),
       createdAt: new Date().toISOString(),
       type: 'delivery',
       status: 'CREATED',
+      artifactsPath: params.artifactsPath,
       discoverySessionId: params.discoverySessionId,
       architectureSessionId: params.architectureSessionId,
       implementationSessionIds: params.implementationSessionIds,
@@ -127,6 +137,7 @@ export class SessionStore {
   async save(next: Session, previous?: Session): Promise<void> {
     if (previous) {
       this._assertTypeUnchanged(next, previous)
+      this._assertArtifactsPathUnchanged(next, previous)
       if (next.type === 'implementation' && previous.type === 'implementation') {
         this._assertBudgetUnchanged(next, previous)
         this._assertCompletedAttemptsUnchanged(next, previous)
@@ -135,10 +146,19 @@ export class SessionStore {
     await this._write(next)
   }
 
-  async saveReport(sessionId: string, markdown: string): Promise<void> {
-    await mkdir(this.traceDir, { recursive: true })
-    const reportPath = join(this.traceDir, `report-${sessionId}.md`)
+  /**
+   * Persist the final migration report as markdown.
+   * Written under the session's artifactsPath (the directory the user confirmed
+   * at the start of the iteration), falling back to the trace dir when omitted.
+   */
+  async saveReport(sessionId: string, markdown: string, artifactsPath?: string): Promise<string> {
+    const targetDir = artifactsPath
+      ? join(artifactsPath, 'modernization-reports')
+      : this.traceDir
+    await mkdir(targetDir, { recursive: true })
+    const reportPath = join(targetDir, `report-${sessionId}.md`)
     await writeFile(reportPath, markdown, 'utf-8')
+    return reportPath
   }
 
   private _assertTypeUnchanged(next: Session, previous: Session): void {
@@ -146,6 +166,15 @@ export class SessionStore {
       throw new Error(
         `Invariant violated: session type is immutable. ` +
         `Expected ${previous.type}, got ${next.type}`
+      )
+    }
+  }
+
+  private _assertArtifactsPathUnchanged(next: Session, previous: Session): void {
+    if (next.artifactsPath !== previous.artifactsPath) {
+      throw new Error(
+        `Invariant violated: artifactsPath is immutable. ` +
+        `Expected ${previous.artifactsPath}, got ${next.artifactsPath}`
       )
     }
   }

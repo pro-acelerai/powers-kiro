@@ -35,6 +35,8 @@ modernization_create_session({
 })
 ```
 
+O caminho dos artefatos (`artifactsPath`) e herdado automaticamente da discovery. O relatorio final sera salvo em `<artifactsPath>/modernization-reports/report-<sessionId>.md`.
+
 ### Passo 2 — Gerar o relatorio
 
 ```

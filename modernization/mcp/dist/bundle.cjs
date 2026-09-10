@@ -126011,6 +126011,7 @@ var SessionStore = class {
       createdAt: (/* @__PURE__ */ new Date()).toISOString(),
       type: "discovery",
       status: "CREATED",
+      artifactsPath: params.artifactsPath,
       legacyPath: params.legacyPath,
       targetStack: params.targetStack,
       scope: params.scope,
@@ -126031,6 +126032,7 @@ var SessionStore = class {
       createdAt: (/* @__PURE__ */ new Date()).toISOString(),
       type: "architecture",
       status: "CREATED",
+      artifactsPath: params.artifactsPath,
       discoverySessionId: params.discoverySessionId,
       migrationPlan: null,
       humanDecision: null,
@@ -126048,6 +126050,7 @@ var SessionStore = class {
       createdAt: (/* @__PURE__ */ new Date()).toISOString(),
       type: "implementation",
       status: "CREATED",
+      artifactsPath: params.artifactsPath,
       discoverySessionId: params.discoverySessionId,
       architectureSessionId: params.architectureSessionId,
       phaseId: params.phaseId,
@@ -126068,6 +126071,7 @@ var SessionStore = class {
       createdAt: (/* @__PURE__ */ new Date()).toISOString(),
       type: "delivery",
       status: "CREATED",
+      artifactsPath: params.artifactsPath,
       discoverySessionId: params.discoverySessionId,
       architectureSessionId: params.architectureSessionId,
       implementationSessionIds: params.implementationSessionIds,
@@ -126093,6 +126097,7 @@ var SessionStore = class {
   async save(next, previous) {
     if (previous) {
       this._assertTypeUnchanged(next, previous);
+      this._assertArtifactsPathUnchanged(next, previous);
       if (next.type === "implementation" && previous.type === "implementation") {
         this._assertBudgetUnchanged(next, previous);
         this._assertCompletedAttemptsUnchanged(next, previous);
@@ -126100,15 +126105,29 @@ var SessionStore = class {
     }
     await this._write(next);
   }
-  async saveReport(sessionId, markdown) {
-    await (0, import_promises.mkdir)(this.traceDir, { recursive: true });
-    const reportPath = (0, import_node_path.join)(this.traceDir, `report-${sessionId}.md`);
+  /**
+   * Persist the final migration report as markdown.
+   * Written under the session's artifactsPath (the directory the user confirmed
+   * at the start of the iteration), falling back to the trace dir when omitted.
+   */
+  async saveReport(sessionId, markdown, artifactsPath) {
+    const targetDir = artifactsPath ? (0, import_node_path.join)(artifactsPath, "modernization-reports") : this.traceDir;
+    await (0, import_promises.mkdir)(targetDir, { recursive: true });
+    const reportPath = (0, import_node_path.join)(targetDir, `report-${sessionId}.md`);
     await (0, import_promises.writeFile)(reportPath, markdown, "utf-8");
+    return reportPath;
   }
   _assertTypeUnchanged(next, previous) {
     if (next.type !== previous.type) {
       throw new Error(
         `Invariant violated: session type is immutable. Expected ${previous.type}, got ${next.type}`
+      );
+    }
+  }
+  _assertArtifactsPathUnchanged(next, previous) {
+    if (next.artifactsPath !== previous.artifactsPath) {
+      throw new Error(
+        `Invariant violated: artifactsPath is immutable. Expected ${previous.artifactsPath}, got ${next.artifactsPath}`
       );
     }
   }
@@ -126172,10 +126191,16 @@ async function handleCreateSession(args, ctx2) {
   if (!args.type) throw new Error("type is required: discovery | architecture | implementation | delivery");
   switch (args.type) {
     case "discovery": {
-      const { legacyPath, targetStack, scope } = args;
+      const { legacyPath, targetStack, scope, artifactsPath } = args;
       if (!legacyPath?.trim()) throw new Error("legacyPath is required");
       if (!targetStack?.trim()) throw new Error("targetStack is required");
       if (!Array.isArray(scope) || scope.length === 0) throw new Error("scope must be a non-empty array of paths");
+      const resolvedArtifacts = artifactsPath?.trim() ? (0, import_node_path3.resolve)(ctx2.workspacePath, artifactsPath.trim()) : ctx2.workspacePath;
+      if (resolvedArtifacts !== ctx2.workspacePath && !resolvedArtifacts.startsWith(ctx2.workspacePath + import_node_path3.sep)) {
+        throw new Error(
+          `artifactsPath "${artifactsPath}" resolves outside the workspace: "${ctx2.workspacePath}". Use a path within the workspace.`
+        );
+      }
       const resolvedLegacy = (0, import_node_path3.resolve)(ctx2.workspacePath, legacyPath.trim());
       const resolvedScope = scope.map((p) => {
         const resolved = (0, import_node_path3.resolve)(resolvedLegacy, p.trim());
@@ -126187,7 +126212,8 @@ async function handleCreateSession(args, ctx2) {
       const session = await ctx2.store.createDiscovery({
         legacyPath: resolvedLegacy,
         targetStack: targetStack.trim(),
-        scope: resolvedScope
+        scope: resolvedScope,
+        artifactsPath: resolvedArtifacts
       });
       return {
         sessionId: session.id,
@@ -126196,6 +126222,7 @@ async function handleCreateSession(args, ctx2) {
         legacyPath: session.legacyPath,
         targetStack: session.targetStack,
         scope: session.scope,
+        artifactsPath: session.artifactsPath,
         refinementBudget: session.refinementBudget,
         message: "Discovery session created. Call read_legacy next."
       };
@@ -126206,12 +126233,16 @@ async function handleCreateSession(args, ctx2) {
       const discoverySession = await ctx2.store.load(discoverySessionId);
       if (discoverySession.type !== "discovery") throw new Error("discoverySessionId must reference a discovery session");
       if (discoverySession.status !== "DONE") throw new Error("Discovery session must be DONE before creating architecture session");
-      const session = await ctx2.store.createArchitecture({ discoverySessionId });
+      const session = await ctx2.store.createArchitecture({
+        discoverySessionId,
+        artifactsPath: discoverySession.artifactsPath
+      });
       return {
         sessionId: session.id,
         type: session.type,
         status: session.status,
         discoverySessionId: session.discoverySessionId,
+        artifactsPath: session.artifactsPath,
         refinementBudget: session.refinementBudget,
         message: "Architecture session created. Call read_discovery next."
       };
@@ -126242,7 +126273,9 @@ async function handleCreateSession(args, ctx2) {
         phaseId,
         phaseNumber: phase.number,
         phaseTitle: phase.title,
-        newProjectPath
+        newProjectPath,
+        // Inherit the artifacts path confirmed at the start of discovery.
+        artifactsPath: discSession.artifactsPath
       });
       return {
         sessionId: session.id,
@@ -126251,6 +126284,7 @@ async function handleCreateSession(args, ctx2) {
         phaseNumber: session.phaseNumber,
         phaseTitle: session.phaseTitle,
         newProjectPath: session.newProjectPath,
+        artifactsPath: session.artifactsPath,
         correctionBudget: session.correctionBudget,
         message: `Implementation session created for Phase ${phaseNumber}: ${phaseTitle}. Call read_phase_context next.`
       };
@@ -126284,12 +126318,15 @@ async function handleCreateSession(args, ctx2) {
       const session = await ctx2.store.createDelivery({
         discoverySessionId,
         architectureSessionId,
-        implementationSessionIds
+        implementationSessionIds,
+        // Inherit the artifacts path confirmed at the start of discovery.
+        artifactsPath: delivDiscovSession.artifactsPath
       });
       return {
         sessionId: session.id,
         type: session.type,
         status: session.status,
+        artifactsPath: session.artifactsPath,
         message: "Delivery session created. Call generate_report next."
       };
     }
@@ -126320,6 +126357,10 @@ var createSessionToolDefinition = {
         type: "array",
         items: { type: "string" },
         description: "[discovery only] Array of folders or files to analyze from the legacy project"
+      },
+      artifactsPath: {
+        type: "string",
+        description: "[discovery only] Base directory (within the workspace) where all artifacts of this iteration are written: HTML report, final report and the new project. Suggest a path to the user and confirm it before creating the session. Inherited automatically by architecture, implementation and delivery sessions. Defaults to the workspace root when omitted."
       },
       discoverySessionId: {
         type: "string",
@@ -127270,10 +127311,11 @@ async function handleSubmitMigrationPlan(args, ctx2) {
     dependencies: p.dependencies ?? [],
     estimatedComplexity: p.estimatedComplexity ?? "medium"
   }));
-  const newProjectPath = (0, import_node_path7.resolve)(ctx2.workspacePath, args.newProjectName.trim());
-  if (!newProjectPath.startsWith(ctx2.workspacePath + import_node_path7.sep)) {
+  const artifactsBase = session.artifactsPath;
+  const newProjectPath = (0, import_node_path7.resolve)(artifactsBase, args.newProjectName.trim());
+  if (newProjectPath !== artifactsBase && !newProjectPath.startsWith(artifactsBase + import_node_path7.sep)) {
     throw new Error(
-      `newProjectName "${args.newProjectName.trim()}" resolves outside the workspace. Use a simple directory name like "my-app-modern".`
+      `newProjectName "${args.newProjectName.trim()}" resolves outside the artifacts directory: "${artifactsBase}". Use a simple directory name like "my-app-modern".`
     );
   }
   const plan = {
@@ -128260,11 +128302,11 @@ Both can run simultaneously. Validate the new system before decommissioning the 
   };
   const updated = { ...toDone.session, report: markdown, resolution };
   await ctx2.store.save(updated, session);
-  await ctx2.store.saveReport(args.sessionId, markdown);
+  const reportPath = await ctx2.store.saveReport(args.sessionId, markdown, delivery.artifactsPath);
   return {
     sessionId: session.id,
     status: "DONE",
-    reportSavedTo: `.kiro/trace/modernization/report-${args.sessionId}.md`,
+    reportSavedTo: reportPath,
     phasesCompleted: donePhases.length,
     phasesTotal: implSessions.length,
     totalFilesCreated: totalNewFiles,
@@ -128767,7 +128809,7 @@ async function handleGenerateDiscoveryHtml(args, ctx2) {
   const discovery = session;
   const generatedAt = (/* @__PURE__ */ new Date()).toLocaleString("pt-BR", { dateStyle: "long", timeStyle: "short" });
   const html = buildHtml(discovery, generatedAt);
-  const reportsDir = (0, import_node_path12.join)(ctx2.workspacePath, "modernization-reports");
+  const reportsDir = (0, import_node_path12.join)(discovery.artifactsPath, "modernization-reports");
   await (0, import_promises5.mkdir)(reportsDir, { recursive: true });
   const htmlPath = (0, import_node_path12.join)(reportsDir, `discovery-${args.sessionId}.html`);
   await (0, import_promises5.writeFile)(htmlPath, html, "utf-8");

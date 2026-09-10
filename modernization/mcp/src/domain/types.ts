@@ -242,6 +242,10 @@ interface BaseSession {
   createdAt: string
   type: SessionType
   status: SessionStatus
+  // Base directory where all artifacts of this iteration are written
+  // (HTML report, final report, new project). Confirmed by the user at the
+  // start of the discovery session and inherited by all downstream sessions.
+  artifactsPath: string
   thinkRecords: ThinkRecord[]
   resolution: Resolution | null
 }

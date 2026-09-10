@@ -20,22 +20,25 @@ after(async () => {
 
 // --- Session creation ---
 
-test('createDiscovery: creates a CREATED discovery session with budgets', async () => {
+test('createDiscovery: creates a CREATED discovery session with budgets and artifactsPath', async () => {
   const session = await store.createDiscovery({
     legacyPath: '/legacy',
     targetStack: 'Node.js',
     scope: ['/legacy/src'],
+    artifactsPath: workspace,
   })
   assert.equal(session.type, 'discovery')
   assert.equal(session.status, 'CREATED')
+  assert.equal(session.artifactsPath, workspace)
   assert.equal(session.refinementBudget, REFINEMENT_BUDGET)
   assert.equal(session.refinementCount, 0)
   assert.match(session.id, /^[0-9a-f-]{36}$/i)
 })
 
 test('createArchitecture / createImplementation / createDelivery set correct defaults', async () => {
-  const arch = await store.createArchitecture({ discoverySessionId: 'disc-1' })
+  const arch = await store.createArchitecture({ discoverySessionId: 'disc-1', artifactsPath: workspace })
   assert.equal(arch.type, 'architecture')
+  assert.equal(arch.artifactsPath, workspace)
   assert.equal(arch.refinementBudget, REFINEMENT_BUDGET)
 
   const impl = await store.createImplementation({
@@ -45,9 +48,11 @@ test('createArchitecture / createImplementation / createDelivery set correct def
     phaseNumber: 1,
     phaseTitle: 'Domain',
     newProjectPath: join(workspace, 'new-app'),
+    artifactsPath: workspace,
   })
   assert.equal(impl.type, 'implementation')
   assert.equal(impl.status, 'CREATED')
+  assert.equal(impl.artifactsPath, workspace)
   assert.equal(impl.correctionBudget, CORRECTION_BUDGET)
   assert.deepEqual(impl.attempts, [])
 
@@ -55,8 +60,10 @@ test('createArchitecture / createImplementation / createDelivery set correct def
     discoverySessionId: 'disc-1',
     architectureSessionId: 'arch-1',
     implementationSessionIds: [impl.id],
+    artifactsPath: workspace,
   })
   assert.equal(deliv.type, 'delivery')
+  assert.equal(deliv.artifactsPath, workspace)
   assert.equal(deliv.report, null)
 })
 
@@ -67,6 +74,7 @@ test('load: returns the persisted session', async () => {
     legacyPath: '/legacy',
     targetStack: 'Go',
     scope: ['/legacy'],
+    artifactsPath: workspace,
   })
   const loaded = await store.load(created.id)
   assert.deepEqual(loaded, created)
@@ -86,15 +94,21 @@ test('load: rejects malformed session IDs', async () => {
 // --- Invariants on save ---
 
 test('save: rejects changing the session type', async () => {
-  const disc = await store.createDiscovery({ legacyPath: '/l', targetStack: 's', scope: ['/l'] })
+  const disc = await store.createDiscovery({ legacyPath: '/l', targetStack: 's', scope: ['/l'], artifactsPath: workspace })
   const tampered = { ...disc, type: 'architecture' } as unknown as typeof disc
   await assert.rejects(() => store.save(tampered, disc), /session type is immutable/)
+})
+
+test('save: rejects changing the artifactsPath', async () => {
+  const disc = await store.createDiscovery({ legacyPath: '/l', targetStack: 's', scope: ['/l'], artifactsPath: workspace })
+  const tampered = { ...disc, artifactsPath: join(workspace, 'elsewhere') }
+  await assert.rejects(() => store.save(tampered, disc), /artifactsPath is immutable/)
 })
 
 test('save: rejects changing the correction budget', async () => {
   const impl = await store.createImplementation({
     discoverySessionId: 'd', architectureSessionId: 'a',
-    phaseId: 'p', phaseNumber: 1, phaseTitle: 'T', newProjectPath: join(workspace, 'app'),
+    phaseId: 'p', phaseNumber: 1, phaseTitle: 'T', newProjectPath: join(workspace, 'app'), artifactsPath: workspace,
   })
   const tampered: ImplementationSession = { ...impl, correctionBudget: 99 }
   await assert.rejects(() => store.save(tampered, impl), /correctionBudget is immutable/)
@@ -103,7 +117,7 @@ test('save: rejects changing the correction budget', async () => {
 test('save: rejects removing a completed attempt', async () => {
   const impl = await store.createImplementation({
     discoverySessionId: 'd', architectureSessionId: 'a',
-    phaseId: 'p', phaseNumber: 1, phaseTitle: 'T', newProjectPath: join(workspace, 'app'),
+    phaseId: 'p', phaseNumber: 1, phaseTitle: 'T', newProjectPath: join(workspace, 'app'), artifactsPath: workspace,
   })
   const completed: ImplementationAttempt = {
     id: 'attempt-1', sessionId: impl.id, attemptNumber: 1,
@@ -120,7 +134,7 @@ test('save: rejects removing a completed attempt', async () => {
 test('save: rejects modifying a completed attempt', async () => {
   const impl = await store.createImplementation({
     discoverySessionId: 'd', architectureSessionId: 'a',
-    phaseId: 'p', phaseNumber: 1, phaseTitle: 'T', newProjectPath: join(workspace, 'app'),
+    phaseId: 'p', phaseNumber: 1, phaseTitle: 'T', newProjectPath: join(workspace, 'app'), artifactsPath: workspace,
   })
   const completed: ImplementationAttempt = {
     id: 'attempt-1', sessionId: impl.id, attemptNumber: 1,
@@ -140,7 +154,7 @@ test('save: rejects modifying a completed attempt', async () => {
 test('save: allows appending a new attempt and updating status', async () => {
   const impl = await store.createImplementation({
     discoverySessionId: 'd', architectureSessionId: 'a',
-    phaseId: 'p', phaseNumber: 1, phaseTitle: 'T', newProjectPath: join(workspace, 'app'),
+    phaseId: 'p', phaseNumber: 1, phaseTitle: 'T', newProjectPath: join(workspace, 'app'), artifactsPath: workspace,
   })
   const inProgress: ImplementationAttempt = {
     id: 'attempt-1', sessionId: impl.id, attemptNumber: 1,
@@ -156,12 +170,24 @@ test('save: allows appending a new attempt and updating status', async () => {
 
 // --- Report ---
 
-test('saveReport: writes the report markdown to the trace dir', async () => {
+test('saveReport: writes under artifactsPath/modernization-reports when provided', async () => {
   const deliv = await store.createDelivery({
-    discoverySessionId: 'd', architectureSessionId: 'a', implementationSessionIds: ['i'],
+    discoverySessionId: 'd', architectureSessionId: 'a', implementationSessionIds: ['i'], artifactsPath: workspace,
   })
-  await store.saveReport(deliv.id, '# Migration Report\n\nAll good.')
-  const reportPath = join(workspace, '.kiro', 'trace', 'modernization', `report-${deliv.id}.md`)
-  const content = await readFile(reportPath, 'utf-8')
+  const returnedPath = await store.saveReport(deliv.id, '# Migration Report\n\nAll good.', workspace)
+  const expected = join(workspace, 'modernization-reports', `report-${deliv.id}.md`)
+  assert.equal(returnedPath, expected)
+  const content = await readFile(expected, 'utf-8')
   assert.match(content, /# Migration Report/)
+})
+
+test('saveReport: falls back to the trace dir when artifactsPath is omitted', async () => {
+  const deliv = await store.createDelivery({
+    discoverySessionId: 'd', architectureSessionId: 'a', implementationSessionIds: ['i'], artifactsPath: workspace,
+  })
+  const returnedPath = await store.saveReport(deliv.id, '# Fallback Report')
+  const expected = join(workspace, '.kiro', 'trace', 'modernization', `report-${deliv.id}.md`)
+  assert.equal(returnedPath, expected)
+  const content = await readFile(expected, 'utf-8')
+  assert.match(content, /# Fallback Report/)
 })

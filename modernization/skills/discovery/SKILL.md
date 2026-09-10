@@ -33,16 +33,32 @@ action="activate", powerName="modernization"
 
 Se receber erro dizendo que a tool nao existe ou que e necessario ativar, execute este passo primeiro.
 
-### Passo 1 — Criar sessao de discovery
+### Passo 1 — Definir o caminho dos artefatos e criar a sessao de discovery
+
+Antes de criar a sessao, defina onde TODOS os artefatos desta iteracao serao salvos
+(relatorio HTML, relatorio final e o novo projeto):
+
+1. **Sugira um caminho** dentro do workspace atual do usuario. Uma boa sugestao padrao
+   e uma pasta dedicada na raiz do workspace, por exemplo `./modernization` ou
+   `./<nome-do-projeto>-modernization`.
+2. **Pergunte ao usuario** se aquele caminho e o ideal para salvar todos os artefatos
+   desta iteracao. Aguarde a confirmacao (ou um caminho alternativo) antes de continuar.
+
+O caminho confirmado (`artifactsPath`) e definido uma unica vez aqui e sera **herdado
+automaticamente** por todas as fases seguintes (architecture, implementation, delivery).
+Deve ser um caminho dentro do workspace.
 
 ```
 modernization_create_session({
   type: "discovery",
   legacyPath: "<caminho para o projeto legado>",
   targetStack: "<stack alvo descrita pelo usuario>",
-  scope: ["<pasta ou arquivo>", ...]
+  scope: ["<pasta ou arquivo>", ...],
+  artifactsPath: "<caminho confirmado pelo usuario, relativo ao workspace>"
 })
 ```
+
+Se o usuario nao especificar um caminho, omita `artifactsPath` — o padrao e a raiz do workspace.
 
 ### Passo 2 — Ler o codigo legado
 
@@ -175,7 +191,7 @@ modernization_request_spec_approval({
 modernization_generate_discovery_html({ sessionId })
 ```
 
-Gera um relatorio HTML self-contained em `modernization-reports/discovery-{sessionId}.html` com abas de resumo, findings, especificacao e raciocinio. Informe ao usuario o caminho do arquivo gerado.
+Gera um relatorio HTML self-contained em `<artifactsPath>/modernization-reports/discovery-{sessionId}.html` com abas de resumo, findings, especificacao e raciocinio. Informe ao usuario o caminho do arquivo gerado.
 
 ## Ao concluir
 

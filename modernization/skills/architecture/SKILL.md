@@ -35,6 +35,8 @@ modernization_create_session({
 })
 ```
 
+O caminho dos artefatos (`artifactsPath`) e herdado automaticamente da sessao de discovery — voce nao precisa (nem pode) redefini-lo aqui. O novo projeto sera criado dentro desse caminho.
+
 ### Passo 2 — Carregar contexto da discovery
 
 ```
@@ -62,7 +64,7 @@ Use para documentar cada decisao arquitetural relevante antes de submeter o plan
 modernization_submit_migration_plan({
   sessionId,
   targetStack: "<stack completa: linguagem + framework + ORM + banco + etc>",
-  newProjectName: "<nome do diretorio do novo projeto>",
+  newProjectName: "<nome simples do diretorio do novo projeto, ex: my-app-modern>",
   architectureDecisions: [
     "<decisao 1 com justificativa>",
     "<decisao 2 com justificativa>",
@@ -82,6 +84,8 @@ modernization_submit_migration_plan({
   rawMarkdown: "<versao markdown legivel do plano completo>"
 })
 ```
+
+`newProjectName` deve ser um nome de diretorio simples (nao um caminho absoluto). O novo projeto sera criado dentro do `artifactsPath` herdado da discovery — ou seja, em `<artifactsPath>/<newProjectName>`.
 
 **Criterios para definicao de fases:**
 - Cada fase e uma entrega coesa — modulo, camada ou funcionalidade completa

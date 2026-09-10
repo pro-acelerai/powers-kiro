@@ -6,6 +6,7 @@ interface CreateDiscoveryArgs {
   legacyPath: string
   targetStack: string
   scope: string[]
+  artifactsPath?: string
 }
 
 interface CreateArchitectureArgs {
@@ -40,10 +41,24 @@ export async function handleCreateSession(args: CreateSessionArgs, ctx: AppConte
 
   switch (args.type) {
     case 'discovery': {
-      const { legacyPath, targetStack, scope } = args
+      const { legacyPath, targetStack, scope, artifactsPath } = args
       if (!legacyPath?.trim()) throw new Error('legacyPath is required')
       if (!targetStack?.trim()) throw new Error('targetStack is required')
       if (!Array.isArray(scope) || scope.length === 0) throw new Error('scope must be a non-empty array of paths')
+
+      // artifactsPath: base directory for all artifacts of this iteration.
+      // Confirmed by the user at the start of discovery. Defaults to the
+      // resolved workspace root when the agent does not provide one.
+      // Must resolve within the workspace so artifacts never leak outside it.
+      const resolvedArtifacts = artifactsPath?.trim()
+        ? resolve(ctx.workspacePath, artifactsPath.trim())
+        : ctx.workspacePath
+      if (resolvedArtifacts !== ctx.workspacePath && !resolvedArtifacts.startsWith(ctx.workspacePath + sep)) {
+        throw new Error(
+          `artifactsPath "${artifactsPath}" resolves outside the workspace: "${ctx.workspacePath}". ` +
+          `Use a path within the workspace.`
+        )
+      }
 
       // legacyPath may live anywhere on disk (only read, never written)
       const resolvedLegacy = resolve(ctx.workspacePath, legacyPath.trim())
@@ -60,6 +75,7 @@ export async function handleCreateSession(args: CreateSessionArgs, ctx: AppConte
         legacyPath: resolvedLegacy,
         targetStack: targetStack.trim(),
         scope: resolvedScope,
+        artifactsPath: resolvedArtifacts,
       })
 
       return {
@@ -69,6 +85,7 @@ export async function handleCreateSession(args: CreateSessionArgs, ctx: AppConte
         legacyPath: session.legacyPath,
         targetStack: session.targetStack,
         scope: session.scope,
+        artifactsPath: session.artifactsPath,
         refinementBudget: session.refinementBudget,
         message: 'Discovery session created. Call read_legacy next.',
       }
@@ -82,13 +99,18 @@ export async function handleCreateSession(args: CreateSessionArgs, ctx: AppConte
       if (discoverySession.type !== 'discovery') throw new Error('discoverySessionId must reference a discovery session')
       if (discoverySession.status !== 'DONE') throw new Error('Discovery session must be DONE before creating architecture session')
 
-      const session = await ctx.store.createArchitecture({ discoverySessionId })
+      // Inherit the artifacts path confirmed at the start of discovery.
+      const session = await ctx.store.createArchitecture({
+        discoverySessionId,
+        artifactsPath: discoverySession.artifactsPath,
+      })
 
       return {
         sessionId: session.id,
         type: session.type,
         status: session.status,
         discoverySessionId: session.discoverySessionId,
+        artifactsPath: session.artifactsPath,
         refinementBudget: session.refinementBudget,
         message: 'Architecture session created. Call read_discovery next.',
       }
@@ -129,6 +151,8 @@ export async function handleCreateSession(args: CreateSessionArgs, ctx: AppConte
         phaseNumber: phase.number,
         phaseTitle: phase.title,
         newProjectPath,
+        // Inherit the artifacts path confirmed at the start of discovery.
+        artifactsPath: discSession.artifactsPath,
       })
 
       return {
@@ -138,6 +162,7 @@ export async function handleCreateSession(args: CreateSessionArgs, ctx: AppConte
         phaseNumber: session.phaseNumber,
         phaseTitle: session.phaseTitle,
         newProjectPath: session.newProjectPath,
+        artifactsPath: session.artifactsPath,
         correctionBudget: session.correctionBudget,
         message: `Implementation session created for Phase ${phaseNumber}: ${phaseTitle}. Call read_phase_context next.`,
       }
@@ -180,12 +205,15 @@ export async function handleCreateSession(args: CreateSessionArgs, ctx: AppConte
         discoverySessionId,
         architectureSessionId,
         implementationSessionIds,
+        // Inherit the artifacts path confirmed at the start of discovery.
+        artifactsPath: delivDiscovSession.artifactsPath,
       })
 
       return {
         sessionId: session.id,
         type: session.type,
         status: session.status,
+        artifactsPath: session.artifactsPath,
         message: 'Delivery session created. Call generate_report next.',
       }
     }
@@ -222,6 +250,15 @@ export const createSessionToolDefinition = {
         type: 'array',
         items: { type: 'string' },
         description: '[discovery only] Array of folders or files to analyze from the legacy project',
+      },
+      artifactsPath: {
+        type: 'string',
+        description:
+          '[discovery only] Base directory (within the workspace) where all artifacts of this ' +
+          'iteration are written: HTML report, final report and the new project. ' +
+          'Suggest a path to the user and confirm it before creating the session. ' +
+          'Inherited automatically by architecture, implementation and delivery sessions. ' +
+          'Defaults to the workspace root when omitted.',
       },
       discoverySessionId: {
         type: 'string',

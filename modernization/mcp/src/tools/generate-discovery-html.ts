@@ -457,7 +457,7 @@ export async function handleGenerateDiscoveryHtml(args: { sessionId: string }, c
 
   const html = buildHtml(discovery, generatedAt)
 
-  const reportsDir = join(ctx.workspacePath, 'modernization-reports')
+  const reportsDir = join(discovery.artifactsPath, 'modernization-reports')
   await mkdir(reportsDir, { recursive: true })
   const htmlPath = join(reportsDir, `discovery-${args.sessionId}.html`)
   await writeFile(htmlPath, html, 'utf-8')
