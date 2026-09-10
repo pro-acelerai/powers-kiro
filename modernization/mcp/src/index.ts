@@ -25,7 +25,7 @@ import { handleGenerateDiscoveryHtml, generateDiscoveryHtmlToolDefinition } from
 const ctx = createContext()
 
 const server = new Server(
-  { name: 'modernization', version: '0.1.0' },
+  { name: 'modernization', version: '0.2.0' },
   { capabilities: { tools: {} } }
 )
 

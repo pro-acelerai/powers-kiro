@@ -128843,7 +128843,7 @@ var generateDiscoveryHtmlToolDefinition = {
 // src/index.ts
 var ctx = createContext();
 var server = new Server(
-  { name: "modernization", version: "0.1.0" },
+  { name: "modernization", version: "0.2.0" },
   { capabilities: { tools: {} } }
 );
 server.setRequestHandler(ListToolsRequestSchema, async () => ({

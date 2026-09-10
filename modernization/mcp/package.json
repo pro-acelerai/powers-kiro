@@ -1,6 +1,6 @@
 {
   "name": "@modernization/mcp",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Modernization MCP Server — the Harness",
   "type": "module",
   "bin": {
