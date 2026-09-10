@@ -43,18 +43,51 @@ export async function handleSubmitSpecification(args: SubmitSpecArgs, ctx: AppCo
   const discovery = session as DiscoverySession
   const version = (discovery.specification?.version ?? 0) + 1
 
+  const NA = '(não informado)'
+
   const specification: Specification = {
     id: randomUUID(),
     sessionId: args.sessionId,
     createdAt: new Date().toISOString(),
     version,
-    domainEntities: args.domainEntities,
-    businessRules: args.businessRules,
-    flows: args.flows,
-    externalContracts: args.externalContracts ?? [],
-    databaseRules: args.databaseRules ?? [],
-    excludedScope: args.excludedScope ?? [],
-    nonFunctional: args.nonFunctional ?? [],
+    domainEntities: (args.domainEntities ?? []).map(e => ({
+      name: e.name ?? NA,
+      description: e.description ?? NA,
+      attributes: Array.isArray(e.attributes) ? e.attributes.map(a => a ?? NA) : [],
+    })),
+    businessRules: (args.businessRules ?? []).map(r => ({
+      id: r.id ?? randomUUID(),
+      title: r.title ?? NA,
+      description: r.description ?? NA,
+      sourceRef: r.sourceRef ?? NA,
+    })),
+    flows: (args.flows ?? []).map(f => ({
+      id: f.id ?? randomUUID(),
+      name: f.name ?? NA,
+      steps: Array.isArray(f.steps) ? f.steps.map(s => s ?? NA) : [],
+      sourceRef: f.sourceRef ?? NA,
+    })),
+    externalContracts: (args.externalContracts ?? []).map(c => ({
+      id: c.id ?? randomUUID(),
+      type: c.type ?? 'external_service',
+      name: c.name ?? NA,
+      description: c.description ?? NA,
+      sourceRef: c.sourceRef ?? NA,
+    })),
+    databaseRules: (args.databaseRules ?? []).map(r => ({
+      id: r.id ?? randomUUID(),
+      name: r.name ?? NA,
+      type: r.type ?? 'other',
+      description: r.description ?? NA,
+      decision: r.decision ?? 'keep_as_is',
+      rationale: r.rationale ?? NA,
+      sourceRef: r.sourceRef ?? NA,
+    })),
+    excludedScope: (args.excludedScope ?? []).map(e => ({
+      path: e.path ?? NA,
+      reason: e.reason ?? NA,
+    })),
+    nonFunctional: (args.nonFunctional ?? []).map(n => n ?? NA),
     rawMarkdown: args.rawMarkdown.trim(),
   }
 
