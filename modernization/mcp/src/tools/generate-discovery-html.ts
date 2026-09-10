@@ -23,8 +23,8 @@ function resolutionLabel(r: string): string {
   return { fix_before: 'Corrigir antes de migrar', descope: 'Fora do escopo', accept_risk: 'Risco aceito' }[r] ?? r
 }
 
-function escapeHtml(s: string): string {
-  return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
+function escapeHtml(s: string | null | undefined): string {
+  return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;')
 }
 
 function findingCard(f: Finding): string {
@@ -102,7 +102,7 @@ function specSection(discovery: DiscoverySession): string {
   const dbRules = (spec.databaseRules ?? []).map(r => `
     <div class="spec-item">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-        <div class="rule-id">${escapeHtml(r.type.replace(/_/g, ' ').toUpperCase())}</div>
+        <div class="rule-id">${escapeHtml((r.type ?? '').replace(/_/g, ' ').toUpperCase())}</div>
         ${badge(dbDecisionLabel(r.decision), dbDecisionColor(r.decision))}
       </div>
       <strong>${escapeHtml(r.name)}</strong>

@@ -128317,7 +128317,7 @@ function resolutionLabel(r) {
   return { fix_before: "Corrigir antes de migrar", descope: "Fora do escopo", accept_risk: "Risco aceito" }[r] ?? r;
 }
 function escapeHtml(s) {
-  return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  return String(s ?? "").replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 }
 function findingCard(f) {
   const decision = f.triageDecision ? `<div class="triage-box">
@@ -128383,7 +128383,7 @@ function specSection(discovery) {
   const dbRules = (spec.databaseRules ?? []).map((r) => `
     <div class="spec-item">
       <div style="display:flex;align-items:center;gap:8px;margin-bottom:6px">
-        <div class="rule-id">${escapeHtml(r.type.replace(/_/g, " ").toUpperCase())}</div>
+        <div class="rule-id">${escapeHtml((r.type ?? "").replace(/_/g, " ").toUpperCase())}</div>
         ${badge(dbDecisionLabel(r.decision), dbDecisionColor(r.decision))}
       </div>
       <strong>${escapeHtml(r.name)}</strong>
