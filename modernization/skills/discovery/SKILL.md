@@ -165,7 +165,7 @@ modernization_request_spec_approval({
 modernization_generate_discovery_html({ sessionId })
 ```
 
-Gera um relatorio HTML self-contained em `.kiro/trace/modernization/discovery-{sessionId}.html` com abas de resumo, findings, especificacao e raciocinio. Informe ao usuario o caminho do arquivo gerado.
+Gera um relatorio HTML self-contained em `modernization-reports/discovery-{sessionId}.html` com abas de resumo, findings, especificacao e raciocinio. Informe ao usuario o caminho do arquivo gerado.
 
 ## Ao concluir
 
