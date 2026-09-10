@@ -23,6 +23,16 @@ A spec e o unico artefato que passa para as proximas fases. O codigo legado nao 
 
 ## Loop de execucao
 
+### Passo 0 — Ativar o power (obrigatorio antes de qualquer tool)
+
+Antes de chamar qualquer tool `modernization_*`, ative o power:
+
+```
+action="activate", powerName="modernization"
+```
+
+Se receber erro dizendo que a tool nao existe ou que e necessario ativar, execute este passo primeiro.
+
 ### Passo 1 — Criar sessao de discovery
 
 ```

@@ -20,6 +20,12 @@ Implementar uma fase do plano de migracao construindo o novo projeto do zero, a 
 
 ## Loop de execucao
 
+### Passo 0 — Ativar o power (obrigatorio antes de qualquer tool)
+
+```
+action="activate", powerName="modernization"
+```
+
 ### Passo 1 — Criar sessao de implementation para a fase
 
 ```

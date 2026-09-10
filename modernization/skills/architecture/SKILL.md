@@ -20,6 +20,12 @@ Com base na spec extraida na Fase 1, projetar a nova arquitetura e definir um pl
 
 ## Loop de execucao
 
+### Passo 0 — Ativar o power (obrigatorio antes de qualquer tool)
+
+```
+action="activate", powerName="modernization"
+```
+
 ### Passo 1 — Criar sessao de architecture
 
 ```

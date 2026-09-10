@@ -18,6 +18,12 @@ Consolidar todas as fases da migracao em um relatorio final que documenta: o que
 
 ## Loop de execucao
 
+### Passo 0 — Ativar o power (obrigatorio antes de qualquer tool)
+
+```
+action="activate", powerName="modernization"
+```
+
 ### Passo 1 — Criar sessao de delivery
 
 ```
