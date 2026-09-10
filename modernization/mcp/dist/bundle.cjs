@@ -3836,7 +3836,7 @@ var require_fast_uri = __commonJS({
         normalizeString(uri, options);
       } else if (typeof uri === "object") {
         uri = /** @type {T} */
-        parse3(serialize(uri, options), options);
+        parse4(serialize(uri, options), options);
       }
       return uri;
     }
@@ -3876,8 +3876,8 @@ var require_fast_uri = __commonJS({
     function resolveComponent(base, relative2, options, skipNormalization) {
       const target = {};
       if (!skipNormalization) {
-        base = parse3(serialize(base, options), options);
-        relative2 = parse3(serialize(relative2, options), options);
+        base = parse4(serialize(base, options), options);
+        relative2 = parse4(serialize(relative2, options), options);
       }
       options = options || {};
       if (!options.tolerant && relative2.scheme) {
@@ -4175,7 +4175,7 @@ var require_fast_uri = __commonJS({
       }
       return { parsed, malformedAuthorityOrPort, malformedPercentEncoding, malformedSchemeSpecific, malformedHost, malformedScheme };
     }
-    function parse3(uri, opts) {
+    function parse4(uri, opts) {
       return parseWithStatus(uri, opts).parsed;
     }
     function normalizeString(uri, opts) {
@@ -4212,7 +4212,7 @@ var require_fast_uri = __commonJS({
       resolveComponent,
       equal,
       serialize,
-      parse: parse3
+      parse: parse4
     };
     module2.exports = fastUri;
     module2.exports.default = fastUri;
@@ -7450,7 +7450,7 @@ var require_ms = __commonJS({
       options = options || {};
       var type = typeof val;
       if (type === "string" && val.length > 0) {
-        return parse3(val);
+        return parse4(val);
       } else if (type === "number" && isFinite(val)) {
         return options.long ? fmtLong(val) : fmtShort(val);
       }
@@ -7458,7 +7458,7 @@ var require_ms = __commonJS({
         "val is not a non-empty string or a valid number. val=" + JSON.stringify(val)
       );
     };
-    function parse3(str) {
+    function parse4(str) {
       str = String(str);
       if (str.length > 100) {
         return;
@@ -9487,7 +9487,7 @@ var require_acorn = __commonJS({
         this.privateNameStack = [];
       };
       var prototypeAccessors = { inFunction: { configurable: true }, inGenerator: { configurable: true }, inAsync: { configurable: true }, canAwait: { configurable: true }, allowReturn: { configurable: true }, allowSuper: { configurable: true }, allowDirectSuper: { configurable: true }, treatFunctionsAsVar: { configurable: true }, allowNewDotTarget: { configurable: true }, allowUsing: { configurable: true }, inClassStaticBlock: { configurable: true } };
-      Parser.prototype.parse = function parse4() {
+      Parser.prototype.parse = function parse5() {
         var this$1$1 = this;
         var node2 = this.options.program || this.startNode();
         this.nextToken();
@@ -9570,7 +9570,7 @@ var require_acorn = __commonJS({
         }
         return cls;
       };
-      Parser.parse = function parse4(input, options) {
+      Parser.parse = function parse5(input, options) {
         return new this(options, input).parse();
       };
       Parser.parseExpressionAt = function parseExpressionAt2(input, pos, options) {
@@ -14675,7 +14675,7 @@ var require_acorn = __commonJS({
         lineBreakG,
         nonASCIIwhitespace
       };
-      function parse3(input, options) {
+      function parse4(input, options) {
         return Parser.parse(input, options);
       }
       function parseExpressionAt(input, pos, options) {
@@ -14700,7 +14700,7 @@ var require_acorn = __commonJS({
       exports3.lineBreak = lineBreak;
       exports3.lineBreakG = lineBreakG;
       exports3.nonASCIIwhitespace = nonASCIIwhitespace;
-      exports3.parse = parse3;
+      exports3.parse = parse4;
       exports3.parseExpressionAt = parseExpressionAt;
       exports3.tokContexts = types;
       exports3.tokTypes = types$1;
@@ -15926,7 +15926,7 @@ var require_espree = __commonJS({
       }
       return new Parser(options, code).tokenize();
     }
-    function parse3(code, options) {
+    function parse4(code, options) {
       const Parser = parsers.get(options);
       return new Parser(options, code).parse();
     }
@@ -15956,7 +15956,7 @@ var require_espree = __commonJS({
     exports2.VisitorKeys = VisitorKeys;
     exports2.latestEcmaVersion = latestEcmaVersion;
     exports2.name = name;
-    exports2.parse = parse3;
+    exports2.parse = parse4;
     exports2.supportedEcmaVersions = supportedEcmaVersions;
     exports2.tokenize = tokenize;
     exports2.version = version2;
@@ -71819,7 +71819,7 @@ var require_Obj = __commonJS({
 var require_Str = __commonJS({
   "node_modules/prelude-ls/lib/Str.js"(exports2, module2) {
     var split;
-    var join5;
+    var join6;
     var lines;
     var unlines;
     var words;
@@ -71834,7 +71834,7 @@ var require_Str = __commonJS({
     split = curry$(function(sep5, str) {
       return str.split(sep5);
     });
-    join5 = curry$(function(sep5, xs) {
+    join6 = curry$(function(sep5, xs) {
       return xs.join(sep5);
     });
     lines = function(str) {
@@ -71893,7 +71893,7 @@ var require_Str = __commonJS({
     };
     module2.exports = {
       split,
-      join: join5,
+      join: join6,
       lines,
       unlines,
       words,
@@ -73086,7 +73086,7 @@ var require_cast = __commonJS({
 var require_lib3 = __commonJS({
   "node_modules/levn/lib/index.js"(exports2, module2) {
     (function() {
-      var parseString, cast, parseType, VERSION, parsedTypeParse, parse3;
+      var parseString, cast, parseType, VERSION, parsedTypeParse, parse4;
       parseString = require_parse_string();
       cast = require_cast();
       parseType = require_lib2().parseType;
@@ -73097,12 +73097,12 @@ var require_lib3 = __commonJS({
         options.customTypes == null && (options.customTypes = {});
         return cast(parseString(parsedType2, string3, options), parsedType2, options);
       };
-      parse3 = function(type, string3, options) {
+      parse4 = function(type, string3, options) {
         return parsedTypeParse(parseType(type), string3, options);
       };
       module2.exports = {
         VERSION,
-        parse: parse3,
+        parse: parse4,
         parsedTypeParse
       };
     }).call(exports2);
@@ -77928,9 +77928,9 @@ var require_minimatch = __commonJS({
         throw new TypeError("pattern is too long");
       }
     };
-    Minimatch.prototype.parse = parse3;
+    Minimatch.prototype.parse = parse4;
     var SUBPARSE = {};
-    function parse3(pattern, isSub) {
+    function parse4(pattern, isSub) {
       assertValidPattern(pattern);
       var options = this.options;
       if (pattern === "**") {
@@ -79711,7 +79711,7 @@ var require_uri_all = __commonJS({
       }
       var URI_PARSE = /^(?:([^:\/?#]+):)?(?:\/\/((?:([^\/?#@]*)@)?(\[[^\/?#\]]+\]|[^\/?#:]*)(?:\:(\d*))?))?([^?#]*)(?:\?([^#]*))?(?:#((?:.|\n|\r)*))?/i;
       var NO_MATCH_IS_UNDEFINED = "".match(/(){0}/)[1] === void 0;
-      function parse3(uriString) {
+      function parse4(uriString) {
         var options = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
         var components = {};
         var protocol = options.iri !== false ? IRI_PROTOCOL : URI_PROTOCOL;
@@ -79880,8 +79880,8 @@ var require_uri_all = __commonJS({
         var skipNormalization = arguments[3];
         var target = {};
         if (!skipNormalization) {
-          base2 = parse3(serialize(base2, options), options);
-          relative2 = parse3(serialize(relative2, options), options);
+          base2 = parse4(serialize(base2, options), options);
+          relative2 = parse4(serialize(relative2, options), options);
         }
         options = options || {};
         if (!options.tolerant && relative2.scheme) {
@@ -79932,24 +79932,24 @@ var require_uri_all = __commonJS({
       }
       function resolve6(baseURI, relativeURI, options) {
         var schemelessOptions = assign({ scheme: "null" }, options);
-        return serialize(resolveComponents(parse3(baseURI, schemelessOptions), parse3(relativeURI, schemelessOptions), schemelessOptions, true), schemelessOptions);
+        return serialize(resolveComponents(parse4(baseURI, schemelessOptions), parse4(relativeURI, schemelessOptions), schemelessOptions, true), schemelessOptions);
       }
       function normalize2(uri, options) {
         if (typeof uri === "string") {
-          uri = serialize(parse3(uri, options), options);
+          uri = serialize(parse4(uri, options), options);
         } else if (typeOf(uri) === "object") {
-          uri = parse3(serialize(uri, options), options);
+          uri = parse4(serialize(uri, options), options);
         }
         return uri;
       }
       function equal(uriA, uriB, options) {
         if (typeof uriA === "string") {
-          uriA = serialize(parse3(uriA, options), options);
+          uriA = serialize(parse4(uriA, options), options);
         } else if (typeOf(uriA) === "object") {
           uriA = serialize(uriA, options);
         }
         if (typeof uriB === "string") {
-          uriB = serialize(parse3(uriB, options), options);
+          uriB = serialize(parse4(uriB, options), options);
         } else if (typeOf(uriB) === "object") {
           uriB = serialize(uriB, options);
         }
@@ -79964,7 +79964,7 @@ var require_uri_all = __commonJS({
       var handler = {
         scheme: "http",
         domainHost: true,
-        parse: function parse4(components, options) {
+        parse: function parse5(components, options) {
           if (!components.host) {
             components.error = components.error || "HTTP URIs must have a host.";
           }
@@ -79993,7 +79993,7 @@ var require_uri_all = __commonJS({
       var handler$2 = {
         scheme: "ws",
         domainHost: true,
-        parse: function parse4(components, options) {
+        parse: function parse5(components, options) {
           var wsComponents = components;
           wsComponents.secure = isSecure(wsComponents);
           wsComponents.resourceName = (wsComponents.path || "/") + (wsComponents.query ? "?" + wsComponents.query : "");
@@ -80166,7 +80166,7 @@ var require_uri_all = __commonJS({
       var UUID = /^[0-9A-Fa-f]{8}(?:\-[0-9A-Fa-f]{4}){3}\-[0-9A-Fa-f]{12}$/;
       var handler$6 = {
         scheme: "urn:uuid",
-        parse: function parse4(urnComponents, options) {
+        parse: function parse5(urnComponents, options) {
           var uuidComponents = urnComponents;
           uuidComponents.uuid = uuidComponents.nss;
           uuidComponents.nss = void 0;
@@ -80191,7 +80191,7 @@ var require_uri_all = __commonJS({
       exports3.SCHEMES = SCHEMES;
       exports3.pctEncChar = pctEncChar;
       exports3.pctDecChars = pctDecChars;
-      exports3.parse = parse3;
+      exports3.parse = parse4;
       exports3.removeDotSegments = removeDotSegments;
       exports3.serialize = serialize;
       exports3.resolveComponents = resolveComponents;
@@ -88782,7 +88782,7 @@ var require_posix = __commonJS({
       assertPath(path2);
       if (path2.length === 0) return ".";
     }
-    function dirname2(path2) {
+    function dirname3(path2) {
       if (path2 instanceof URL) {
         path2 = fromFileUrl(path2);
       }
@@ -88933,7 +88933,7 @@ var require_posix = __commonJS({
       if (isAbsolute4) return `/${path2}`;
       return path2;
     }
-    function join5(path2, ...paths) {
+    function join6(path2, ...paths) {
       if (path2 === void 0) return ".";
       if (path2 instanceof URL) {
         path2 = fromFileUrl(path2);
@@ -88946,7 +88946,7 @@ var require_posix = __commonJS({
       const joined = paths.filter((path3) => path3.length > 0).join("/");
       return joined === "" ? "." : normalize2(joined);
     }
-    function parse3(path2) {
+    function parse4(path2) {
       assertPath(path2);
       const ret = {
         root: "",
@@ -89411,7 +89411,7 @@ var require_posix = __commonJS({
     function joinGlobs(globs, options = {}) {
       const { globstar = false } = options;
       if (!globstar || globs.length === 0) {
-        return join5(...globs);
+        return join6(...globs);
       }
       let joined;
       for (const glob of globs) {
@@ -89431,18 +89431,18 @@ var require_posix = __commonJS({
     exports2.SEPARATOR_PATTERN = SEPARATOR_PATTERN;
     exports2.basename = basename;
     exports2.common = common;
-    exports2.dirname = dirname2;
+    exports2.dirname = dirname3;
     exports2.extname = extname;
     exports2.format = format;
     exports2.fromFileUrl = fromFileUrl;
     exports2.globToRegExp = globToRegExp;
     exports2.isAbsolute = isAbsolute3;
     exports2.isGlob = isGlob;
-    exports2.join = join5;
+    exports2.join = join6;
     exports2.joinGlobs = joinGlobs;
     exports2.normalize = normalize2;
     exports2.normalizeGlob = normalizeGlob;
-    exports2.parse = parse3;
+    exports2.parse = parse4;
     exports2.relative = relative2;
     exports2.resolve = resolve6;
     exports2.toFileUrl = toFileUrl;
@@ -89564,7 +89564,7 @@ var require_windows = __commonJS({
       assertPath(path2);
       if (path2.length === 0) return ".";
     }
-    function dirname2(path2) {
+    function dirname3(path2) {
       if (path2 instanceof URL) {
         path2 = fromFileUrl(path2);
       }
@@ -89838,7 +89838,7 @@ var require_windows = __commonJS({
       }
       return device + tail;
     }
-    function join5(path2, ...paths) {
+    function join6(path2, ...paths) {
       if (path2 instanceof URL) {
         path2 = fromFileUrl(path2);
       }
@@ -89876,7 +89876,7 @@ var require_windows = __commonJS({
       }
       return normalize2(joined);
     }
-    function parse3(path2) {
+    function parse4(path2) {
       assertPath(path2);
       const ret = {
         root: "",
@@ -90484,7 +90484,7 @@ var require_windows = __commonJS({
     function joinGlobs(globs, options = {}) {
       const { globstar = false } = options;
       if (!globstar || globs.length === 0) {
-        return join5(...globs);
+        return join6(...globs);
       }
       let joined;
       for (const glob of globs) {
@@ -90504,18 +90504,18 @@ var require_windows = __commonJS({
     exports2.SEPARATOR_PATTERN = SEPARATOR_PATTERN;
     exports2.basename = basename;
     exports2.common = common;
-    exports2.dirname = dirname2;
+    exports2.dirname = dirname3;
     exports2.extname = extname;
     exports2.format = format;
     exports2.fromFileUrl = fromFileUrl;
     exports2.globToRegExp = globToRegExp;
     exports2.isAbsolute = isAbsolute3;
     exports2.isGlob = isGlob;
-    exports2.join = join5;
+    exports2.join = join6;
     exports2.joinGlobs = joinGlobs;
     exports2.normalize = normalize2;
     exports2.normalizeGlob = normalizeGlob;
-    exports2.parse = parse3;
+    exports2.parse = parse4;
     exports2.relative = relative2;
     exports2.resolve = resolve6;
     exports2.toFileUrl = toFileUrl;
@@ -99664,7 +99664,7 @@ var require_esquery = __commonJS({
         throw err;
       }
     }
-    function parse3(source) {
+    function parse4(source) {
       if (selectorCache.has(source)) {
         return selectorCache.get(source);
       }
@@ -99686,7 +99686,7 @@ var require_esquery = __commonJS({
       return esquery.matches(node2, root, ancestry, options);
     }
     module2.exports = {
-      parse: parse3,
+      parse: parse4,
       matches,
       ESQueryParsedSelector
     };
@@ -99697,7 +99697,7 @@ var require_esquery = __commonJS({
 var require_source_code_traverser = __commonJS({
   "node_modules/eslint/lib/linter/source-code-traverser.js"(exports2, module2) {
     "use strict";
-    var { parse: parse3, matches } = require_esquery();
+    var { parse: parse4, matches } = require_esquery();
     var vk = require_eslint_visitor_keys();
     var STEP_KIND_VISIT = 1;
     var STEP_KIND_CALL = 2;
@@ -99718,7 +99718,7 @@ var require_source_code_traverser = __commonJS({
         this.anyTypeEnterSelectors = [];
         this.anyTypeExitSelectors = [];
         visitor.forEachName((rawSelector) => {
-          const selector = parse3(rawSelector);
+          const selector = parse4(rawSelector);
           if (selector.nodeTypes) {
             const typeMap = selector.isExit ? this.exitSelectorsByNodeType : this.enterSelectorsByNodeType;
             selector.nodeTypes.forEach((nodeType) => {
@@ -102430,7 +102430,7 @@ var require_cjs4 = __commonJS({
       known.set(value, index);
       return index;
     };
-    var parse3 = (text, reviver) => {
+    var parse4 = (text, reviver) => {
       const input = $parse(text, Primitives).map(primitives);
       const $ = reviver || noop;
       let value = input[0];
@@ -102446,7 +102446,7 @@ var require_cjs4 = __commonJS({
       }
       return $.call({ "": value }, "", value);
     };
-    exports2.parse = parse3;
+    exports2.parse = parse4;
     var stringify = (value, replacer, space) => {
       const $ = replacer && typeof replacer === object3 ? (k, v) => k === "" || -1 < replacer.indexOf(k) ? v : void 0 : replacer || noop;
       const known = /* @__PURE__ */ new Map();
@@ -102477,7 +102477,7 @@ var require_cjs4 = __commonJS({
     exports2.stringify = stringify;
     var toJSON = (value) => $parse(stringify(value));
     exports2.toJSON = toJSON;
-    var fromJSON = (value) => parse3($stringify(value));
+    var fromJSON = (value) => parse4($stringify(value));
     exports2.fromJSON = fromJSON;
   }
 });
@@ -104938,11 +104938,11 @@ var init_retrier = __esm({
 });
 
 // node_modules/@humanfs/node/src/node-hfs.js
-var import_node_path9, import_promises4, import_node_url, RETRY_ERROR_CODES, NodeHfsDirectoryEntry, NodeHfsImpl, NodeHfs, hfs;
+var import_node_path10, import_promises4, import_node_url, RETRY_ERROR_CODES, NodeHfsDirectoryEntry, NodeHfsImpl, NodeHfs, hfs;
 var init_node_hfs = __esm({
   "node_modules/@humanfs/node/src/node-hfs.js"() {
     init_src();
-    import_node_path9 = __toESM(require("node:path"), 1);
+    import_node_path10 = __toESM(require("node:path"), 1);
     init_retrier();
     import_promises4 = __toESM(require("node:fs/promises"), 1);
     import_node_url = require("node:url");
@@ -105029,7 +105029,7 @@ var init_node_hfs = __esm({
         const value = Buffer.from(contents);
         return this.#retrier.retry(() => this.#fsp.writeFile(filePath, value)).catch((error2) => {
           if (error2.code === "ENOENT") {
-            const dirPath = import_node_path9.default.dirname(
+            const dirPath = import_node_path10.default.dirname(
               filePath instanceof URL ? (0, import_node_url.fileURLToPath)(filePath) : filePath
             );
             return this.#fsp.mkdir(dirPath, { recursive: true }).then(() => this.#fsp.writeFile(filePath, value));
@@ -105051,7 +105051,7 @@ var init_node_hfs = __esm({
         const value = Buffer.from(contents);
         return this.#retrier.retry(() => this.#fsp.appendFile(filePath, value)).catch((error2) => {
           if (error2.code === "ENOENT") {
-            const dirPath = import_node_path9.default.dirname(
+            const dirPath = import_node_path10.default.dirname(
               filePath instanceof URL ? (0, import_node_url.fileURLToPath)(filePath) : filePath
             );
             return this.#fsp.mkdir(dirPath, { recursive: true }).then(() => this.#fsp.appendFile(filePath, value));
@@ -105217,8 +105217,8 @@ var init_node_hfs = __esm({
         const destinationStr = destination instanceof URL ? (0, import_node_url.fileURLToPath)(destination) : destination;
         await this.createDirectory(destination);
         for await (const entry of this.list(source)) {
-          const fromEntryPath = import_node_path9.default.join(sourceStr, entry.name);
-          const toEntryPath = import_node_path9.default.join(destinationStr, entry.name);
+          const fromEntryPath = import_node_path10.default.join(sourceStr, entry.name);
+          const toEntryPath = import_node_path10.default.join(destinationStr, entry.name);
           if (entry.isSymlink) {
             const target = await this.#fsp.readlink(fromEntryPath);
             await this.#fsp.symlink(target, toEntryPath);
@@ -106437,7 +106437,7 @@ var require_relative_module_resolver = __commonJS({
 var require_eslint = __commonJS({
   "node_modules/eslint/lib/eslint/eslint.js"(exports2, module2) {
     "use strict";
-    var { existsSync: existsSync2 } = require("node:fs");
+    var { existsSync: existsSync3 } = require("node:fs");
     var fs = require("node:fs/promises");
     var os = require("node:os");
     var path2 = require("node:path");
@@ -106845,7 +106845,7 @@ var require_eslint = __commonJS({
           configLoader: this.#configLoader,
           warningService
         });
-        if (existsSync2(path2.resolve(processedOptions.cwd, ".eslintignore"))) {
+        if (existsSync3(path2.resolve(processedOptions.cwd, ".eslintignore"))) {
           warningService.emitESLintIgnoreWarning();
         }
       }
@@ -107013,11 +107013,11 @@ var require_eslint = __commonJS({
         if (!lintResultCache && cacheFilePath) {
           debug2(`Deleting cache file at ${cacheFilePath}`);
           try {
-            if (existsSync2(cacheFilePath)) {
+            if (existsSync3(cacheFilePath)) {
               await fs.unlink(cacheFilePath);
             }
           } catch (error2) {
-            if (existsSync2(cacheFilePath)) {
+            if (existsSync3(cacheFilePath)) {
               throw error2;
             }
           }
@@ -117582,17 +117582,17 @@ var _safeParseAsync = (_Err) => async (schema, value, _ctx) => {
 };
 var safeParseAsync = /* @__PURE__ */ _safeParseAsync($ZodRealError);
 var _encode = (_Err) => {
-  const parse3 = _parse(_Err);
+  const parse4 = _parse(_Err);
   const fn = (schema, value, _ctx, _params) => {
     const ctx2 = _ctx ? { ..._ctx, direction: "backward" } : { direction: "backward" };
-    return parse3(schema, value, ctx2, finalizeParams(fn, _params));
+    return parse4(schema, value, ctx2, finalizeParams(fn, _params));
   };
   return fn;
 };
 var _decode = (_Err) => {
-  const parse3 = _parse(_Err);
+  const parse4 = _parse(_Err);
   const fn = (schema, value, _ctx, _params) => {
-    return parse3(schema, value, _ctx, finalizeParams(fn, _params));
+    return parse4(schema, value, _ctx, finalizeParams(fn, _params));
   };
   return fn;
 };
@@ -125990,6 +125990,10 @@ var StdioServerTransport = class {
   }
 };
 
+// src/context.ts
+var import_node_fs = require("node:fs");
+var import_node_path2 = require("node:path");
+
 // src/trace/session-store.ts
 var import_promises = require("node:fs/promises");
 var import_node_path = require("node:path");
@@ -126140,8 +126144,22 @@ var SessionStore = class {
 };
 
 // src/context.ts
+var WORKSPACE_MARKERS = [".kiro", ".git"];
+function resolveWorkspacePath(startDir = process.cwd()) {
+  let current = startDir;
+  const { root } = (0, import_node_path2.parse)(current);
+  while (true) {
+    const hasMarker = WORKSPACE_MARKERS.some((marker) => (0, import_node_fs.existsSync)((0, import_node_path2.join)(current, marker)));
+    if (hasMarker) return current;
+    if (current === root) break;
+    const parent = (0, import_node_path2.dirname)(current);
+    if (parent === current) break;
+    current = parent;
+  }
+  return startDir;
+}
 function createContext() {
-  const workspacePath = process.env["MODERNIZATION_WORKSPACE"] ?? process.cwd();
+  const workspacePath = resolveWorkspacePath();
   return {
     workspacePath,
     store: new SessionStore(workspacePath)
@@ -126149,7 +126167,7 @@ function createContext() {
 }
 
 // src/tools/create-session.ts
-var import_node_path2 = require("node:path");
+var import_node_path3 = require("node:path");
 async function handleCreateSession(args, ctx2) {
   if (!args.type) throw new Error("type is required: discovery | architecture | implementation | delivery");
   switch (args.type) {
@@ -126158,10 +126176,10 @@ async function handleCreateSession(args, ctx2) {
       if (!legacyPath?.trim()) throw new Error("legacyPath is required");
       if (!targetStack?.trim()) throw new Error("targetStack is required");
       if (!Array.isArray(scope) || scope.length === 0) throw new Error("scope must be a non-empty array of paths");
-      const resolvedLegacy = (0, import_node_path2.resolve)(ctx2.workspacePath, legacyPath.trim());
+      const resolvedLegacy = (0, import_node_path3.resolve)(ctx2.workspacePath, legacyPath.trim());
       const resolvedScope = scope.map((p) => {
-        const resolved = (0, import_node_path2.resolve)(resolvedLegacy, p.trim());
-        if (resolved !== resolvedLegacy && !resolved.startsWith(resolvedLegacy + import_node_path2.sep)) {
+        const resolved = (0, import_node_path3.resolve)(resolvedLegacy, p.trim());
+        if (resolved !== resolvedLegacy && !resolved.startsWith(resolvedLegacy + import_node_path3.sep)) {
           throw new Error(`scope path "${p}" must be within the legacy project directory: "${resolvedLegacy}"`);
         }
         return resolved;
@@ -126335,7 +126353,7 @@ var createSessionToolDefinition = {
 
 // src/tools/read-legacy.ts
 var import_promises2 = require("node:fs/promises");
-var import_node_path3 = require("node:path");
+var import_node_path4 = require("node:path");
 
 // src/domain/state-machine.ts
 var DISCOVERY_TRANSITIONS = {
@@ -126456,7 +126474,7 @@ async function collectFiles(dir, warnings) {
   }
   for (const entry of entries) {
     if (IGNORED_DIRS.has(entry.name)) continue;
-    const fullPath = (0, import_node_path3.join)(dir, entry.name);
+    const fullPath = (0, import_node_path4.join)(dir, entry.name);
     if (entry.isDirectory()) {
       const sub = await collectFiles(fullPath, warnings);
       results.push(...sub);
@@ -126507,7 +126525,7 @@ async function handleReadLegacy(args, ctx2) {
     if (fileSize > MAX_FILE_SIZE) {
       fileContents.push({
         path: filePath,
-        relativePath: (0, import_node_path3.relative)(discovery.legacyPath, filePath),
+        relativePath: (0, import_node_path4.relative)(discovery.legacyPath, filePath),
         content: "",
         size: fileSize,
         skipped: true
@@ -126525,7 +126543,7 @@ async function handleReadLegacy(args, ctx2) {
       const content = await (0, import_promises2.readFile)(filePath, "utf-8");
       fileContents.push({
         path: filePath,
-        relativePath: (0, import_node_path3.relative)(discovery.legacyPath, filePath),
+        relativePath: (0, import_node_path4.relative)(discovery.legacyPath, filePath),
         content,
         size: fileSize,
         skipped: false
@@ -126613,19 +126631,19 @@ var submitThinkToolDefinition = {
 
 // src/tools/submit-finding.ts
 var import_node_crypto3 = require("node:crypto");
-var import_node_path5 = require("node:path");
+var import_node_path6 = require("node:path");
 
 // src/harness/scope.ts
-var import_node_path4 = require("node:path");
+var import_node_path5 = require("node:path");
 function abs(p) {
-  const resolved = (0, import_node_path4.isAbsolute)(p) ? (0, import_node_path4.normalize)(p) : (0, import_node_path4.normalize)((0, import_node_path4.resolve)(p));
+  const resolved = (0, import_node_path5.isAbsolute)(p) ? (0, import_node_path5.normalize)(p) : (0, import_node_path5.normalize)((0, import_node_path5.resolve)(p));
   return process.platform === "win32" ? resolved.toLowerCase() : resolved;
 }
 function isInScope(filePath, scope) {
   const normalizedFile = abs(filePath);
   return scope.some((scopePath) => {
     const normalizedScope = abs(scopePath);
-    return normalizedFile === normalizedScope || normalizedFile.startsWith(normalizedScope + import_node_path4.sep) || normalizedFile.startsWith(normalizedScope + "/");
+    return normalizedFile === normalizedScope || normalizedFile.startsWith(normalizedScope + import_node_path5.sep) || normalizedFile.startsWith(normalizedScope + "/");
   });
 }
 function assertInScope(filePath, scope) {
@@ -126658,7 +126676,7 @@ async function handleSubmitFinding(args, ctx2) {
   if (!args.recommendation?.trim()) throw new Error("recommendation is required");
   const discovery = session;
   if (!args.file?.trim()) throw new Error("file is required and must be a non-empty path");
-  const absoluteFile = (0, import_node_path5.resolve)(discovery.legacyPath, args.file.trim());
+  const absoluteFile = (0, import_node_path6.resolve)(discovery.legacyPath, args.file.trim());
   assertInScope(absoluteFile, discovery.scope);
   const finding = {
     id: (0, import_node_crypto3.randomUUID)(),
@@ -127225,7 +127243,7 @@ var readDiscoveryToolDefinition = {
 
 // src/tools/submit-migration-plan.ts
 var import_node_crypto7 = require("node:crypto");
-var import_node_path6 = require("node:path");
+var import_node_path7 = require("node:path");
 async function handleSubmitMigrationPlan(args, ctx2) {
   const session = await ctx2.store.load(args.sessionId);
   if (session.type !== "architecture") {
@@ -127236,7 +127254,7 @@ async function handleSubmitMigrationPlan(args, ctx2) {
   }
   if (!args.targetStack?.trim()) throw new Error("targetStack is required");
   if (!args.newProjectName?.trim()) throw new Error("newProjectName is required");
-  if ((0, import_node_path6.isAbsolute)(args.newProjectName.trim())) {
+  if ((0, import_node_path7.isAbsolute)(args.newProjectName.trim())) {
     throw new Error('newProjectName must be a relative directory name (e.g. "my-app-modern"), not an absolute path');
   }
   if (!Array.isArray(args.phases) || args.phases.length === 0) throw new Error("phases must be a non-empty array");
@@ -127252,8 +127270,8 @@ async function handleSubmitMigrationPlan(args, ctx2) {
     dependencies: p.dependencies ?? [],
     estimatedComplexity: p.estimatedComplexity ?? "medium"
   }));
-  const newProjectPath = (0, import_node_path6.resolve)(ctx2.workspacePath, args.newProjectName.trim());
-  if (!newProjectPath.startsWith(ctx2.workspacePath + import_node_path6.sep)) {
+  const newProjectPath = (0, import_node_path7.resolve)(ctx2.workspacePath, args.newProjectName.trim());
+  if (!newProjectPath.startsWith(ctx2.workspacePath + import_node_path7.sep)) {
     throw new Error(
       `newProjectName "${args.newProjectName.trim()}" resolves outside the workspace. Use a simple directory name like "my-app-modern".`
     );
@@ -127512,7 +127530,7 @@ var readPhaseContextToolDefinition = {
 
 // src/tools/submit-new-file.ts
 var import_node_crypto9 = require("node:crypto");
-var import_node_path7 = require("node:path");
+var import_node_path8 = require("node:path");
 function getCurrentAttempt(session) {
   return session.attempts.find((a) => a.status === "IN_PROGRESS") ?? null;
 }
@@ -127551,8 +127569,8 @@ async function handleSubmitNewFile(args, ctx2) {
       verificationResult: null
     };
   }
-  const absoluteFile = (0, import_node_path7.resolve)(impl.newProjectPath, args.file.trim());
-  const projectBase = impl.newProjectPath.endsWith(import_node_path7.sep) ? impl.newProjectPath : impl.newProjectPath + import_node_path7.sep;
+  const absoluteFile = (0, import_node_path8.resolve)(impl.newProjectPath, args.file.trim());
+  const projectBase = impl.newProjectPath.endsWith(import_node_path8.sep) ? impl.newProjectPath : impl.newProjectPath + import_node_path8.sep;
   if (!absoluteFile.startsWith(projectBase)) {
     throw new Error(
       `Path traversal detected: "${args.file}" resolves to "${absoluteFile}", which is outside the new project directory "${impl.newProjectPath}". Use paths relative to the project root (e.g. "src/domain/user.ts").`
@@ -127611,7 +127629,7 @@ var submitNewFileToolDefinition = {
 
 // src/tools/apply-new-project.ts
 var import_promises3 = require("node:fs/promises");
-var import_node_path8 = require("node:path");
+var import_node_path9 = require("node:path");
 
 // src/harness/sensors.ts
 function checkSpecCoverage(spec, newFiles) {
@@ -127721,7 +127739,7 @@ async function handleApplyNewProject(args, ctx2) {
   const writtenFiles = [];
   try {
     for (const newFile of attempt.newFiles) {
-      await (0, import_promises3.mkdir)((0, import_node_path8.dirname)(newFile.file), { recursive: true });
+      await (0, import_promises3.mkdir)((0, import_node_path9.dirname)(newFile.file), { recursive: true });
       await (0, import_promises3.writeFile)(newFile.file, newFile.content, "utf-8");
       writtenFiles.push(newFile.file);
     }
@@ -127785,13 +127803,13 @@ var import_node_crypto11 = require("node:crypto");
 var import_eslint = __toESM(require_api(), 1);
 var import_js = __toESM(require_src3(), 1);
 var import_globals = __toESM(require_globals5(), 1);
-var import_node_fs = require("node:fs");
-var import_node_path10 = require("node:path");
+var import_node_fs2 = require("node:fs");
+var import_node_path11 = require("node:path");
 var import_node_crypto10 = require("node:crypto");
 var CONFIG_FILES = ["eslint.config.js", "eslint.config.mjs", "eslint.config.cjs"];
 var TS_EXTENSIONS = /\.[mc]?tsx?$/i;
 function hasProjectConfig(projectPath) {
-  return CONFIG_FILES.some((f) => (0, import_node_fs.existsSync)((0, import_node_path10.join)(projectPath, f)));
+  return CONFIG_FILES.some((f) => (0, import_node_fs2.existsSync)((0, import_node_path11.join)(projectPath, f)));
 }
 async function runLint(files, attemptId, projectPath) {
   if (files.length === 0) {
@@ -128332,7 +128350,7 @@ var failSessionToolDefinition = {
 
 // src/tools/generate-discovery-html.ts
 var import_promises5 = require("node:fs/promises");
-var import_node_path11 = require("node:path");
+var import_node_path12 = require("node:path");
 function badge(text, color) {
   return `<span class="badge" style="background:${color}">${text}</span>`;
 }
@@ -128751,9 +128769,9 @@ async function handleGenerateDiscoveryHtml(args, ctx2) {
   const discovery = session;
   const generatedAt = (/* @__PURE__ */ new Date()).toLocaleString("pt-BR", { dateStyle: "long", timeStyle: "short" });
   const html = buildHtml(discovery, generatedAt);
-  const reportsDir = (0, import_node_path11.join)(ctx2.workspacePath, "modernization-reports");
+  const reportsDir = (0, import_node_path12.join)(ctx2.workspacePath, "modernization-reports");
   await (0, import_promises5.mkdir)(reportsDir, { recursive: true });
-  const htmlPath = (0, import_node_path11.join)(reportsDir, `discovery-${args.sessionId}.html`);
+  const htmlPath = (0, import_node_path12.join)(reportsDir, `discovery-${args.sessionId}.html`);
   await (0, import_promises5.writeFile)(htmlPath, html, "utf-8");
   const projectName = discovery.legacyPath.split(/[\\/]/).pop() ?? discovery.legacyPath;
   const spec = discovery.specification;
