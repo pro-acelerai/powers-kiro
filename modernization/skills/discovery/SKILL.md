@@ -121,10 +121,24 @@ modernization_submit_specification({
   businessRules: [...],
   flows: [...],
   externalContracts: [...],
+  databaseRules: [...],   // triggers, stored procedures, scheduled jobs, views, functions
+  excludedScope: [...],   // modulos/arquivos fora do escopo, com motivo
   nonFunctional: [...],
   rawMarkdown: "<versao markdown legivel da spec completa>"
 })
 ```
+
+**databaseRules** — Para cada objeto de banco encontrado (trigger, procedure, job, view, function), registre:
+- `id`, `name`, `type`, `description` (em termos de negocio)
+- `decision`: `migrate` | `reimplement_in_application` | `drop` | `keep_as_is`
+- `rationale`: justificativa da decisao
+- `sourceRef`: onde foi encontrado
+
+**excludedScope** — Para cada modulo ou arquivo fora do escopo da migracao, registre:
+- `path`: caminho do modulo/arquivo
+- `reason`: por que esta excluido
+
+Se o sistema legado nao tiver logica no banco e nao houver escopo excluido, passe arrays vazios.
 
 A spec deve capturar o QUE o sistema faz, nao COMO. Nao mencione nomes de funcoes, classes ou arquivos do legado na spec.
 
