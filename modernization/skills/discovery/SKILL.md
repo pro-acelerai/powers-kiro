@@ -145,9 +145,18 @@ modernization_request_spec_approval({
 - Se aprovado: sessao transita para DONE. Discovery completo.
 - Se rejeitado: volta para SPECIFYING. Corrija e re-submeta (max 2 vezes).
 
+### Passo 11 — Gerar relatorio HTML (somente apos aprovacao)
+
+```
+modernization_generate_discovery_html({ sessionId })
+```
+
+Gera um relatorio HTML self-contained em `.kiro/trace/modernization/discovery-{sessionId}.html` com abas de resumo, findings, especificacao e raciocinio. Informe ao usuario o caminho do arquivo gerado.
+
 ## Ao concluir
 
 Informe ao usuario:
 - Quantos findings foram encontrados e suas classificacoes
 - Que a spec foi aprovada e esta salva
+- O caminho do relatorio HTML gerado
 - Que o proximo passo e criar uma sessao de architecture com o `sessionId` desta sessao
