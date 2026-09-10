@@ -35,10 +35,11 @@ modernization_create_session({
   architectureSessionId: "<id da sessao de architecture>",
   phaseId: "<id da fase do plano>",
   phaseNumber: <numero da fase>,
-  phaseTitle: "<titulo da fase>",
-  newProjectName: "<nome do diretorio do novo projeto>"
+  phaseTitle: "<titulo da fase>"
 })
 ```
+
+O diretorio do novo projeto nao e informado aqui: ele e herdado automaticamente do plano de migracao aprovado na Fase 2 (`newProjectName`/`newProjectPath`). Garanta apenas que `phaseId` corresponde a uma fase existente nesse plano.
 
 ### Passo 2 — Carregar contexto da fase
 
