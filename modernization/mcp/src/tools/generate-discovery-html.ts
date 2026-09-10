@@ -457,9 +457,9 @@ export async function handleGenerateDiscoveryHtml(args: { sessionId: string }, c
 
   const html = buildHtml(discovery, generatedAt)
 
-  const traceDir = join(ctx.workspacePath, '.kiro', 'trace', 'modernization')
-  await mkdir(traceDir, { recursive: true })
-  const htmlPath = join(traceDir, `discovery-${args.sessionId}.html`)
+  const reportsDir = join(ctx.workspacePath, 'modernization-reports')
+  await mkdir(reportsDir, { recursive: true })
+  const htmlPath = join(reportsDir, `discovery-${args.sessionId}.html`)
   await writeFile(htmlPath, html, 'utf-8')
 
   const projectName = discovery.legacyPath.split(/[\\/]/).pop() ?? discovery.legacyPath
@@ -468,7 +468,7 @@ export async function handleGenerateDiscoveryHtml(args: { sessionId: string }, c
   return {
     sessionId: args.sessionId,
     htmlPath,
-    relativePath: `.kiro/trace/modernization/discovery-${args.sessionId}.html`,
+    relativePath: `modernization-reports/discovery-${args.sessionId}.html`,
     summary: {
       project: projectName,
       targetStack: discovery.targetStack,
@@ -482,7 +482,7 @@ export async function handleGenerateDiscoveryHtml(args: { sessionId: string }, c
         : 0,
       thinkRecords: discovery.thinkRecords.length,
     },
-    message: `HTML de discovery gerado em ${htmlPath}. Abra no navegador para apresentar os resultados.`,
+    message: `Relatório HTML gerado em modernization-reports/discovery-${args.sessionId}.html. Abra no navegador para apresentar os resultados.`,
   }
 }
 

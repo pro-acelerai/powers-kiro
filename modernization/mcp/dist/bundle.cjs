@@ -128719,16 +128719,16 @@ async function handleGenerateDiscoveryHtml(args, ctx2) {
   const discovery = session;
   const generatedAt = (/* @__PURE__ */ new Date()).toLocaleString("pt-BR", { dateStyle: "long", timeStyle: "short" });
   const html = buildHtml(discovery, generatedAt);
-  const traceDir = (0, import_node_path11.join)(ctx2.workspacePath, ".kiro", "trace", "modernization");
-  await (0, import_promises5.mkdir)(traceDir, { recursive: true });
-  const htmlPath = (0, import_node_path11.join)(traceDir, `discovery-${args.sessionId}.html`);
+  const reportsDir = (0, import_node_path11.join)(ctx2.workspacePath, "modernization-reports");
+  await (0, import_promises5.mkdir)(reportsDir, { recursive: true });
+  const htmlPath = (0, import_node_path11.join)(reportsDir, `discovery-${args.sessionId}.html`);
   await (0, import_promises5.writeFile)(htmlPath, html, "utf-8");
   const projectName = discovery.legacyPath.split(/[\\/]/).pop() ?? discovery.legacyPath;
   const spec = discovery.specification;
   return {
     sessionId: args.sessionId,
     htmlPath,
-    relativePath: `.kiro/trace/modernization/discovery-${args.sessionId}.html`,
+    relativePath: `modernization-reports/discovery-${args.sessionId}.html`,
     summary: {
       project: projectName,
       targetStack: discovery.targetStack,
@@ -128739,7 +128739,7 @@ async function handleGenerateDiscoveryHtml(args, ctx2) {
       specItems: spec ? spec.domainEntities.length + spec.businessRules.length + spec.flows.length + spec.externalContracts.length + (spec.databaseRules ?? []).length : 0,
       thinkRecords: discovery.thinkRecords.length
     },
-    message: `HTML de discovery gerado em ${htmlPath}. Abra no navegador para apresentar os resultados.`
+    message: `Relat\xF3rio HTML gerado em modernization-reports/discovery-${args.sessionId}.html. Abra no navegador para apresentar os resultados.`
   };
 }
 var generateDiscoveryHtmlToolDefinition = {
