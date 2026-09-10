@@ -11,7 +11,7 @@
     "build": "tsc",
     "bundle": "esbuild src/index.ts --bundle --platform=node --target=node18 --format=cjs --outfile=dist/bundle.cjs --external:jiti",
     "start": "node dist/index.js",
-    "test": "node --import tsx/esm --test src/domain/state-machine.test.ts src/trace/session-store.test.ts src/harness/scope.test.ts src/context.test.ts"
+    "test": "node --import tsx/esm --test src/domain/state-machine.test.ts src/trace/session-store.test.ts src/harness/scope.test.ts src/context.test.ts src/tools/create-session.test.ts"
   },
   "dependencies": {
     "@eslint/js": "^9.0.0",

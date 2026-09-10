@@ -1,4 +1,4 @@
-import { resolve, sep } from 'node:path'
+import { resolve, sep, isAbsolute } from 'node:path'
 import type { AppContext } from '../context.js'
 
 interface CreateDiscoveryArgs {
@@ -47,18 +47,23 @@ export async function handleCreateSession(args: CreateSessionArgs, ctx: AppConte
       if (!Array.isArray(scope) || scope.length === 0) throw new Error('scope must be a non-empty array of paths')
 
       // artifactsPath: base directory for all artifacts of this iteration.
-      // Confirmed by the user at the start of discovery. Defaults to the
-      // resolved workspace root when the agent does not provide one.
-      // Must resolve within the workspace so artifacts never leak outside it.
-      const resolvedArtifacts = artifactsPath?.trim()
-        ? resolve(ctx.workspacePath, artifactsPath.trim())
+      //
+      // The MCP server cannot reliably discover the user's open workspace on its
+      // own (process.cwd() may be the power's install dir, and Kiro does not
+      // inject the workspace path). So the agent — which DOES know the real
+      // workspace — is the source of truth:
+      //
+      //   - Absolute path  → trusted as-is (the agent resolved it against the
+      //                       real workspace). Not validated against the guessed
+      //                       ctx.workspacePath, which may be wrong.
+      //   - Relative path  → resolved against ctx.workspacePath (best-effort).
+      //   - Omitted        → falls back to ctx.workspacePath (walk-up heuristic).
+      const trimmedArtifacts = artifactsPath?.trim()
+      const resolvedArtifacts = trimmedArtifacts
+        ? (isAbsolute(trimmedArtifacts)
+            ? resolve(trimmedArtifacts)
+            : resolve(ctx.workspacePath, trimmedArtifacts))
         : ctx.workspacePath
-      if (resolvedArtifacts !== ctx.workspacePath && !resolvedArtifacts.startsWith(ctx.workspacePath + sep)) {
-        throw new Error(
-          `artifactsPath "${artifactsPath}" resolves outside the workspace: "${ctx.workspacePath}". ` +
-          `Use a path within the workspace.`
-        )
-      }
 
       // legacyPath may live anywhere on disk (only read, never written)
       const resolvedLegacy = resolve(ctx.workspacePath, legacyPath.trim())
@@ -254,11 +259,16 @@ export const createSessionToolDefinition = {
       artifactsPath: {
         type: 'string',
         description:
-          '[discovery only] Base directory (within the workspace) where all artifacts of this ' +
-          'iteration are written: HTML report, final report and the new project. ' +
+          '[discovery only] Base directory where all artifacts of this iteration are written: ' +
+          'HTML report, final report and the new project. ' +
+          'IMPORTANT: pass an ABSOLUTE path rooted at the user\'s current workspace ' +
+          '(e.g. "c:/Users/me/workspace/my-project/modernization"). The server cannot ' +
+          'reliably discover the open workspace on its own, so an absolute path from the ' +
+          'agent is treated as the source of truth. ' +
           'Suggest a path to the user and confirm it before creating the session. ' +
           'Inherited automatically by architecture, implementation and delivery sessions. ' +
-          'Defaults to the workspace root when omitted.',
+          'A relative path is resolved against the server-detected workspace (best-effort); ' +
+          'when omitted, defaults to that detected workspace.',
       },
       discoverySessionId: {
         type: 'string',

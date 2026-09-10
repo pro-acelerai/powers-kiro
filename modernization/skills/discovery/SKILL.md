@@ -39,14 +39,20 @@ Antes de criar a sessao, defina onde TODOS os artefatos desta iteracao serao sal
 (relatorio HTML, relatorio final e o novo projeto):
 
 1. **Sugira um caminho** dentro do workspace atual do usuario. Uma boa sugestao padrao
-   e uma pasta dedicada na raiz do workspace, por exemplo `./modernization` ou
-   `./<nome-do-projeto>-modernization`.
+   e uma pasta dedicada na raiz do workspace, por exemplo `<workspace>/modernization` ou
+   `<workspace>/<nome-do-projeto>-modernization`.
 2. **Pergunte ao usuario** se aquele caminho e o ideal para salvar todos os artefatos
    desta iteracao. Aguarde a confirmacao (ou um caminho alternativo) antes de continuar.
 
+**IMPORTANTE — passe um caminho ABSOLUTO.** O servidor MCP nao consegue descobrir de
+forma confiavel qual e o workspace aberto (o `process.cwd()` do servidor pode apontar
+para a pasta de instalacao do power). Voce, o agente, conhece o workspace atual do
+usuario — entao monte o `artifactsPath` como um caminho absoluto a partir dele, por
+exemplo `c:/Users/me/workspace/meu-projeto/modernization`. Um caminho absoluto e tratado
+como fonte de verdade e nao e validado contra o workspace adivinhado pelo servidor.
+
 O caminho confirmado (`artifactsPath`) e definido uma unica vez aqui e sera **herdado
 automaticamente** por todas as fases seguintes (architecture, implementation, delivery).
-Deve ser um caminho dentro do workspace.
 
 ```
 modernization_create_session({
@@ -54,11 +60,13 @@ modernization_create_session({
   legacyPath: "<caminho para o projeto legado>",
   targetStack: "<stack alvo descrita pelo usuario>",
   scope: ["<pasta ou arquivo>", ...],
-  artifactsPath: "<caminho confirmado pelo usuario, relativo ao workspace>"
+  artifactsPath: "<caminho ABSOLUTO confirmado pelo usuario, dentro do workspace atual>"
 })
 ```
 
-Se o usuario nao especificar um caminho, omita `artifactsPath` — o padrao e a raiz do workspace.
+Se voce nao conseguir determinar o caminho absoluto do workspace, um caminho relativo
+sera resolvido contra o workspace detectado pelo servidor (best-effort); se omitido, o
+padrao e esse mesmo workspace detectado.
 
 ### Passo 2 — Ler o codigo legado
 

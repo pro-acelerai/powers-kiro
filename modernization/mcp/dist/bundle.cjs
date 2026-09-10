@@ -88858,7 +88858,7 @@ var require_posix = __commonJS({
       assertArg$1(pathObject);
       return _format("/", pathObject);
     }
-    function isAbsolute3(path2) {
+    function isAbsolute4(path2) {
       assertPath(path2);
       return path2.length > 0 && isPosixPathSeparator(path2.charCodeAt(0));
     }
@@ -88925,12 +88925,12 @@ var require_posix = __commonJS({
         path2 = fromFileUrl(path2);
       }
       assertArg(path2);
-      const isAbsolute4 = isPosixPathSeparator(path2.charCodeAt(0));
+      const isAbsolute5 = isPosixPathSeparator(path2.charCodeAt(0));
       const trailingSeparator = isPosixPathSeparator(path2.charCodeAt(path2.length - 1));
-      path2 = normalizeString(path2, !isAbsolute4, "/", isPosixPathSeparator);
-      if (path2.length === 0 && !isAbsolute4) path2 = ".";
+      path2 = normalizeString(path2, !isAbsolute5, "/", isPosixPathSeparator);
+      if (path2.length === 0 && !isAbsolute5) path2 = ".";
       if (path2.length > 0 && trailingSeparator) path2 += "/";
-      if (isAbsolute4) return `/${path2}`;
+      if (isAbsolute5) return `/${path2}`;
       return path2;
     }
     function join6(path2, ...paths) {
@@ -88956,9 +88956,9 @@ var require_posix = __commonJS({
         name: ""
       };
       if (path2.length === 0) return ret;
-      const isAbsolute4 = isPosixPathSeparator(path2.charCodeAt(0));
+      const isAbsolute5 = isPosixPathSeparator(path2.charCodeAt(0));
       let start;
-      if (isAbsolute4) {
+      if (isAbsolute5) {
         ret.root = "/";
         start = 1;
       } else {
@@ -88994,7 +88994,7 @@ var require_posix = __commonJS({
       preDotState === 0 || // The (right-most) trimmed path component is exactly '..'
       preDotState === 1 && startDot === end - 1 && startDot === startPart + 1) {
         if (end !== -1) {
-          if (startPart === 0 && isAbsolute4) {
+          if (startPart === 0 && isAbsolute5) {
             ret.base = ret.name = path2.slice(1, end);
           } else {
             ret.base = ret.name = path2.slice(startPart, end);
@@ -89002,7 +89002,7 @@ var require_posix = __commonJS({
         }
         ret.base = ret.base || "/";
       } else {
-        if (startPart === 0 && isAbsolute4) {
+        if (startPart === 0 && isAbsolute5) {
           ret.name = path2.slice(1, startDot);
           ret.base = path2.slice(1, end);
         } else {
@@ -89013,7 +89013,7 @@ var require_posix = __commonJS({
       }
       if (startPart > 0) {
         ret.dir = stripTrailingSeparators(path2.slice(0, startPart - 1), isPosixPathSeparator);
-      } else if (isAbsolute4) ret.dir = "/";
+      } else if (isAbsolute5) ret.dir = "/";
       return ret;
     }
     function resolve6(...pathSegments) {
@@ -89118,7 +89118,7 @@ var require_posix = __commonJS({
       });
     }
     function toFileUrl(path2) {
-      if (!isAbsolute3(path2)) {
+      if (!isAbsolute4(path2)) {
         throw new TypeError(`Path must be absolute: received "${path2}"`);
       }
       const url = new URL("file:///");
@@ -89436,7 +89436,7 @@ var require_posix = __commonJS({
     exports2.format = format;
     exports2.fromFileUrl = fromFileUrl;
     exports2.globToRegExp = globToRegExp;
-    exports2.isAbsolute = isAbsolute3;
+    exports2.isAbsolute = isAbsolute4;
     exports2.isGlob = isGlob;
     exports2.join = join6;
     exports2.joinGlobs = joinGlobs;
@@ -89688,7 +89688,7 @@ var require_windows = __commonJS({
       assertArg$1(pathObject);
       return _format("\\", pathObject);
     }
-    function isAbsolute3(path2) {
+    function isAbsolute4(path2) {
       assertPath(path2);
       const len = path2.length;
       if (len === 0) return false;
@@ -89768,11 +89768,11 @@ var require_windows = __commonJS({
       const len = path2.length;
       let rootEnd = 0;
       let device;
-      let isAbsolute4 = false;
+      let isAbsolute5 = false;
       const code = path2.charCodeAt(0);
       if (len > 1) {
         if (isPathSeparator(code)) {
-          isAbsolute4 = true;
+          isAbsolute5 = true;
           if (isPathSeparator(path2.charCodeAt(1))) {
             let j = 2;
             let last = j;
@@ -89807,7 +89807,7 @@ var require_windows = __commonJS({
             rootEnd = 2;
             if (len > 2) {
               if (isPathSeparator(path2.charCodeAt(2))) {
-                isAbsolute4 = true;
+                isAbsolute5 = true;
                 rootEnd = 3;
               }
             }
@@ -89818,21 +89818,21 @@ var require_windows = __commonJS({
       }
       let tail;
       if (rootEnd < len) {
-        tail = normalizeString(path2.slice(rootEnd), !isAbsolute4, "\\", isPathSeparator);
+        tail = normalizeString(path2.slice(rootEnd), !isAbsolute5, "\\", isPathSeparator);
       } else {
         tail = "";
       }
-      if (tail.length === 0 && !isAbsolute4) tail = ".";
+      if (tail.length === 0 && !isAbsolute5) tail = ".";
       if (tail.length > 0 && isPathSeparator(path2.charCodeAt(len - 1))) {
         tail += "\\";
       }
       if (device === void 0) {
-        if (isAbsolute4) {
+        if (isAbsolute5) {
           if (tail.length > 0) return `\\${tail}`;
           else return "\\";
         }
         return tail;
-      } else if (isAbsolute4) {
+      } else if (isAbsolute5) {
         if (tail.length > 0) return `${device}\\${tail}`;
         else return `${device}\\`;
       }
@@ -90011,11 +90011,11 @@ var require_windows = __commonJS({
         if (len === 0) continue;
         let rootEnd = 0;
         let device = "";
-        let isAbsolute4 = false;
+        let isAbsolute5 = false;
         const code = path2.charCodeAt(0);
         if (len > 1) {
           if (isPathSeparator(code)) {
-            isAbsolute4 = true;
+            isAbsolute5 = true;
             if (isPathSeparator(path2.charCodeAt(1))) {
               let j = 2;
               let last = j;
@@ -90051,7 +90051,7 @@ var require_windows = __commonJS({
               rootEnd = 2;
               if (len > 2) {
                 if (isPathSeparator(path2.charCodeAt(2))) {
-                  isAbsolute4 = true;
+                  isAbsolute5 = true;
                   rootEnd = 3;
                 }
               }
@@ -90059,7 +90059,7 @@ var require_windows = __commonJS({
           }
         } else if (isPathSeparator(code)) {
           rootEnd = 1;
-          isAbsolute4 = true;
+          isAbsolute5 = true;
         }
         if (device.length > 0 && resolvedDevice.length > 0 && device.toLowerCase() !== resolvedDevice.toLowerCase()) {
           continue;
@@ -90069,7 +90069,7 @@ var require_windows = __commonJS({
         }
         if (!resolvedAbsolute) {
           resolvedTail = `${path2.slice(rootEnd)}\\${resolvedTail}`;
-          resolvedAbsolute = isAbsolute4;
+          resolvedAbsolute = isAbsolute5;
         }
         if (resolvedAbsolute && resolvedDevice.length > 0) break;
       }
@@ -90166,7 +90166,7 @@ var require_windows = __commonJS({
       });
     }
     function toFileUrl(path2) {
-      if (!isAbsolute3(path2)) {
+      if (!isAbsolute4(path2)) {
         throw new TypeError(`Path must be absolute: received "${path2}"`);
       }
       const [, hostname, pathname] = path2.match(/^(?:[/\\]{2}([^/\\]+)(?=[/\\](?:[^/\\]|$)))?(.*)/);
@@ -90509,7 +90509,7 @@ var require_windows = __commonJS({
     exports2.format = format;
     exports2.fromFileUrl = fromFileUrl;
     exports2.globToRegExp = globToRegExp;
-    exports2.isAbsolute = isAbsolute3;
+    exports2.isAbsolute = isAbsolute4;
     exports2.isGlob = isGlob;
     exports2.join = join6;
     exports2.joinGlobs = joinGlobs;
@@ -126195,12 +126195,8 @@ async function handleCreateSession(args, ctx2) {
       if (!legacyPath?.trim()) throw new Error("legacyPath is required");
       if (!targetStack?.trim()) throw new Error("targetStack is required");
       if (!Array.isArray(scope) || scope.length === 0) throw new Error("scope must be a non-empty array of paths");
-      const resolvedArtifacts = artifactsPath?.trim() ? (0, import_node_path3.resolve)(ctx2.workspacePath, artifactsPath.trim()) : ctx2.workspacePath;
-      if (resolvedArtifacts !== ctx2.workspacePath && !resolvedArtifacts.startsWith(ctx2.workspacePath + import_node_path3.sep)) {
-        throw new Error(
-          `artifactsPath "${artifactsPath}" resolves outside the workspace: "${ctx2.workspacePath}". Use a path within the workspace.`
-        );
-      }
+      const trimmedArtifacts = artifactsPath?.trim();
+      const resolvedArtifacts = trimmedArtifacts ? (0, import_node_path3.isAbsolute)(trimmedArtifacts) ? (0, import_node_path3.resolve)(trimmedArtifacts) : (0, import_node_path3.resolve)(ctx2.workspacePath, trimmedArtifacts) : ctx2.workspacePath;
       const resolvedLegacy = (0, import_node_path3.resolve)(ctx2.workspacePath, legacyPath.trim());
       const resolvedScope = scope.map((p) => {
         const resolved = (0, import_node_path3.resolve)(resolvedLegacy, p.trim());
@@ -126360,7 +126356,7 @@ var createSessionToolDefinition = {
       },
       artifactsPath: {
         type: "string",
-        description: "[discovery only] Base directory (within the workspace) where all artifacts of this iteration are written: HTML report, final report and the new project. Suggest a path to the user and confirm it before creating the session. Inherited automatically by architecture, implementation and delivery sessions. Defaults to the workspace root when omitted."
+        description: `[discovery only] Base directory where all artifacts of this iteration are written: HTML report, final report and the new project. IMPORTANT: pass an ABSOLUTE path rooted at the user's current workspace (e.g. "c:/Users/me/workspace/my-project/modernization"). The server cannot reliably discover the open workspace on its own, so an absolute path from the agent is treated as the source of truth. Suggest a path to the user and confirm it before creating the session. Inherited automatically by architecture, implementation and delivery sessions. A relative path is resolved against the server-detected workspace (best-effort); when omitted, defaults to that detected workspace.`
       },
       discoverySessionId: {
         type: "string",
