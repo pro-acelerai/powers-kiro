@@ -4,10 +4,7 @@
     "pro-coding": {
       "type": "stdio",
       "command": "node",
-      "args": ["./mcp/dist/bundle.cjs"],
-      "env": {
-        "STORY_CODER_WORKSPACE": "${workspaceFolder}"
-      }
+      "args": ["./mcp/dist/bundle.cjs"]
     }
   }
 }
