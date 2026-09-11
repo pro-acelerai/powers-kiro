@@ -19,6 +19,10 @@ node_modules/
 # Claude Code session data
 .claude/
 
+# Apresentação (arquivo local, não versionado)
+APRESENTACAO.html
+logo_prodemge.png
+
 # OS
 .DS_Store
 Thumbs.db
