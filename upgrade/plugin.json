@@ -1,0 +1,25 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "upgrade",
+  "version": "0.1.0",
+  "description": "Upgrade de versao, dependencias e seguranca em projetos existentes. Scan, Plan, Apply, Validate.",
+  "author": {
+    "name": "Upgrade",
+    "url": "https://github.com/pro-acelerai/powers-kiro"
+  },
+  "keywords": [
+    "upgrade",
+    "update",
+    "versao",
+    "version",
+    "dependencia",
+    "dependency",
+    "seguranca",
+    "security",
+    "cve",
+    "deprecated",
+    "migration",
+    "breaking"
+  ],
+  "license": "MIT"
+}
