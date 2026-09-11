@@ -1,0 +1,36 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "readiness",
+  "version": "1.0.0",
+  "description": "Atua como Tech Lead guardiao de qualidade: valida historias de usuario contra os 23 criterios de Definition of Ready, calcula indice de prontidao, avalia AI-Readiness e emite veredito com bloqueadores, pendencias e contradicoes.",
+  "author": {
+    "name": "pro-acelerai",
+    "url": "https://github.com/pro-acelerai"
+  },
+  "keywords": [
+    "definition of ready",
+    "DoR",
+    "AI-Ready",
+    "AI-Readiness",
+    "quality gate",
+    "validar historia",
+    "validar historias",
+    "prontidao",
+    "indice de prontidao",
+    "tech lead",
+    "principal engineer",
+    "NOT READY",
+    "READY",
+    "needs refinement",
+    "bloqueador",
+    "pendencia",
+    "contradicao",
+    "discovery",
+    "technical design",
+    "matriz de risco",
+    "23 criterios",
+    "esta pronta para desenvolvimento",
+    "pode entrar na sprint"
+  ],
+  "license": "MIT"
+}

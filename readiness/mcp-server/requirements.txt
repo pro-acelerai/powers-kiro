@@ -1,0 +1,4 @@
+# Necessario apenas para ler arquivos PDF
+pypdf==6.16.2
+# Necessario apenas para exportar a planilha consolidada de vereditos
+openpyxl==3.1.5
