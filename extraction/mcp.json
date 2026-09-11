@@ -1,0 +1,11 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/mcp.schema.json",
+  "mcpServers": {
+    "extraction-mcp": {
+      "type": "stdio",
+      "command": "python",
+      "args": ["mcp-server/server.py"],
+      "env": {}
+    }
+  }
+}
