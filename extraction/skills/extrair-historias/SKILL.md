@@ -18,12 +18,17 @@ Use esta skill quando o usuario quiser:
 
 Antes de iniciar, pergunte ao usuario qual modelo deseja usar:
 
-> **Modelo Padrao** - narrativa "Eu como... quero... para que...", campo "Integracoes Internas", agnóstico de dominio
+> **Modelo Padrao** - narrativa "Eu como... quero... para que...", campo "Integracoes Internas", agnostico de dominio
 > **Modelo GFO + TJ** - narrativa "A fim de... precisa-se...", campo "Integracoes GFO", sem linguagem tecnica, criterios como "Resultados esperados"
+> **Modelo SIMADE** - narrativa com multiplos atores e codigos SSC, campo "Integracoes SIMADE", criterios com sub-numeracao decimal, inclui versao e historico de evolucao
 
 Se o usuario nao indicar, use o **Modelo Padrao**.
 
-No modelo GFO+TJ, carregue e siga a steering `dev.kiro/steering/diretrizes-gfo-tj.md` antes de gerar as historias. As regras de granularidade, classificacao HU/HT e numeracao continuam iguais nos dois modelos.
+No modelo GFO+TJ, carregue e siga a steering `dev.kiro/steering/diretrizes-gfo-tj.md` antes de gerar as historias.
+
+No modelo SIMADE, carregue e siga a steering `dev.kiro/steering/diretrizes-simade.md` antes de gerar as historias.
+
+As regras de granularidade, classificacao HU/HT e numeracao de `regras-extracao.md` continuam iguais nos tres modelos.
 
 ### 1. Obter o documento de entrada
 
@@ -73,12 +78,19 @@ Para cada funcionalidade encontrada, quebre em acoes atomicas seguindo a granula
 
 **Modelo GFO+TJ:** seguir exatamente o formato "A fim de... precisa-se..." de `diretrizes-gfo-tj.md`.
 
+**Modelo SIMADE:** listar todos os perfis SSC identificados na fonte, seguir exatamente o formato de `diretrizes-simade.md`:
+> Como [Persona1 (SSC: CODIGO = "PAPEL")],
+> [Persona2 (SSC: CODIGO = "PAPEL")],
+> eu quero [acao atomica especifica],
+> para [valor esperado].
+
 ### 6. Preencher campos
 
 - Prioridade: inferir do documento quando possivel, senao "A definir"
 - Complexidade: inferir do documento quando possivel, senao "A definir"
 - Dependencias: mapear referencias cruzadas logicas entre historias
-- Campo de integracoes internas: "Integracoes Internas" (Padrao) ou "Integracoes GFO" (GFO+TJ)
+- Campo de integracoes internas: "Integracoes Internas" (Padrao), "Integracoes GFO" (GFO+TJ) ou "Integracoes SIMADE" (SIMADE)
+- No modelo SIMADE: incluir campo "Versao" antes da narrativa e secao "Historico de Evolucao" ao final
 
 ### 7. Numerar sequencialmente
 

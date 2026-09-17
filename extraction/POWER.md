@@ -18,10 +18,11 @@ Ao iniciar, o usuario escolhe o modelo que define formato de narrativa e campos 
 
 | Modelo | Descricao |
 |---|---|
-| **Padrao** | Narrativa "Eu como... quero... para que...", campo "Integracoes Internas", agnóstico de dominio |
+| **Padrao** | Narrativa "Eu como... quero... para que...", campo "Integracoes Internas", agnostico de dominio |
 | **GFO + TJ** | Campo "Integracoes GFO" + narrativa "A fim de... precisa-se..." (formato Tribunal de Justica), criterios como "Resultados esperados", sem linguagem tecnica |
+| **SIMADE** | Campo "Integracoes SIMADE" + narrativa com multiplos atores e codigos SSC, criterios com sub-numeracao decimal (1, 1.1, 1.2...), secao "Informacoes Complementares" e versionamento com historico de evolucao |
 
-As regras de granularidade, classificacao HU/HT e numeracao sao identicas nos dois modelos.
+As regras de granularidade, classificacao HU/HT e numeracao sao identicas nos tres modelos.
 
 ## When to Use This Power
 
@@ -63,7 +64,7 @@ Analisa historias ja extraidas e oferece:
 
 ### Extracao
 
-1. Escolha o modelo: **Padrao** ou **GFO + TJ**
+1. Escolha o modelo: **Padrao**, **GFO + TJ** ou **SIMADE**
 2. Forneca o documento (planilha Excel via `ler_planilha`, texto colado, ou #File)
 3. O Power analisa, identifica funcionalidades e gera historias atomicas
 4. Cada historia recebe narrativa, campos, criterios e dependencias

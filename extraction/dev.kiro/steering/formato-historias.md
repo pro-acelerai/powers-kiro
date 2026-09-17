@@ -63,6 +63,63 @@ O campo de narrativa e o nome do campo de integracoes internas variam conforme o
 
 Quando o modelo GFO+TJ estiver ativo, as `diretrizes-gfo-tj.md` substituem a narrativa e os criterios de aceite. O campo de integracoes internas passa a se chamar **Integracoes GFO**. Os demais campos da tabela de metadados sao identicos ao modelo Padrao.
 
+## Modelo SIMADE
+
+Quando o modelo SIMADE estiver ativo, as `diretrizes-simade.md` substituem a narrativa e os criterios de aceite. O campo de integracoes internas passa a se chamar **Integracoes SIMADE**. A historia inclui campo de versao e secao de historico de evolucao.
+
+```markdown
+# HISTORIA [NNN] – [Titulo curto com verbo de acao]
+
+[N]a Versao
+
+Como [Persona1 (SSC: CODIGO1 = "PAPEL1")],
+[Persona2 (SSC: CODIGO2 = "PAPEL2")],
+[...]
+eu quero [acao que o usuario/sistema executa],
+para [beneficio ou valor esperado].
+
+| Campo | Valor |
+|---|---|
+| **Tipo** | [HU ou HT] |
+| **Macro Etapa** | [Nome] |
+| **Produto** | [Nome] |
+| **Modulo** | [Nome do modulo do sistema] |
+| **Prioridade** | [Alta / Media / Baixa / A definir] |
+| **Complexidade** | [Alta / Media / Baixa / A definir] |
+| **Integracoes SIMADE** | [Modulos SIMADE relacionados] |
+| **Integracoes Externas** | [Sistemas externos envolvidos] |
+| **Pre-requisitos** | [O que precisa existir antes] |
+| **Dependencias** | [IDs de outras historias: HU003, HT002, etc. ou "-"] |
+| **Sistema Substituido** | [Sistema atual que sera substituido] |
+
+CRITERIOS DE ACEITE
+1 – [Regra ou comportamento principal]
+1.1 - [Caso especifico ou variacao]
+1.2 - [Outro caso especifico]
+2 – [Segunda regra principal]
+2.1 - [Sub-caso]
+
+**Regras de Negocio:**
+- RN01: [Regra extraida do documento, se mencionada]
+
+(Se nenhuma regra for mencionada no documento, omitir esta secao)
+
+Informacoes Complementares:
+[Exemplos concretos ou contexto adicional — omitir se nao houver]
+
+**Observacoes:**
+- [Rastreabilidade: de qual funcionalidade/linha do documento esta historia foi derivada]
+- [Detalhes tecnicos de implementacao, se identificados na fonte]
+- [Notas para refinamento posterior]
+
+HISTORICO DE EVOLUCAO DA HISTORIA:
+| Data | Descricao |
+|---|---|
+| - | Versao inicial |
+```
+
+A narrativa e os criterios de aceite seguem exatamente o formato definido em `dev.kiro/steering/diretrizes-simade.md`.
+
 ```markdown
 | **Integracoes GFO** | [Modulos GFO relacionados] |
 ```
