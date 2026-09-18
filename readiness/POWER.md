@@ -50,6 +50,7 @@ Nao use para escrever ou extrair historias novas, nem para code review de codigo
 | Arquivo HTML | Informar o caminho do `.html` / `.htm` | `ler_documento` |
 | Arquivo PDF | Informar o caminho do `.pdf` | `ler_documento` |
 | Historia dentro do projeto | "valide as historias do projeto" (sem caminho) | `listar_documentos` -> `ler_documento` |
+| Anexo Tecnico (opcional) | Fornecido junto com a historia — ativa a validacao de coerencia HT x AT | nenhuma ou `ler_documento` |
 
 Para PDFs digitalizados (imagem, sem camada de texto) a extracao falha: o Power avisa e pede a versao em texto. Nao adivinha conteudo.
 
@@ -64,6 +65,7 @@ Para PDFs digitalizados (imagem, sem camada de texto) a extracao falha: o Power 
 - Quality Gates 1 a 4 com PASS / FAIL
 - Bloqueadores, pendencias (DUV), contradicoes (CON), dependencias (DEP), riscos (RSK)
 - Registro de pressoes e influencias externas
+- **Quando o Anexo Tecnico for fornecido:** executa tambem a ETAPA 4 — Coerencia HT x AT, verificando cobertura dos CAs, mapeamento de campos, cobertura de erros, escopo e consistencia interna do AT. Emite parecer COERENTE | COERENTE COM RESSALVAS | INCOERENTE. Incoerencia critica impacta o veredito final.
 - Veredito final: READY | READY COM RESSALVAS | NEEDS REFINEMENT | NOT READY
 
 ### 2. Avaliacao de AI-Readiness (skill: avaliar-ai-ready)
@@ -77,15 +79,18 @@ Para PDFs digitalizados (imagem, sem camada de texto) a extracao falha: o Power 
 ## Usage
 
 1. Forneca a historia (prompt, `#File`, anexo, caminho de .md/.html/.pdf, ou peca para procurar no projeto)
-2. Escolha o modelo: **Padrao** (agnóstico) ou **GFO** (labels GitLab especificos)
-3. O Power abre o Quality Gate declarando o plano de analise em 11 passos
-4. Executa Discovery, Analise Funcional e Technical Design sem mascarar lacunas entre etapas
-5. Verifica os 23 criterios e calcula os indices com as tools `calcular_indice_dor` e `calcular_indice_ai_ready`
-6. Emite o relatorio de analise e o veredito final
-7. Opcionalmente exporta o relatorio em Markdown ou uma planilha consolidada de vereditos (caminho sugerido: `.kiro/readiness/`)
+2. Opcionalmente, forneca tambem o Anexo Tecnico (gerado pelo power `derivation`) — ativa a validacao de coerencia HT x AT
+3. Escolha o modelo: **Padrao** (agnóstico) ou **GFO** (labels GitLab especificos)
+4. O Power abre o Quality Gate declarando o plano de analise
+5. Executa Discovery, Analise Funcional e Technical Design sem mascarar lacunas entre etapas
+6. Se AT foi fornecido, executa a ETAPA 4 — Coerencia HT x AT
+7. Verifica os 23 criterios e calcula os indices com as tools `calcular_indice_dor` e `calcular_indice_ai_ready`
+8. Emite o relatorio de analise e o veredito final
+9. Opcionalmente exporta o relatorio em Markdown ou uma planilha consolidada de vereditos (caminho sugerido: `.kiro/readiness/`)
 
 Modos disponiveis:
 - "Valide se esta historia esta pronta" -> analise completa com veredito
+- "Valide esta historia e o Anexo Tecnico" -> analise completa + coerencia HT x AT
 - "Valide todas as historias do arquivo X" -> validacao em lote com tabela consolidada
 - "Quick gate nesta historia" -> apenas Quality Gates + bloqueadores + veredito
 - "Esta historia e apta para IA?" -> apenas AI-Ready (exige DoR >= 80 antes)

@@ -9,7 +9,8 @@ Coleção de **Kiro Powers** — extensões para o [Kiro IDE](https://kiro.dev) 
 | Power | Versão | Skills | MCP | Descrição |
 |---|---|---|---|---|
 | [`extraction`](./extraction/) | 1.0.0 | 2 | — | Extrai e refina histórias de usuário (HU/HT) a partir de planilhas ou texto |
-| [`readiness`](./readiness/) | 1.0.0 | 2 | — | Valida histórias contra os 23 critérios de Definition of Ready e emite veredito |
+| [`readiness`](./readiness/) | 1.0.0 | 2 | — | Valida histórias contra os 23 critérios de Definition of Ready e emite veredito; opcionalmente valida coerência HT × AT |
+| [`derivation`](./derivation/) | 1.0.0 | 2 | — | Levanta lacunas técnicas da história e gera o Anexo Técnico completo para o desenvolvedor |
 | [`coding`](./coding/) | 0.2.0 | 1 | TypeScript | Implementa histórias com fluxo governado — agent propõe, Harness controla |
 | [`upgrade`](./upgrade/) | 0.1.0 | 2 | TypeScript | Atualiza runtime, dependências e remedia CVEs in-place com rollback automático |
 | [`modernization`](./modernization/) | 0.2.0 | 4 | TypeScript | Migra sistemas legados para stacks modernas via Reverse → Spec → Forward |
@@ -41,7 +42,7 @@ Atua como Tech Lead guardião de qualidade. Recebe uma história de usuário e r
 Executa um fluxo de 3 fases obrigatórias (Discovery → Análise Funcional → Technical Design), verifica 23 critérios de DoR e calcula dois índices ponderados.
 
 **Skills:**
-- `validar-historia` — fluxo completo de validação com índice DoR (0–100) e veredito final
+- `validar-historia` — fluxo completo de validação com índice DoR (0–100) e veredito final; quando o Anexo Técnico é fornecido, executa também a ETAPA 4 de coerência HT × AT (cobertura de CAs, mapeamento de campos, cobertura de erros, escopo e consistência interna)
 - `avaliar-ai-ready` — avalia aptidão para execução por IA (ativado apenas quando DoR ≥ 80), calcula índice AI-Ready (0–100)
 
 **Vereditos possíveis:** `READY` · `READY COM RESSALVAS` · `NEEDS REFINEMENT` · `NOT READY`
@@ -49,6 +50,20 @@ Executa um fluxo de 3 fases obrigatórias (Discovery → Análise Funcional → 
 **Modelos:**
 - **Padrão** — status genérico (Jira, GitHub, Azure, Linear…)
 - **GFO** — labels GitLab específicos da equipe
+
+---
+
+## Derivation
+
+Age como Analista Técnico Sênior na ponte entre o requisito de negócio e a implementação. Recebe uma história já refinada com o PO e identifica tudo que falta para que um desenvolvedor possa implementá-la sem adivinhas — campos sem mapeamento, contratos não definidos, regras não especificadas, cenários de erro sem tratamento.
+
+O fluxo é obrigatoriamente em duas fases separadas: primeiro levanta as lacunas, depois — com as respostas coletadas pelo Analista junto ao Líder Técnico, DBA e PO — gera o Anexo Técnico completo.
+
+**Skills:**
+- `levantar-lacunas` — analisa a HT/HU e gera lista de perguntas específicas agrupadas por responsável (Líder Técnico, DBA, PO/Negócio, Analista), cada uma com marcador `> Resposta:` para preenchimento. Output: `.kiro/derivation/[ID]-lacunas.md`
+- `derivar-anexo` — com a história original e as respostas preenchidas, gera o Anexo Técnico com seções condicionais: contexto de integração, campos enviados/recebidos com tabelas completas, validações por campo, persistência, HTTP codes, logs, mock, cenários de teste e mapeamento consolidado. Lacunas não respondidas viram `[PENDENTE]` — nunca suposição. Output: `.kiro/derivation/[ID]-anexo-tecnico.md`
+
+O Anexo Técnico é documento de uso exclusivo do desenvolvedor. A história (HU/HT) permanece como artefato do negócio e do cliente.
 
 ---
 

@@ -13,6 +13,7 @@ Use esta skill quando o usuario quiser:
 - Identificar bloqueadores, lacunas, ambiguidades e contradicoes em requisitos
 - Obter um indice de prontidao objetivo com veredito
 - Decidir se uma historia pode entrar na sprint
+- Validar se o Anexo Tecnico (quando fornecido) cobre corretamente todos os requisitos da historia e nao introduz escopo nao solicitado
 
 ## Papel
 
@@ -47,12 +48,15 @@ O modelo escolhido afeta apenas a secao de labels/status do relatorio (secao 15)
 | Usuario pede para validar "as historias do projeto" sem indicar arquivo | Use a tool `listar_documentos` na raiz do workspace, apresente os candidatos e confirme qual usar |
 | PDF sem texto extraivel (digitalizado) | Informe o problema e peca a versao em texto. NAO adivinhe conteudo |
 | Multiplas historias no documento | Pergunte se o usuario quer todas (lote) ou uma especifica, salvo se ele ja tiver dito |
+| Anexo Tecnico fornecido junto com a historia | Leia tambem o AT e ative a ETAPA 4 — Coerencia HT x AT apos o Technical Design |
 
 Se a entrada nao contiver nenhuma historia identificavel, diga isso explicitamente e pare. Nao construa uma historia para depois validar.
 
+Registre explicitamente se o AT foi ou nao fornecido — isso determina se a ETAPA 4 sera executada.
+
 ### 2. Abrir o Quality Gate
 
-Antes de analisar, emita o bloco de abertura do steering `formato-relatorio.md` (secao "Comando inicial") com o ID/titulo recebido, o modelo escolhido e o plano de 11 passos. Em validacao em lote, emita a abertura uma vez para o conjunto.
+Antes de analisar, emita o bloco de abertura do steering `formato-relatorio.md` (secao "Comando inicial") com o ID/titulo recebido, o modelo escolhido, se AT foi fornecido, e o plano de passos (12 quando AT presente, 11 sem AT). Em validacao em lote, emita a abertura uma vez para o conjunto.
 
 ### 3. ETAPA 1 - Discovery
 
@@ -100,24 +104,87 @@ Levante e classifique:
 
 Uma etapa nao deve mascarar lacunas de outra. Se o Discovery esta incompleto, nao "resolva" no Technical Design.
 
-### 6. Verificar os 23 criterios
+### 6. ETAPA 4 — Coerencia HT x AT (apenas quando AT for fornecido)
+
+**Pule este passo se o AT nao foi fornecido.**
+
+Esta etapa responde: *"O Anexo Tecnico cobre corretamente tudo que a historia exige, e nao introduz nada alem disso?"*
+
+#### 6.1 Cobertura dos CAs (HT → AT)
+
+Para cada Criterio de Aceite (CA) da historia, verifique se o AT tem especificacao tecnica correspondente:
+
+- **COBERTO** — o AT especifica como implementar o que o CA exige
+- **PARCIAL** — o AT aborda o CA mas com lacunas
+- **AUSENTE** — o CA nao tem cobertura tecnica no AT → **BLOQUEADOR**
+
+#### 6.2 Mapeamento de campos (HT → AT)
+
+Para cada campo ou dado mencionado na historia, verifique se o AT especifica nome no contrato, tipo, formato, tamanho, obrigatoriedade, e origem ou destino.
+
+Campo mencionado na historia sem mapeamento completo no AT → **LACUNA** (bloqueador se campo obrigatorio).
+
+#### 6.3 Cobertura de erros (HT → AT)
+
+Para cada cenario de erro ou excecao mencionado na historia, verifique se o AT define a condicao que o dispara e o tratamento (codigo HTTP, log, comportamento do sistema).
+
+Cenario de erro sem tratamento no AT → **LACUNA**.
+
+#### 6.4 Escopo (AT → HT)
+
+Verifique se o AT introduz elementos nao presentes na historia:
+- Campos nao mencionados na historia (exceto campos tecnicos de infraestrutura como IDs internos e timestamps de auditoria, que sao aceitaveis)
+- Regras de negocio nao descritas nos CAs
+- Comportamentos nao requeridos
+
+Registrar como **EXPANSAO DE ESCOPO** — nao e bloqueador automatico, mas exige validacao com PO.
+
+#### 6.5 Consistencia interna do AT
+
+Verifique a consistencia dentro do proprio AT:
+- Todos os campos da tabela de envio tem secao de detalhe?
+- Todos os campos da tabela de recebimento tem regra de validacao na secao correspondente?
+- Todas as regras de validacao tem pelo menos um cenario de teste correspondente?
+- Os codigos HTTP da tabela de tratamento sao coerentes com os cenarios de persistencia?
+
+Inconsistencia interna → **INCONSISTENCIA AT** (bloqueador se impede a implementacao).
+
+#### 6.6 Parecer de coerencia
+
+Emita ao final desta etapa:
+
+```
+COERENCIA HT x AT: [COERENTE | COERENTE COM RESSALVAS | INCOERENTE]
+
+CAs cobertos: N/N
+Campos mapeados: N/N
+Cenarios de erro cobertos: N/N
+Expansoes de escopo: N
+Inconsistencias internas: N
+```
+
+**INCOERENTE** = pelo menos um CA AUSENTE ou LACUNA critica em campo obrigatorio ou cenario de erro. Impacta o veredito final como bloqueador.
+
+**COERENTE COM RESSALVAS** = lacunas menores em campos opcionais ou inconsistencias que nao impedem a implementacao. Registrar como pendencias (DUV).
+
+### 7. Verificar os 23 criterios
 
 Percorra a lista completa de `references/criterios-dor.md` e atribua a cada criterio: OK | PARCIAL | PENDENTE | BLOQUEADO | N/A, sempre com evidencia (citacao ou referencia ao trecho da historia) ou com a pendencia correspondente.
 
 Criterio marcado N/A exige justificativa explicita.
 
-### 7. Calcular o indice de Definition of Ready
+### 8. Calcular o indice de Definition of Ready
 
 Atribua nota de 0 a 100 para cada um dos 9 criterios ponderados e chame a tool `calcular_indice_dor` com `scores` e `bloqueadores_criticos`.
 
 Use a rubrica de notas de `references/criterios-dor.md`. Nunca calcule o indice mentalmente e nunca arredonde para uma faixa mais favoravel.
 
-### 8. Avaliar AI-Ready
+### 9. Avaliar AI-Ready
 
 Se o indice de DoR for **>= 80**, aplique a skill `avaliar-ai-ready`.
 Se for **< 80**, registre "AI-Ready: NAO AVALIADA - exige DoR >= 80" e siga.
 
-### 9. Consolidar riscos, pendencias e contradicoes
+### 10. Consolidar riscos, pendencias e contradicoes
 
 Preencha, usando os templates do steering `formato-relatorio.md`:
 - Matriz de risco (RSK-nnn)
@@ -125,17 +192,27 @@ Preencha, usando os templates do steering `formato-relatorio.md`:
 - Contradicoes (CON-nnn) com as duas fontes e quem decide
 - Dependencias criticas (DEP-nnn)
 - Pressoes e influencias externas detectadas na conversa ou no documento
+- Quando AT fornecido: lacunas de coerencia (COE-nnn) com a dimensao (CA, campo, erro, escopo, consistencia) e o item especifico
 
-### 10. Aplicar os Quality Gates e a Regra de Ouro
+### 11. Aplicar os Quality Gates e a Regra de Ouro
 
 Responda os 4 gates com PASS/FAIL e as 8 perguntas da Regra de Ouro. Qualquer SIM nas perguntas da Regra de Ouro rebaixa o veredito conforme a tabela em `principios-tech-lead.md`.
 
-### 11. Emitir o relatorio e o veredito
+Quando AT for fornecido, responda tambem o Gate 5:
+- **Gate 5 — Coerencia AT:** o Anexo Tecnico e COERENTE com a historia? FAIL quando INCOERENTE.
+
+### 12. Emitir o relatorio e o veredito
 
 Use exatamente o formato do steering `formato-relatorio.md`, incluindo:
 resumo executivo, matriz de DoR, regras de negocio, pendencias, contradicoes, dependencias, technical design resumido, estrategia de testes, rastreabilidade, labels/status (conforme modelo escolhido) e o bloco de veredito final.
 
-### 12. Exportar (opcional)
+Quando AT for fornecido, inclua tambem no relatorio a secao de Coerencia HT x AT:
+- Parecer geral (COERENTE | COERENTE COM RESSALVAS | INCOERENTE)
+- Tabela de CAs com status de cobertura
+- Lista de lacunas de coerencia (COE-nnn) com dimensao e item
+- Lista de expansoes de escopo detectadas
+
+### 13. Exportar (opcional)
 
 Pergunte ao usuario:
 - Exibir apenas no chat
@@ -147,7 +224,10 @@ O usuario pode aceitar a sugestao ou informar um caminho diferente. Sempre confi
 ## Modos de operacao
 
 ### Validacao completa
-"Valide se esta historia esta pronta" -> processo completo (passos 0 a 12).
+"Valide se esta historia esta pronta" -> processo completo (passos 0 a 13, sem AT).
+
+### Validacao com Anexo Tecnico
+"Valide esta historia e o Anexo Tecnico" -> processo completo com ETAPA 4 ativada (passos 0 a 13, com AT). Emite parecer de coerencia HT x AT alem do veredito de DoR.
 
 ### Validacao em lote
 "Valide todas as historias do arquivo X" ->

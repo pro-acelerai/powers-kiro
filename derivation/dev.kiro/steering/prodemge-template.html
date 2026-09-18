@@ -1,0 +1,1064 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <!--
+  ╔══════════════════════════════════════════════════════════════╗
+  ║  PRODEMGE HTML TEMPLATE — Design System para Powers Kiro    ║
+  ║  Substituir <!-- PLACEHOLDER --> pelo conteúdo real.        ║
+  ║  Ler _shared/steering/html-generation.md antes de usar.     ║
+  ╚══════════════════════════════════════════════════════════════╝
+  -->
+  <title><!-- TITULO DA PAGINA --></title>
+  <style>
+    /* ═══════════════════════════════════════
+       DESIGN SYSTEM — Variáveis e Reset
+       ═══════════════════════════════════════ */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --red:       #CC0000;
+      --red-hover: #aa0000;
+      --red-light: #fff0f0;
+      --red-mid:   #ffd5d5;
+      --gray-text: #3d3d3d;
+      --gray-mute: #767676;
+      --gray-bg:   #f5f6f7;
+      --gray-card: #ffffff;
+      --gray-bdr:  #e3e3e3;
+      --gray-dark: #2b2b2b;
+      --white:     #ffffff;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: var(--gray-bg);
+      color: var(--gray-text);
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════
+       HEADER
+       ═══════════════════════════════════════ */
+    header {
+      background: var(--white);
+      border-bottom: 1px solid var(--gray-bdr);
+      padding: 0 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.06);
+    }
+
+    .header-logo img { height: 36px; display: block; }
+
+    .header-right { display: flex; align-items: center; gap: 8px; }
+
+    .header-badge {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--gray-mute);
+      padding: 4px 12px;
+      border: 1px solid var(--gray-bdr);
+      border-radius: 20px;
+    }
+
+    .header-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--red); }
+
+    /* ═══════════════════════════════════════
+       HERO
+       ═══════════════════════════════════════ */
+    .hero {
+      background: var(--white);
+      border-bottom: 3px solid var(--red);
+      padding: 48px 48px 40px;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 14px;
+    }
+
+    .hero h1 {
+      font-size: 34px;
+      font-weight: 800;
+      color: var(--gray-dark);
+      margin-bottom: 12px;
+      letter-spacing: -0.5px;
+    }
+
+    .hero h1 span { color: var(--red); }
+
+    .hero-tagline {
+      font-size: 14px;
+      color: var(--gray-mute);
+      max-width: 600px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    .hero-meta {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 18px;
+      flex-wrap: wrap;
+    }
+
+    .hero-meta-item {
+      font-size: 12px;
+      color: var(--gray-mute);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .hero-meta-item strong { color: var(--gray-text); }
+
+    /* ═══════════════════════════════════════
+       ÁREA DE CONTEÚDO PRINCIPAL
+       ═══════════════════════════════════════ */
+    .content-area {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 36px 48px 64px;
+    }
+
+    /* ═══════════════════════════════════════
+       SEÇÃO GENÉRICA (doc-section)
+       Uso: Derivation (seções AT), Readiness
+       ═══════════════════════════════════════ */
+    .doc-section {
+      background: var(--gray-card);
+      border: 1px solid var(--gray-bdr);
+      border-left: 4px solid var(--red);
+      border-radius: 10px;
+      padding: 28px 32px;
+      margin-bottom: 20px;
+      box-shadow: 0 1px 6px rgba(0,0,0,0.04);
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--gray-dark);
+      margin-bottom: 14px;
+      letter-spacing: -0.3px;
+    }
+
+    .section-body {
+      font-size: 14px;
+      color: var(--gray-mute);
+      line-height: 1.8;
+    }
+
+    .section-body + .section-body { margin-top: 10px; }
+
+    .sub-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gray-mute);
+      margin-bottom: 12px;
+      margin-top: 20px;
+    }
+
+    /* ═══════════════════════════════════════
+       AT SECTION HEADER
+       Uso: Derivation — cabeçalho de seção numerada
+       ═══════════════════════════════════════ */
+    .at-section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+
+    .at-section-number {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--red);
+      color: var(--white);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      flex-shrink: 0;
+    }
+
+    /* ═══════════════════════════════════════
+       MACRO SECTION
+       Uso: Extraction — agrupa histórias por macro etapa
+       ═══════════════════════════════════════ */
+    .macro-section { margin-bottom: 36px; }
+
+    .macro-header {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      padding: 14px 24px;
+      background: var(--gray-dark);
+      border-radius: 8px 8px 0 0;
+    }
+
+    .macro-number {
+      font-size: 30px;
+      font-weight: 900;
+      color: var(--red);
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .macro-name { font-size: 16px; font-weight: 700; color: var(--white); }
+    .macro-count { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 2px; }
+
+    /* ═══════════════════════════════════════
+       STORY CARD
+       Uso: Extraction — cada HU ou HT
+       ═══════════════════════════════════════ */
+    .story-card {
+      background: var(--gray-card);
+      border: 1px solid var(--gray-bdr);
+      border-left: 4px solid var(--red);
+      border-top: none;
+      padding: 24px 28px;
+      margin-bottom: 0;
+    }
+
+    .story-card + .story-card { border-top: 1px solid var(--gray-bdr); }
+
+    .story-card:last-child { border-radius: 0 0 10px 10px; margin-bottom: 0; }
+
+    .story-card.standalone {
+      border-radius: 10px;
+      border-top: 1px solid var(--gray-bdr);
+      margin-bottom: 12px;
+    }
+
+    .story-header { margin-bottom: 14px; }
+
+    .story-id-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+
+    .story-id {
+      font-size: 13px;
+      font-weight: 800;
+      color: var(--red);
+      font-family: 'Courier New', monospace;
+      letter-spacing: 0.5px;
+    }
+
+    .story-title {
+      font-size: 17px;
+      font-weight: 700;
+      color: var(--gray-dark);
+      letter-spacing: -0.3px;
+    }
+
+    .story-narrative {
+      font-size: 14px;
+      color: var(--gray-text);
+      line-height: 1.85;
+      background: var(--red-light);
+      border-left: 3px solid var(--red-mid);
+      padding: 12px 16px;
+      border-radius: 0 6px 6px 0;
+      margin-bottom: 16px;
+    }
+
+    .story-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      color: var(--gray-mute);
+      margin-bottom: 8px;
+    }
+
+    .ca-list {
+      list-style: decimal;
+      padding-left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      margin-bottom: 16px;
+    }
+
+    .ca-list li {
+      font-size: 13px;
+      color: var(--gray-text);
+      line-height: 1.65;
+      padding-left: 4px;
+    }
+
+    .rules-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    .rules-list li {
+      font-size: 13px;
+      color: var(--gray-mute);
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+
+    .rules-list li::before {
+      content: '›';
+      color: var(--red);
+      font-size: 16px;
+      flex-shrink: 0;
+      line-height: 1.4;
+    }
+
+    /* ═══════════════════════════════════════
+       BADGES
+       ═══════════════════════════════════════ */
+    .badge {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 20px;
+      letter-spacing: 0.3px;
+      white-space: nowrap;
+    }
+
+    .badge-red    { background: var(--red); color: var(--white); }
+    .badge-dark   { background: var(--gray-dark); color: var(--white); }
+    .badge-gray   { background: var(--gray-bg); color: var(--gray-mute); border: 1px solid var(--gray-bdr); }
+    .badge-hu     { background: #1a4a8a; color: var(--white); }
+    .badge-ht     { background: #5a1a8a; color: var(--white); }
+    .badge-green  { background: #e6f9ed; color: #1a7a3a; border: 1px solid #a0ddb0; }
+    .badge-yellow { background: #fffbe6; color: #7a5c00; border: 1px solid #e0c040; }
+    .badge-orange { background: #fff3e6; color: #7a3a00; border: 1px solid #e0a060; }
+
+    .badge-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 16px;
+    }
+
+    /* ═══════════════════════════════════════
+       DATA TABLE (tabela genérica)
+       Uso: Derivation (campos, HTTP, cenários), Readiness (DoR)
+       ═══════════════════════════════════════ */
+    .data-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 13px;
+      margin-top: 12px;
+      border-radius: 6px;
+      overflow: hidden;
+    }
+
+    .data-table th {
+      background: var(--gray-bg);
+      color: var(--gray-mute);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      padding: 9px 12px;
+      text-align: left;
+      border-bottom: 2px solid var(--gray-bdr);
+    }
+
+    .data-table td {
+      padding: 9px 12px;
+      border-bottom: 1px solid var(--gray-bdr);
+      color: var(--gray-text);
+      vertical-align: top;
+      line-height: 1.5;
+    }
+
+    .data-table tr:last-child td { border-bottom: none; }
+    .data-table tr:hover td { background: var(--gray-bg); }
+
+    .data-table td code { font-size: 11px; }
+
+    .row-success td { background: #f0fbf4; }
+    .row-error   td { background: var(--red-light); }
+    .row-error td:first-child { border-left: 3px solid var(--red-mid); }
+
+    /* ═══════════════════════════════════════
+       STORY FIELDS TABLE (dentro do story-card)
+       ═══════════════════════════════════════ */
+    .story-fields { margin-top: 16px; }
+
+    .story-fields .data-table th,
+    .story-fields .data-table td { padding: 6px 10px; }
+
+    /* ═══════════════════════════════════════
+       INLINE CODE
+       ═══════════════════════════════════════ */
+    code {
+      background: var(--gray-bg);
+      color: var(--red);
+      font-size: 12px;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+      border: 1px solid var(--gray-bdr);
+    }
+
+    /* ═══════════════════════════════════════
+       FLOW ROW (sequência de passos)
+       Uso: Derivation (fluxo de integração)
+       ═══════════════════════════════════════ */
+    .flow-row {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 12px;
+    }
+
+    .flow-item {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 12px;
+      border-radius: 4px;
+      background: var(--gray-bg);
+      color: var(--gray-text);
+      border: 1px solid var(--gray-bdr);
+      letter-spacing: 0.3px;
+    }
+
+    .flow-item.highlight { background: var(--red); color: var(--white); border-color: var(--red); }
+    .flow-sep { color: var(--gray-bdr); font-size: 16px; }
+
+    /* ═══════════════════════════════════════
+       PENDENTE BLOCK
+       Uso: Derivation — lacuna não respondida
+       ═══════════════════════════════════════ */
+    .pendente-block {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: #fffbe6;
+      border: 1px solid #e8c840;
+      border-left: 4px solid #c8a000;
+      border-radius: 8px;
+      padding: 14px 18px;
+      margin-bottom: 16px;
+    }
+
+    .pendente-icon { font-size: 18px; flex-shrink: 0; padding-top: 1px; }
+
+    .pendente-title {
+      font-size: 11px;
+      font-weight: 800;
+      color: #7a5c00;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 4px;
+    }
+
+    .pendente-desc {
+      font-size: 13px;
+      color: #5a4200;
+      line-height: 1.6;
+    }
+
+    /* ═══════════════════════════════════════
+       STATUS BADGE (critérios DoR)
+       Uso: Readiness — status de cada critério
+       ═══════════════════════════════════════ */
+    .status-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 4px;
+      white-space: nowrap;
+      letter-spacing: 0.3px;
+    }
+
+    .status-ok       { background: #e6f9ed; color: #1a7a3a; }
+    .status-partial  { background: #fffbe6; color: #7a5c00; }
+    .status-pending  { background: #f0f0ff; color: #3a3a8a; }
+    .status-blocked  { background: var(--red-light); color: var(--red); }
+    .status-na       { background: var(--gray-bg); color: var(--gray-mute); border: 1px solid var(--gray-bdr); }
+
+    /* ═══════════════════════════════════════
+       VERDICT BLOCK
+       Uso: Readiness — veredito principal
+       ═══════════════════════════════════════ */
+    .verdict-block {
+      border-radius: 12px;
+      padding: 26px 32px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+    }
+
+    .verdict-main { flex: 1; }
+    .verdict-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      opacity: 0.65;
+      margin-bottom: 4px;
+    }
+
+    .verdict-value {
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -0.3px;
+    }
+
+    .verdict-sub {
+      font-size: 12px;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+
+    .verdict-ready      { background: #e6f9ed; border: 2px solid #1a7a3a; }
+    .verdict-ressalvas  { background: #fffbe6; border: 2px solid #c8a000; }
+    .verdict-refinement { background: #fff3e6; border: 2px solid #c06000; }
+    .verdict-not-ready  { background: var(--red-light); border: 2px solid var(--red); }
+
+    .verdict-ready      .verdict-value { color: #1a7a3a; }
+    .verdict-ressalvas  .verdict-value { color: #7a5c00; }
+    .verdict-refinement .verdict-value { color: #7a3a00; }
+    .verdict-not-ready  .verdict-value { color: var(--red); }
+
+    .verdict-scores { display: flex; gap: 24px; flex-shrink: 0; }
+
+    .score-item { text-align: center; }
+    .score-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: var(--gray-mute);
+      margin-bottom: 4px;
+    }
+    .score-value { font-size: 28px; font-weight: 900; color: var(--gray-dark); }
+    .score-unit  { font-size: 14px; font-weight: 400; color: var(--gray-mute); }
+
+    /* ═══════════════════════════════════════
+       QUALITY GATES
+       Uso: Readiness — resultado dos gates
+       ═══════════════════════════════════════ */
+    .gates-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 4px;
+    }
+
+    .gate-chip {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 5px 14px;
+      border-radius: 6px;
+      letter-spacing: 0.3px;
+    }
+
+    .gate-pass { background: #e6f9ed; color: #1a7a3a; border: 1px solid #a0ddb0; }
+    .gate-fail { background: var(--red-light); color: var(--red); border: 1px solid var(--red-mid); }
+
+    /* ═══════════════════════════════════════
+       BLOCKER ITEM
+       Uso: Readiness — bloqueadores críticos
+       ═══════════════════════════════════════ */
+    .blocker-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--red-light);
+      border: 1px solid var(--red-mid);
+      border-left: 4px solid var(--red);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 10px;
+    }
+
+    .blocker-code {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--red);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      white-space: nowrap;
+      padding-top: 2px;
+      min-width: 70px;
+    }
+
+    .blocker-text { font-size: 13px; color: var(--gray-text); line-height: 1.65; }
+
+    /* ═══════════════════════════════════════
+       FINDING ITEM (DUV / CON / RSK / DEP / COE)
+       Uso: Readiness — pendências, contradições, riscos
+       ═══════════════════════════════════════ */
+    .finding-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      background: var(--gray-bg);
+      border: 1px solid var(--gray-bdr);
+      border-radius: 8px;
+      padding: 12px 16px;
+      margin-bottom: 8px;
+    }
+
+    .finding-code {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--gray-dark);
+      font-family: 'Courier New', monospace;
+      white-space: nowrap;
+      padding-top: 1px;
+      min-width: 62px;
+    }
+
+    .finding-title { font-size: 11px; color: var(--gray-mute); margin-bottom: 4px; }
+    .finding-desc  { font-size: 13px; color: var(--gray-text); line-height: 1.65; }
+
+    /* ═══════════════════════════════════════
+       COHERENCE SECTION (AT × HT)
+       Uso: Readiness quando AT é fornecido
+       ═══════════════════════════════════════ */
+    .coherence-section { border-left-color: #6a2aaa; }
+
+    .coherence-verdict {
+      display: inline-block;
+      font-size: 13px;
+      font-weight: 800;
+      padding: 5px 16px;
+      border-radius: 6px;
+      letter-spacing: 0.5px;
+      margin-bottom: 14px;
+    }
+
+    .coherence-coerente    { background: #e6f9ed; color: #1a7a3a; border: 1px solid #a0ddb0; }
+    .coherence-ressalvas   { background: #fffbe6; color: #7a5c00; border: 1px solid #e0c040; }
+    .coherence-incoerente  { background: var(--red-light); color: var(--red); border: 1px solid var(--red-mid); }
+
+    /* ═══════════════════════════════════════
+       DIVIDER
+       ═══════════════════════════════════════ */
+    .divider { border: none; border-top: 1px solid var(--gray-bdr); margin: 20px 0; }
+
+    /* ═══════════════════════════════════════
+       FOOTER
+       ═══════════════════════════════════════ */
+    footer {
+      background: var(--white);
+      border-top: 1px solid var(--gray-bdr);
+      padding: 22px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .footer-logo img { height: 26px; }
+    .footer-text { font-size: 11px; color: var(--gray-mute); letter-spacing: 0.5px; }
+    .footer-dot  { width: 5px; height: 5px; border-radius: 50%; background: var(--red); }
+
+    /* ═══════════════════════════════════════
+       RESPONSIVO MOBILE
+       ═══════════════════════════════════════ */
+    @media (max-width: 640px) {
+      header { padding: 0 20px; height: 56px; }
+      .header-logo img { height: 28px; }
+      .header-badge { display: none; }
+
+      .hero { padding: 32px 20px 24px; }
+      .hero h1 { font-size: 24px; }
+
+      .content-area { padding: 20px 16px 40px; }
+
+      .doc-section { padding: 20px 18px; }
+      .story-card  { padding: 18px 16px; }
+
+      .macro-header { padding: 12px 16px; gap: 12px; }
+      .macro-number { font-size: 22px; }
+
+      .verdict-block { padding: 18px 20px; gap: 14px; }
+      .verdict-value { font-size: 22px; }
+      .score-value   { font-size: 22px; }
+
+      footer { flex-direction: column; gap: 10px; padding: 18px 20px; text-align: center; }
+      .footer-dot { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HEADER — fixo, sempre presente, não alterar estrutura.
+     Alterar apenas o texto de .header-badge conforme o power.
+     Exemplos:
+       Extraction  → "Extraction · Histórias"
+       Derivation  → "Derivation · Anexo Técnico"
+       Readiness   → "Readiness · Quality Gate"
+     ═══════════════════════════════════════════════════════════ -->
+<header>
+  <div class="header-logo">
+    <img src="data:image/png;base64,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" alt="Prodemge" />
+  </div>
+  <div class="header-right">
+    <div class="header-badge"><!-- NOME DO POWER · TIPO DO DOCUMENTO --></div>
+    <div class="header-dot"></div>
+  </div>
+</header>
+
+<!-- ═══════════════════════════════════════════════════════════
+     HERO — preencher eyebrow, h1 (com <span> na palavra-chave),
+     tagline e os itens de hero-meta.
+     Remover hero-meta se não houver metadados relevantes.
+     ═══════════════════════════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-eyebrow"><!-- TIPO DO DOCUMENTO: ex: Histórias de Usuário · GFO+TJ --></div>
+  <h1><!-- NOME/MÓDULO: ex: Módulo de <span>Pagamentos</span> --></h1>
+  <p class="hero-tagline"><!-- DESCRIÇÃO BREVE: ex: 47 histórias extraídas a partir do documento de visão geral --></p>
+  <div class="hero-meta">
+    <div class="hero-meta-item">Total <strong><!-- N histórias / seções --></strong></div>
+    <div class="hero-meta-item">Gerado em <strong><!-- DATA --></strong></div>
+    <!-- Adicionar ou remover itens conforme necessário -->
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════════════════════
+     ÁREA DE CONTEÚDO — inserir componentes abaixo conforme
+     o tipo de documento. Ver steering/html-generation.md.
+     ═══════════════════════════════════════════════════════════ -->
+<main class="content-area">
+
+
+  <!-- ─────────────────────────────────────────────────────────
+       COMPONENTE: macro-section + story-card
+       Powers: Extraction
+       Repetir o bloco .macro-section para cada macro etapa.
+       Repetir .story-card dentro de cada macro-section.
+       ───────────────────────────────────────────────────────── -->
+  <section class="macro-section">
+    <div class="macro-header">
+      <div class="macro-number"><!-- 01 --></div>
+      <div>
+        <div class="macro-name"><!-- NOME DA MACRO ETAPA --></div>
+        <div class="macro-count"><!-- N histórias · X HU · Y HT --></div>
+      </div>
+    </div>
+
+    <!-- story-card: repetir para cada história da macro etapa -->
+    <div class="story-card">
+      <div class="story-header">
+        <div class="story-id-row">
+          <span class="story-id"><!-- HU001 --></span>
+          <!-- Usar badge-hu para HU, badge-ht para HT -->
+          <span class="badge badge-hu">HU</span>
+          <span class="badge badge-gray"><!-- PRIORIDADE: Alta / Média / Baixa --></span>
+        </div>
+        <div class="story-title"><!-- TÍTULO DA HISTÓRIA --></div>
+      </div>
+
+      <!-- Narrativa — usar linguagem conforme o modelo (Padrão / GFO+TJ / SIMADE) -->
+      <div class="story-narrative">
+        <!-- Eu, como <strong>PERSONA</strong>,<br>
+             quero <strong>AÇÃO</strong>,<br>
+             para que <strong>VALOR</strong>. -->
+      </div>
+
+      <div class="story-section-label">Critérios de aceite</div>
+      <ol class="ca-list">
+        <li><!-- CRITÉRIO 1 --></li>
+        <li><!-- CRITÉRIO 2 --></li>
+        <!-- Adicionar conforme necessário -->
+      </ol>
+
+      <!-- Regras de negócio: incluir apenas se existirem -->
+      <div class="story-section-label">Regras de negócio</div>
+      <ul class="rules-list">
+        <li><!-- REGRA 1 --></li>
+      </ul>
+
+      <!-- Tabela de campos da história -->
+      <div class="story-fields">
+        <table class="data-table">
+          <tbody>
+            <tr><td>Prioridade</td><td><!-- --></td></tr>
+            <tr><td>Complexidade</td><td><!-- --></td></tr>
+            <tr><td>Dependências</td><td><!-- IDs ou — --></td></tr>
+            <tr><td><!-- Integrações Internas / GFO / SIMADE --></td><td><!-- --></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <!-- /story-card -->
+
+  </section>
+  <!-- /macro-section -->
+
+
+  <!-- ─────────────────────────────────────────────────────────
+       COMPONENTE: summary-table
+       Powers: Extraction — tabela resumo ao final do documento
+       ───────────────────────────────────────────────────────── -->
+  <div class="doc-section">
+    <div class="section-title">Resumo do Backlog</div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>ID</th><th>Tipo</th><th>Título</th>
+          <th>Prioridade</th><th>Complexidade</th><th>Dependências</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Repetir para cada história -->
+        <tr>
+          <td><code><!-- HU001 --></code></td>
+          <td><span class="badge badge-hu">HU</span></td>
+          <td><!-- TÍTULO --></td>
+          <td><!-- --></td><td><!-- --></td><td><!-- IDs ou — --></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- /summary-table -->
+
+
+  <!-- ─────────────────────────────────────────────────────────
+       COMPONENTE: at-section
+       Powers: Derivation — seção numerada do Anexo Técnico
+       Repetir para cada seção do AT. Incluir apenas seções aplicáveis.
+       ───────────────────────────────────────────────────────── -->
+  <div class="doc-section">
+    <div class="at-section-header">
+      <div class="at-section-number"><!-- 1 --></div>
+      <div class="section-title"><!-- TÍTULO DA SEÇÃO: ex: Objetivo --></div>
+    </div>
+    <p class="section-body"><!-- TEXTO DA SEÇÃO --></p>
+  </div>
+
+  <!-- at-section com tabela de campos -->
+  <div class="doc-section">
+    <div class="at-section-header">
+      <div class="at-section-number"><!-- 3 --></div>
+      <div class="section-title"><!-- TÍTULO: ex: Campos enviados --></div>
+    </div>
+    <div class="sub-label"><!-- 3.1 Sub-seção --></div>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Campo</th><th>Descrição</th><th>Obrigatório</th><th>Formato</th><th>Origem / Regra</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><code><!-- nomeCampo --></code></td>
+          <td><!-- --></td>
+          <td><span class="badge badge-red">Sim</span></td>
+          <td><!-- Numérico (2) --></td>
+          <td><code><!-- TABELA.COLUNA --></code></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- at-section com fluxo de integração -->
+  <div class="doc-section">
+    <div class="at-section-header">
+      <div class="at-section-number"><!-- 2 --></div>
+      <div class="section-title"><!-- Contexto da integração --></div>
+    </div>
+    <p class="section-body"><!-- Descrição do fluxo --></p>
+    <div class="flow-row">
+      <span class="flow-item"><!-- Passo 1 --></span><span class="flow-sep">›</span>
+      <span class="flow-item highlight"><!-- Passo com destaque --></span><span class="flow-sep">›</span>
+      <span class="flow-item"><!-- Passo 2 --></span>
+    </div>
+  </div>
+
+  <!-- at-section com cenários de teste -->
+  <div class="doc-section">
+    <div class="at-section-header">
+      <div class="at-section-number"><!-- 11 --></div>
+      <div class="section-title">Cenários mínimos para teste</div>
+    </div>
+    <table class="data-table">
+      <thead><tr><th>Cenário</th><th>Resultado esperado</th></tr></thead>
+      <tbody>
+        <tr class="row-success">
+          <td><!-- Cenário de sucesso --></td>
+          <td><!-- Validar, persistir e retornar <code>201</code> --></td>
+        </tr>
+        <tr class="row-error">
+          <td><!-- Campo ausente ou inválido --></td>
+          <td><!-- Registrar inconsistência e retornar <code>500</code> --></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- /at-section -->
+
+
+  <!-- ─────────────────────────────────────────────────────────
+       COMPONENTE: pendente-block
+       Powers: Derivation — lacuna não respondida no AT
+       ───────────────────────────────────────────────────────── -->
+  <div class="pendente-block">
+    <div class="pendente-icon">⚠️</div>
+    <div>
+      <div class="pendente-title">PENDENTE — aguardando resposta do <!-- RESPONSÁVEL --></div>
+      <div class="pendente-desc"><!-- DESCRIÇÃO DA LACUNA --></div>
+    </div>
+  </div>
+  <!-- /pendente-block -->
+
+
+  <!-- ─────────────────────────────────────────────────────────
+       COMPONENTE: verdict-block
+       Powers: Readiness — veredito principal
+       Classes: verdict-ready | verdict-ressalvas | verdict-refinement | verdict-not-ready
+       Incluir .verdict-scores apenas quando AI-Ready foi avaliado.
+       ───────────────────────────────────────────────────────── -->
+  <div class="verdict-block verdict-ready">
+    <div class="verdict-main">
+      <div class="verdict-label">Veredito</div>
+      <div class="verdict-value"><!-- READY --></div>
+      <div class="verdict-sub"><!-- Texto adicional opcional --></div>
+    </div>
+    <div class="verdict-scores">
+      <div class="score-item">
+        <div class="score-label">DoR</div>
+        <div class="score-value"><!-- 87 --><span class="score-unit">/100</span></div>
+      </div>
+      <div class="score-item">
+        <div class="score-label">AI-Ready</div>
+        <div class="score-value"><!-- 91 --><span class="score-unit">/100</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Quality Gates -->
+  <div class="doc-section">
+    <div class="section-title">Quality Gates</div>
+    <div class="gates-row">
+      <!-- Usar gate-pass ou gate-fail conforme resultado -->
+      <span class="gate-chip gate-pass">Gate 1 — PASS</span>
+      <span class="gate-chip gate-pass">Gate 2 — PASS</span>
+      <span class="gate-chip gate-fail">Gate 3 — FAIL</span>
+      <span class="gate-chip gate-pass">Gate 4 — PASS</span>
+      <!-- Gate 5 apenas quando AT for fornecido -->
+      <span class="gate-chip gate-pass">Gate 5 (AT) — PASS</span>
+    </div>
+  </div>
+
+  <!-- DoR Matrix -->
+  <div class="doc-section">
+    <div class="section-title">Matriz de Definition of Ready</div>
+    <table class="data-table">
+      <thead><tr><th>Critério</th><th>Status</th><th>Evidência / Pendência</th></tr></thead>
+      <tbody>
+        <!-- Usar status-ok | status-partial | status-pending | status-blocked | status-na -->
+        <tr>
+          <td><!-- CRITÉRIO --></td>
+          <td><span class="status-badge status-ok">OK</span></td>
+          <td><!-- EVIDÊNCIA --></td>
+        </tr>
+        <tr>
+          <td><!-- CRITÉRIO --></td>
+          <td><span class="status-badge status-blocked">BLOQUEADO</span></td>
+          <td><!-- PENDÊNCIA --></td>
+        </tr>
+        <tr>
+          <td><!-- CRITÉRIO --></td>
+          <td><span class="status-badge status-na">N/A</span></td>
+          <td><!-- JUSTIFICATIVA --></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Bloqueadores -->
+  <div class="doc-section">
+    <div class="section-title">Bloqueadores</div>
+    <!-- Repetir para cada bloqueador -->
+    <div class="blocker-item">
+      <div class="blocker-code">BLOQUEADOR</div>
+      <div class="blocker-text"><!-- DESCRIÇÃO DO BLOQUEADOR --></div>
+    </div>
+  </div>
+
+  <!-- Pendências / Findings (DUV, CON, RSK, DEP, COE) -->
+  <div class="doc-section">
+    <div class="section-title">Pendências</div>
+    <!-- Repetir para cada finding -->
+    <div class="finding-item">
+      <div class="finding-code"><!-- DUV-001 --></div>
+      <div>
+        <div class="finding-title"><!-- Responsável: PO · Bloqueia Ready: SIM --></div>
+        <div class="finding-desc"><!-- DESCRIÇÃO DA PENDÊNCIA --></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Coerência HT × AT (apenas quando AT foi fornecido) -->
+  <div class="doc-section coherence-section">
+    <div class="section-title">Coerência HT × AT</div>
+    <!-- Usar coherence-coerente | coherence-ressalvas | coherence-incoerente -->
+    <div class="coherence-verdict coherence-ressalvas">COERENTE COM RESSALVAS</div>
+    <table class="data-table">
+      <thead><tr><th>CA</th><th>Cobertura no AT</th><th>Observação</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><!-- CA01 — Título --></td>
+          <td><span class="status-badge status-ok">COBERTO</span></td>
+          <td><!-- --></td>
+        </tr>
+        <tr>
+          <td><!-- CA02 — Título --></td>
+          <td><span class="status-badge status-partial">PARCIAL</span></td>
+          <td><!-- O que falta --></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <!-- /readiness components -->
+
+
+</main>
+<!-- /content-area -->
+
+<!-- ═══════════════════════════════════════════════════════════
+     FOOTER — fixo, não alterar.
+     ═══════════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-logo">
+    <img src="data:image/png;base64,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" alt="Prodemge" />
+  </div>
+  <div class="footer-text">AcelerAI · Kiro Powers · Esteira de Desenvolvimento com IA</div>
+  <div class="footer-dot"></div>
+</footer>
+
+</body>
+</html>
