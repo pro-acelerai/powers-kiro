@@ -6,7 +6,7 @@ inclusion: auto
 
 Ao extrair historias de usuario, SEMPRE use o formato Markdown abaixo. Nao invente formatos alternativos.
 
-O campo de narrativa e o nome do campo de integracoes internas variam conforme o modelo escolhido (Padrao ou GFO+TJ). As demais secoes sao identicas.
+O formato varia conforme o modelo escolhido (Padrao, GFO+TJ ou SIMADE).
 
 ## Modelo Padrao
 
@@ -61,7 +61,97 @@ O campo de narrativa e o nome do campo de integracoes internas variam conforme o
 
 ## Modelo GFO + TJ
 
-Quando o modelo GFO+TJ estiver ativo, as `diretrizes-gfo-tj.md` substituem a narrativa e os criterios de aceite. O campo de integracoes internas passa a se chamar **Integracoes GFO**. Os demais campos da tabela de metadados sao identicos ao modelo Padrao.
+O modelo GFO+TJ possui tres tipos de historia com templates distintos. Nao ha tabela de metadados — o corpo da historia segue exatamente os templates abaixo, definidos em `dev.kiro/steering/diretrizes-gfo-tj.md`.
+
+### HU — Historia de Usuario
+
+```markdown
+**Como** [persona/ator]
+
+**quero** [acao que o usuario executa]
+
+**para** [beneficio ou valor esperado]
+
+_Caminho: > [caminho de navegacao no sistema]_
+
+-------------
+
+**Criterios de Aceite:**
+
+**CA01:** _Cenario: [titulo do cenario]_
+
+> **Dado** [pre-condicao]
+>
+> **Quando** [acao do usuario]
+>
+> **Entao** [resultado esperado]
+
+**Importante:** Ao referenciar mensagem padrao, reproduzir texto + codigo. Ex: Operacao realizada com sucesso. _(msg_gfo_success_1)_
+
+-------------
+
+**PROTOTIPOS**
+
+-------------
+
+**Anexos**
+
+**Tabela de mapeamento de campos e comandos**
+
+| Campos e Comandos | Descricao | Formato | Observacao |
+|---|---|---|---|
+|  |  |  |  |
+```
+
+### HT — Historia Tecnica
+
+```markdown
+**A fim de** [objetivo ou beneficio],
+
+**precisa-se** [necessidade que deve ser atendida].
+
+-------------
+
+**Resultados esperados:**
+
+**CA01:** [primeiro resultado verificavel]
+
+**CA02:** [segundo resultado verificavel]
+```
+
+### HM — Historia de Melhoria
+
+```markdown
+**Historia Referencia:** [codigo e titulo / hiperlink da Wiki]
+
+**Temos** [situacao atual]
+
+**Queremos** [situacao desejada]
+
+---------------
+
+**Resultados esperados:**
+
+**CA01:** [primeiro resultado verificavel]
+
+**CA02:** [segundo resultado verificavel]
+
+**Importante:** Ao referenciar mensagem padrao, reproduzir texto + codigo. Ex: Operacao realizada com sucesso. _(msg_gfo_success_1)_
+
+-------------
+
+**PROTOTIPOS**
+
+-------------
+
+**Anexos**
+
+**Tabela de mapeamento de campos e comandos**
+
+| Campos e Comandos | Descricao | Formato | Observacao |
+|---|---|---|---|
+|  |  |  |  |
+```
 
 ## Modelo SIMADE
 
@@ -120,23 +210,19 @@ HISTORICO DE EVOLUCAO DA HISTORIA:
 
 A narrativa e os criterios de aceite seguem exatamente o formato definido em `dev.kiro/steering/diretrizes-simade.md`.
 
-```markdown
-| **Integracoes GFO** | [Modulos GFO relacionados] |
-```
-
-A narrativa e os criterios de aceite seguem exatamente o formato definido em `dev.kiro/steering/diretrizes-gfo-tj.md`.
-
 ## Tabela resumo ao final de cada macro etapa
 
 ```markdown
 ## Resumo - [Nome Macro Etapa]
 
-| Produto | HU | HT | Total |
-|---|---|---|---|
-| [Produto 1] | [X] | [Y] | [Z] |
-| [Produto 2] | [X] | [Y] | [Z] |
-| **TOTAL** | **[X]** | **[Y]** | **[Z]** |
+| Produto | HU | HT | HM | Total |
+|---|---|---|---|---|
+| [Produto 1] | [X] | [Y] | [Z] | [W] |
+| [Produto 2] | [X] | [Y] | [Z] | [W] |
+| **TOTAL** | **[X]** | **[Y]** | **[Z]** | **[W]** |
 ```
+
+(No modelo Padrao e SIMADE, omitir a coluna HM da tabela resumo — ela so existe no modelo GFO+TJ.)
 
 ## Regras de preenchimento
 

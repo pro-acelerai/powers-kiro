@@ -1,6 +1,6 @@
 ---
 name: extrair-historias
-description: Extrai historias de usuario (HU) e historias tecnicas (HT) a partir de planilhas de visao geral ou texto, com narrativa completa, criterios de aceite e referencias cruzadas.
+description: Extrai historias de usuario (HU), tecnicas (HT) e de melhoria (HM) a partir de planilhas de visao geral ou texto, com narrativa completa, criterios de aceite e referencias cruzadas.
 ---
 
 # Extrair Historias de Usuario
@@ -18,9 +18,9 @@ Use esta skill quando o usuario quiser:
 
 Antes de iniciar, pergunte ao usuario qual modelo deseja usar:
 
-> **Modelo Padrao** - narrativa "Eu como... quero... para que...", campo "Integracoes Internas", agnostico de dominio
-> **Modelo GFO + TJ** - narrativa "A fim de... precisa-se...", campo "Integracoes GFO", sem linguagem tecnica, criterios como "Resultados esperados"
-> **Modelo SIMADE** - narrativa com multiplos atores e codigos SSC, campo "Integracoes SIMADE", criterios com sub-numeracao decimal, inclui versao e historico de evolucao
+> **Modelo Padrao** - narrativa "Eu como... quero... para que...", tabela de metadados, agnostico de dominio
+> **Modelo GFO + TJ** - tres tipos: HU (Como/quero/para + BDD), HT (A fim de/precisa-se + Resultados esperados), HM (Temos/Queremos + Resultados esperados); sem tabela de metadados
+> **Modelo SIMADE** - narrativa com multiplos atores e codigos SSC, criterios com sub-numeracao decimal, inclui versao e historico de evolucao
 
 Se o usuario nao indicar, use o **Modelo Padrao**.
 
@@ -28,7 +28,7 @@ No modelo GFO+TJ, carregue e siga a steering `dev.kiro/steering/diretrizes-gfo-t
 
 No modelo SIMADE, carregue e siga a steering `dev.kiro/steering/diretrizes-simade.md` antes de gerar as historias.
 
-As regras de granularidade, classificacao HU/HT e numeracao de `regras-extracao.md` continuam iguais nos tres modelos.
+As regras de granularidade e numeracao de `regras-extracao.md` continuam iguais nos tres modelos.
 
 ### 1. Obter o documento de entrada
 
@@ -64,10 +64,16 @@ Para cada funcionalidade encontrada, quebre em acoes atomicas seguindo a granula
 | Gerar relatorio | Criar documento/relatorio |
 | Visualizar painel | Ver grafico ou dashboard |
 
-### 4. Classificar como HU ou HT
+### 4. Classificar o tipo de historia
 
+**Modelos Padrao e SIMADE:**
 - **HU (Historia de Usuario)**: O usuario interage diretamente (tela, botao, formulario)
 - **HT (Historia Tecnica)**: O sistema executa sozinho (integracao automatica, rotina)
+
+**Modelo GFO+TJ — tres tipos:**
+- **HU (Historia de Usuario)**: Usuario interage diretamente com a tela
+- **HT (Historia Tecnica)**: Sistema executa automaticamente (integracao, rotina, processamento)
+- **HM (Historia de Melhoria)**: Adequacao ou ajuste de funcionalidade ja existente no sistema
 
 ### 5. Escrever narrativa
 
@@ -76,7 +82,10 @@ Para cada funcionalidade encontrada, quebre em acoes atomicas seguindo a granula
 > quero [acao atomica especifica],
 > para que [valor de negocio real - nao apenas "registrar"].
 
-**Modelo GFO+TJ:** seguir exatamente o formato "A fim de... precisa-se..." de `diretrizes-gfo-tj.md`.
+**Modelo GFO+TJ:** tres narrativas conforme o tipo — seguir `diretrizes-gfo-tj.md`:
+- HU: "Como [ator], quero [acao], para [beneficio]" + Caminho de navegacao
+- HT: "A fim de [objetivo], precisa-se [necessidade]"
+- HM: "Temos [situacao atual] / Queremos [situacao desejada]" + Historia Referencia
 
 **Modelo SIMADE:** listar todos os perfis SSC identificados na fonte, seguir exatamente o formato de `diretrizes-simade.md`:
 > Como [Persona1 (SSC: CODIGO = "PAPEL")],
@@ -89,13 +98,15 @@ Para cada funcionalidade encontrada, quebre em acoes atomicas seguindo a granula
 - Prioridade: inferir do documento quando possivel, senao "A definir"
 - Complexidade: inferir do documento quando possivel, senao "A definir"
 - Dependencias: mapear referencias cruzadas logicas entre historias
-- Campo de integracoes internas: "Integracoes Internas" (Padrao), "Integracoes GFO" (GFO+TJ) ou "Integracoes SIMADE" (SIMADE)
+- Campo de integracoes: "Integracoes Internas" (Padrao) ou "Integracoes SIMADE" (SIMADE)
+- Modelo GFO+TJ: sem tabela de metadados — usar apenas os templates de `diretrizes-gfo-tj.md`
 - No modelo SIMADE: incluir campo "Versao" antes da narrativa e secao "Historico de Evolucao" ao final
 
 ### 7. Numerar sequencialmente
 
 - HU: HU001, HU002, HU003... (sequencia global, nao reinicia entre etapas)
 - HT: HT001, HT002, HT003... (sequencia propria global)
+- HM (apenas GFO+TJ): HM001, HM002, HM003... (sequencia propria global)
 
 ### 8. Mapear dependencias
 
@@ -112,10 +123,10 @@ Logica padrao de dependencias:
 Usar o formato definido no steering `formato-historias.md` para o modelo escolhido:
 - Narrativa (conforme modelo)
 - Tabela de campos
-- Criterios de aceite (3-5, especificos e testaveis) ou Resultados esperados (GFO+TJ)
-- Regras de negocio (apenas se mencionadas no documento)
-- Observacoes com rastreabilidade
-- Tabela resumo ao final de cada macro etapa
+- Criterios de aceite: formato BDD (HU GFO+TJ), Resultados esperados (HT/HM GFO+TJ) ou lista numerada (Padrao/SIMADE)
+- Regras de negocio (apenas se mencionadas no documento; nao se aplica ao GFO+TJ)
+- Observacoes com rastreabilidade (Padrao e SIMADE; nao se aplica ao GFO+TJ)
+- Tabela resumo ao final de cada macro etapa (HU / HT / HM para GFO+TJ; HU / HT para os demais)
 
 ### 10. Exportar
 
