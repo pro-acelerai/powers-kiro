@@ -1,93 +1,150 @@
-# powers-kiro
+# Powers Kiro
 
+Coleção de **Kiro Powers** — extensões para o [Kiro IDE](https://kiro.dev) que adicionam fluxos especializados de desenvolvimento com IA. Cada power combina skills, steering files e, quando necessário, um servidor MCP próprio com controle de estado, gates de aprovação humana e rastreabilidade completa.
 
+---
 
-## Getting started
+## Powers disponíveis
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+| Power | Versão | Skills | MCP | Descrição |
+|---|---|---|---|---|
+| [`extraction`](./extraction/) | 1.0.0 | 2 | — | Extrai e refina histórias de usuário (HU/HT) a partir de planilhas ou texto |
+| [`readiness`](./readiness/) | 1.0.0 | 2 | — | Valida histórias contra os 23 critérios de Definition of Ready e emite veredito; opcionalmente valida coerência HT × AT |
+| [`derivation`](./derivation/) | 1.0.0 | 2 | — | Levanta lacunas técnicas da história e gera o Anexo Técnico completo para o desenvolvedor |
+| [`coding`](./coding/) | 0.2.0 | 1 | TypeScript | Implementa histórias com fluxo governado — agent propõe, Harness controla |
+| [`upgrade`](./upgrade/) | 0.1.0 | 2 | TypeScript | Atualiza runtime, dependências e remedia CVEs in-place com rollback automático |
+| [`modernization`](./modernization/) | 0.2.0 | 4 | TypeScript | Migra sistemas legados para stacks modernas via Reverse → Spec → Forward |
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+---
 
-## Add your files
+## Extraction
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Converte planilhas Excel ou texto de visão geral em histórias completas com narrativa, critérios de aceite, regras de negócio, dependências cruzadas e tabela resumo por macro etapa. Segue granularidade CRUD — cada ação é uma história separada.
+
+**Skills:**
+- `extrair-historias` — quebra funcionalidades em ações atômicas, classifica HU/HT, numera sequencialmente (HU001..., HT001...), exporta em Markdown ou Excel
+- `refinar-historias` — aplica checklist INVEST, melhora critérios de aceite, identifica gaps e gera cenários BDD (Dado / Quando / Então)
+
+**Modelos de narrativa:**
+
+| Modelo | Narrativa | Campo integrações | Destaques |
+|---|---|---|---|
+| **Padrão** | "Eu como… quero… para que…" | Integrações Internas | Agnóstico de domínio |
+| **GFO + TJ** | "A fim de… precisa-se…" | Integrações GFO | Sem linguagem técnica, critérios como "Resultados esperados" |
+| **SIMADE** | Múltiplos atores com código SSC | Integrações SIMADE | Sub-numeração decimal nos CAs (1, 1.1, 1.2…), versionamento e histórico de evolução |
+
+---
+
+## Readiness
+
+Atua como Tech Lead guardião de qualidade. Recebe uma história de usuário e responde: *"Há informação suficiente, coerente e testável para implementar sem adivinhas?"*
+
+Executa um fluxo de 3 fases obrigatórias (Discovery → Análise Funcional → Technical Design), verifica 23 critérios de DoR e calcula dois índices ponderados.
+
+**Skills:**
+- `validar-historia` — fluxo completo de validação com índice DoR (0–100) e veredito final; quando o Anexo Técnico é fornecido, executa também a ETAPA 4 de coerência HT × AT (cobertura de CAs, mapeamento de campos, cobertura de erros, escopo e consistência interna)
+- `avaliar-ai-ready` — avalia aptidão para execução por IA (ativado apenas quando DoR ≥ 80), calcula índice AI-Ready (0–100)
+
+**Vereditos possíveis:** `READY` · `READY COM RESSALVAS` · `NEEDS REFINEMENT` · `NOT READY`
+
+**Modelos:**
+- **Padrão** — status genérico (Jira, GitHub, Azure, Linear…)
+- **GFO** — labels GitLab específicos da equipe
+
+---
+
+## Derivation
+
+Age como Analista Técnico Sênior na ponte entre o requisito de negócio e a implementação. Recebe uma história já refinada com o PO e identifica tudo que falta para que um desenvolvedor possa implementá-la sem adivinhas — campos sem mapeamento, contratos não definidos, regras não especificadas, cenários de erro sem tratamento.
+
+O fluxo é obrigatoriamente em duas fases separadas: primeiro levanta as lacunas, depois — com as respostas coletadas pelo Analista junto ao Líder Técnico, DBA e PO — gera o Anexo Técnico completo.
+
+**Skills:**
+- `levantar-lacunas` — analisa a HT/HU e gera lista de perguntas específicas agrupadas por responsável (Líder Técnico, DBA, PO/Negócio, Analista), cada uma com marcador `> Resposta:` para preenchimento. Output: `.kiro/derivation/[ID]-lacunas.md`
+- `derivar-anexo` — com a história original e as respostas preenchidas, gera o Anexo Técnico com seções condicionais: contexto de integração, campos enviados/recebidos com tabelas completas, validações por campo, persistência, HTTP codes, logs, mock, cenários de teste e mapeamento consolidado. Lacunas não respondidas viram `[PENDENTE]` — nunca suposição. Output: `.kiro/derivation/[ID]-anexo-tecnico.md`
+
+O Anexo Técnico é documento de uso exclusivo do desenvolvedor. A história (HU/HT) permanece como artefato do negócio e do cliente.
+
+---
+
+## Coding
+
+Implementa histórias de usuário com controle governado. O agente raciocina e propõe; o Harness MCP valida cada transição do grafo de estados e garante que nenhum arquivo fora do escopo declarado seja tocado.
+
+**Skill:**
+- `implement-story` — 8 passos com parada obrigatória para aprovação humana antes de qualquer escrita no disco
+
+**Fluxo:** Criar sessão → Ler escopo → Plano → Propor mudanças → **✋ Aprovação humana** → Aplicar → Lint → Corrigir
+
+Backup automático de cada arquivo antes de sobrescrever. Trace completo salvo em `.kiro/trace/` ao final da sessão.
+
+---
+
+## Upgrade
+
+Atualiza runtime, dependências com breaking changes, remedia CVEs e adota idiomas modernos da linguagem — aplicado in-place no projeto existente, sem reescrever lógica de negócio.
+
+**Skills:**
+- `analysis` — scan completo do projeto, identifica issues, propõe plano com gate humano de aprovação
+- `execution` — aplica mudanças in-place e valida com lint + comando de build/testes do próprio projeto
+
+Rollback automático se a escrita de arquivos falhar parcialmente. Casos de uso típicos: Java 21→25, Spring Boot 2→3, Node 18→22, React 17→18, Webpack→Vite, CVEs críticos.
+
+---
+
+## Modernization
+
+Migra sistemas legados para stacks modernas com controle governado. O agente não copia código legado — extrai a intenção do sistema como especificação tecnologicamente agnóstica e reconstrói do zero na nova stack. O legado permanece intocado; o novo sistema roda em paralelo.
+
+**Skills:**
+- `discovery` — analisa o legado, extrai spec agnóstica, gate humano de aprovação
+- `architecture` — projeta a nova arquitetura, submete plano faseado, gate humano de aprovação
+- `implementation` — constrói o novo projeto fase por fase com lint + loop de correção
+- `delivery` — consolida sessões e gera Migration Report completo
+
+**Fases:** Discovery → Architecture → Implementation → Delivery
+
+---
+
+## Como usar um Power
+
+Powers com MCP (coding, upgrade, modernization):
+
+1. Copie o `mcp.json` do power para `.kiro/settings/mcp.json` do seu projeto (ou mescle com o existente)
+2. Reinicie o Kiro — o power aparece automaticamente como conjunto de tools disponíveis
+3. O bundle já está compilado em `mcp/dist/bundle.cjs` — não precisa de `npm install`
+
+Powers sem MCP (extraction, readiness):
+
+1. Copie a pasta do power para `.kiro/` do seu projeto (ou instale via Kiro Marketplace)
+2. As skills ficam disponíveis como slash commands
+
+---
+
+## Estrutura de um Power
 
 ```
-cd existing_repo
-git remote add origin https://git.prodemge.gov.br/ia-prodemge/pro-acelerai/powers-kiro.git
-git branch -M main
-git push -uf origin main
+meu-power/
+├── plugin.json              # Metadados (nome, versão, descrição, keywords)
+├── mcp.json                 # Configuração MCP para copiar ao projeto (se aplicável)
+├── POWER.md                 # Documentação e instruções de uso
+├── dev.kiro/
+│   └── steering/            # Steering files que moldam o comportamento do agente
+│       ├── regras.md        # inclusion: auto — sempre carregado
+│       └── diretrizes.md    # inclusion: manual — ativado por referência explícita
+├── skills/                  # Skills Kiro (slash commands)
+│   └── minha-skill/
+│       └── SKILL.md
+└── mcp/                     # Servidor MCP (apenas powers com lógica pesada)
+    ├── src/                 # Código-fonte TypeScript
+    ├── dist/
+    │   └── bundle.cjs       # Bundle autocontido
+    ├── package.json
+    └── tsconfig.json
 ```
 
-## Integrate with your tools
+---
 
-- [ ] [Set up project integrations](https://git.prodemge.gov.br/ia-prodemge/pro-acelerai/powers-kiro/-/settings/integrations)
+## Desenvolvido por
 
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing (SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thanks to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+**pro-acelerai** — Ferramentas de IA para times de desenvolvimento

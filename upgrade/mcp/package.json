@@ -1,0 +1,22 @@
+{
+  "name": "@upgrade/mcp",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "build": "tsc",
+    "bundle": "esbuild src/index.ts --bundle --platform=node --target=node18 --format=cjs --outfile=dist/bundle.cjs --external:jiti",
+    "test": "node --import tsx/esm --test src/**/*.test.ts"
+  },
+  "dependencies": {
+    "@eslint/js": "^9.0.0",
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "eslint": "^9.0.0",
+    "globals": "^15.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "esbuild": "^0.25.12",
+    "tsx": "^4.19.0",
+    "typescript": "^5.7.0"
+  }
+}

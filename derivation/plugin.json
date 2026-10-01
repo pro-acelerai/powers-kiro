@@ -1,0 +1,34 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "derivation",
+  "version": "1.0.0",
+  "description": "Deriva o Anexo Tecnico a partir de uma historia de usuario: identifica as lacunas tecnicas, gera uma lista de perguntas categorizadas por responsavel e, apos as respostas do Analista, produz o documento tecnico completo para o desenvolvedor.",
+  "author": {
+    "name": "pro-acelerai",
+    "url": "https://github.com/pro-acelerai"
+  },
+  "keywords": [
+    "anexo tecnico",
+    "derivar anexo",
+    "lacunas tecnicas",
+    "mapeamento de dados",
+    "contrato de integracao",
+    "campos de entrada",
+    "campos de retorno",
+    "regras de validacao",
+    "persistencia",
+    "codigos HTTP",
+    "logs",
+    "graylog",
+    "mock",
+    "cenarios de teste",
+    "historias tecnicas",
+    "HT",
+    "HU",
+    "derivacao tecnica",
+    "Analista de Requisitos",
+    "Lider Tecnico",
+    "DBA"
+  ],
+  "license": "MIT"
+}
